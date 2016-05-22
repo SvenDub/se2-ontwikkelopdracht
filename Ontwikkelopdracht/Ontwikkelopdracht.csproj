@@ -108,19 +108,29 @@
     <Content Include="Content\main.css" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
+    <Content Include="Views\Blog\Details.cshtml" />
+    <Content Include="Views\Blog\Index.cshtml" />
+    <Content Include="Views\Film\Details.cshtml" />
+    <Content Include="Views\Film\Index.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\Order\Save.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Views\Shared\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BlogController.cs" />
+    <Compile Include="Controllers\FilmController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Blog.cs" />
     <Compile Include="Models\Crewmember.cs" />
+    <Compile Include="Models\EntityController.cs" />
     <Compile Include="Models\Film.cs" />
     <Compile Include="Models\Gender.cs" />
     <Compile Include="Models\Genre.cs" />
@@ -148,6 +158,9 @@
     <Folder Include="Content\Images" />
     <Folder Include="Models" />
     <Folder Include="Views\Animals" />
+    <Folder Include="Views\Blog" />
+    <Folder Include="Views\Film" />
+    <Folder Include="Views\Order" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
