@@ -38,6 +38,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataMemberAttribute.cs" />
+    <Compile Include="DataType.cs" />
     <Compile Include="EntityAttribute.cs" />
     <Compile Include="EntityException.cs" />
     <Compile Include="IdentityAttribute.cs" />

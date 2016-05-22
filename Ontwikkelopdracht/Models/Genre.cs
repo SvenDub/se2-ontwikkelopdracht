@@ -7,6 +7,8 @@ namespace Ontwikkelopdracht.Models
     {
         [Identity(Column = "genre_id")]
         public int Id { get; set; }
+
+        [DataMember(Column = "naam")]
         public string Name { get; set; }
     }
 }

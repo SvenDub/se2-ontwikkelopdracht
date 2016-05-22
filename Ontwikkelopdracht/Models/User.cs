@@ -7,8 +7,11 @@ namespace Ontwikkelopdracht.Models
     {
         [Identity(Column = "email")]
         public string Email { get; set; }
+        [DataMember(Column = "naam")]
         public string Name { get; set; }
+        [DataMember(Column = "wachtwoord")]
         public string Password { get; set; }
+        [DataMember(Column = "admin")]
         public bool Admin { get; set; }
     }
 }
