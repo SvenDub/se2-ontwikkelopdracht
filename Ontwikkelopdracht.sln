@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ontwikkelopdracht", "Ontwik
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inject", "Inject\Inject.csproj", "{33C556CA-FAA6-46A9-B812-6F29F80491A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ontwikkelopdracht.Persistence", "Ontwikkelopdracht.Persistence\Ontwikkelopdracht.Persistence.csproj", "{C7F342D7-16DE-42BA-8C11-3F8346A04DAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{33C556CA-FAA6-46A9-B812-6F29F80491A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33C556CA-FAA6-46A9-B812-6F29F80491A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33C556CA-FAA6-46A9-B812-6F29F80491A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7F342D7-16DE-42BA-8C11-3F8346A04DAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F342D7-16DE-42BA-8C11-3F8346A04DAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7F342D7-16DE-42BA-8C11-3F8346A04DAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F342D7-16DE-42BA-8C11-3F8346A04DAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
