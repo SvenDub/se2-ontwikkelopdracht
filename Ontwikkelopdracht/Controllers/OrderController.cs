@@ -3,7 +3,7 @@ using Ontwikkelopdracht.Models;
 
 namespace Ontwikkelopdracht.Controllers
 {
-    public class OrderController : EntityController<Order>
+    public class OrderController : EntityController<Order, int>
     {
         public ActionResult Index(int show) => View();
 

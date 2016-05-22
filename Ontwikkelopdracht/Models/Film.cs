@@ -1,9 +1,12 @@
 ﻿using System;
+using Ontwikkelopdracht.Persistence;
 
 namespace Ontwikkelopdracht.Models
 {
+    [Entity(Table = "film")]
     public class Film
     {
+        [Identity(Column = "film_id")]
         public int Id { get; set; }
         public string Title { get; set; }
         public int Length { get; set; }

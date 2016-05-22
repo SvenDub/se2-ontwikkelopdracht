@@ -3,7 +3,7 @@ using Ontwikkelopdracht.Models;
 
 namespace Ontwikkelopdracht.Controllers
 {
-    public class FilmController : EntityController<Film>
+    public class FilmController : EntityController<Film, int>
     {
         public ActionResult Index() => View(Repository.FindAll());
 

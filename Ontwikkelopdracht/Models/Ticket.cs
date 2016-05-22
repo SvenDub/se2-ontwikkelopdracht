@@ -1,5 +1,8 @@
-﻿namespace Ontwikkelopdracht.Models
+﻿using Ontwikkelopdracht.Persistence;
+
+namespace Ontwikkelopdracht.Models
 {
+    [Entity(Table = "kaartje")]
     public class Ticket
     {
         public int Id { get; set; }

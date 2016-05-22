@@ -135,6 +135,7 @@
     <Compile Include="Models\Gender.cs" />
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\ProductionMySqlConnectionParams.cs" />
     <Compile Include="Models\Show.cs" />
     <Compile Include="Models\Ticket.cs" />
     <Compile Include="Models\User.cs" />
@@ -174,6 +175,14 @@
     <ProjectReference Include="..\Ontwikkelopdracht.Persistence\Ontwikkelopdracht.Persistence.csproj">
       <Project>{C7F342D7-16DE-42BA-8C11-3F8346A04DAE}</Project>
       <Name>Ontwikkelopdracht.Persistence</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ontwikkelopdracht.Persistence.MySql\Ontwikkelopdracht.Persistence.MySql.csproj">
+      <Project>{89510982-2366-416A-8047-8C70A55E638C}</Project>
+      <Name>Ontwikkelopdracht.Persistence.MySql</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Util\Util.csproj">
+      <Project>{2AE26B52-21C4-403E-B48B-5F6DE7262F1E}</Project>
+      <Name>Util</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

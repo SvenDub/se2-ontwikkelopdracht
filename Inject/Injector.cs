@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Ontwikkelopdracht.Models;
 
 namespace Inject
 {
@@ -16,7 +17,12 @@ namespace Inject
         /// </summary>
         private static readonly IDictionary<Type, Type> Types = new Dictionary<Type, Type>();
 
+        /// <summary>
+        ///     Mapping of all instances of implementations.
+        /// </summary>
         private static readonly IDictionary<Type, object> Instances = new Dictionary<Type, object>();
+
+        private const string Tag = "INJECT";
 
         /// <summary>
         ///     Register the implementation of a type.
@@ -26,6 +32,20 @@ namespace Inject
         public static void Register<TContract, TImplementation>()
         {
             Types[typeof (TContract)] = typeof (TImplementation);
+
+            Log.I(Tag, $"Registring {typeof(TContract)} => {typeof(TImplementation)}");
+        }
+
+        /// <summary>
+        ///     Register the implementation of a type.
+        /// </summary>
+        /// <param name="contract">The type to register.</param>
+        /// <param name="implementation">The implementation of the type.</param>
+        public static void Register(Type contract, Type implementation)
+        {
+            Types[contract] = implementation;
+
+            Log.I(Tag, $"Registring {contract} => {implementation}");
         }
 
         /// <summary>
@@ -40,6 +60,8 @@ namespace Inject
             foreach (KeyValuePair<Type, Type> keyValuePair in types)
             {
                 Types[keyValuePair.Key] = keyValuePair.Value;
+
+                Log.I(Tag, $"Registring {keyValuePair.Key} => {keyValuePair.Value}");
             }
         }
 

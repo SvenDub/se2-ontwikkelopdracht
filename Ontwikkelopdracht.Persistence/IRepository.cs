@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Ontwikkelopdracht.Persistence
 {
@@ -8,7 +7,7 @@ namespace Ontwikkelopdracht.Persistence
     /// </summary>
     /// <typeparam name="T">The entity type the repository manages.</typeparam>
     /// <typeparam name="ID">The type of the id of the entity the repository manages.</typeparam>
-    public interface IRepository<T, ID> : IDisposable
+    public interface IRepository<T, ID> where T : new()
     {
         /// <summary>
         ///     Returns the number of entities available
@@ -27,7 +26,7 @@ namespace Ontwikkelopdracht.Persistence
         /// </summary>
         /// <typeparam name="S">The type of the entities.</typeparam>
         /// <param name="entities">The entities to delete.</param>
-        void Delete<S>(IEnumerable<S> entities) where S : T;
+        void Delete<S>(List<S> entities) where S : T;
 
         /// <summary>
         ///     Deletes a given entity.
@@ -51,14 +50,14 @@ namespace Ontwikkelopdracht.Persistence
         ///     Returns all instances of the type.
         /// </summary>
         /// <returns>All entities.</returns>
-        IEnumerable<T> FindAll();
+        List<T> FindAll();
 
         /// <summary>
         ///     Returns all instances of the type with the given IDs.
         /// </summary>
         /// <param name="ids">The IDs to check.</param>
         /// <returns>All entities with the given IDs.</returns>
-        IEnumerable<T> FindAll(IEnumerable<ID> ids);
+        List<T> FindAll(List<ID> ids);
 
         /// <summary>
         ///     Retrieves an entity by its id.
@@ -81,6 +80,6 @@ namespace Ontwikkelopdracht.Persistence
         /// <typeparam name="S">The type of entities to save.</typeparam>
         /// <param name="entities">The entities to save.</param>
         /// <returns>The saved entities.</returns>
-        IEnumerable<S> Save<S>(IEnumerable<S> entities) where S : T;
+        List<S> Save<S>(List<S> entities) where S : T;
     }
 }

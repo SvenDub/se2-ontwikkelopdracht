@@ -4,8 +4,8 @@ using Ontwikkelopdracht.Persistence;
 
 namespace Ontwikkelopdracht.Models
 {
-    public abstract class EntityController<T> : Controller
+    public abstract class EntityController<T, ID> : Controller where T : new()
     {
-        protected IRepository<T, int> Repository = Injector.Resolve<IRepository<T, int>>();
+        protected readonly IRepository<T, ID> Repository = Injector.Resolve<IRepository<T, ID>>();
     }
 }

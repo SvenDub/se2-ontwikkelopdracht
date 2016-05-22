@@ -3,7 +3,7 @@ using Ontwikkelopdracht.Models;
 
 namespace Ontwikkelopdracht.Controllers
 {
-    public class BlogController : EntityController<Blog>
+    public class BlogController : EntityController<Blog, int>
     {
         public ActionResult Index() => View(Repository.FindAll());
 
