@@ -1,0 +1,72 @@
+﻿@using Models
+@using System.Linq
+@model List<Animal>
+@{
+    ViewBag.Title = "Aanwezige dieren";
+}
+<h1>Aanwezige dieren</h1>
+<p>
+    Wij bieden onderdak aan de volgende dieren:
+</p>
+<ul>
+    <li>
+        <a href="#animal-honden">Honden</a>
+    </li>
+    <li>
+        <a href="#animal-katten">Katten</a>
+    </li>
+</ul>
+<section id="animal-honden" class="animal-section">
+    <h2>Honden</h2>
+    <p>
+        Dit zijn onze honden.
+    </p>
+    <input onclick="location.href = '@Url.Action("CreateDog", "Animals")';return false;" type="button" value="Voeg hond toe"/>
+    <input type="button" id="delete-dogs" value="Verwijder honden">
+    <table class="animal-list">
+        <thead>
+        <tr>
+            <th>Naam</th>
+            <th>Reg. Nr.</th>
+            <th>Gereserveerd</th>
+        </tr>
+        </thead>
+        <tbody id="animal-honden-data">
+        @foreach (Dog dog in Model.OfType<Dog>().ToList())
+        {
+            <tr>
+                <td>@dog.Name</td>
+                <td>@dog.Id</td>
+                <td>@{ WriteLiteral(dog.ReservedBy == null ? "Nee" : "Ja"); }</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</section>
+<section id="animal-katten" class="animal-section">
+    <h2>Katten</h2>
+    <p>
+        Dit zijn onze katten.
+    </p>
+    <input onclick="location.href = '@Url.Action("CreateCat", "Animals")';return false;" type="button" value="Voeg kat toe"/>
+    <input type="button" id="delete-cats" value="Verwijder katten">
+    <table class="animal-list">
+        <thead>
+        <tr>
+            <th>Naam</th>
+            <th>Reg. Nr.</th>
+            <th>Gereserveerd</th>
+        </tr>
+        </thead>
+        <tbody id="animal-katten-data">
+        @foreach (Cat cat in Model.OfType<Cat>().ToList())
+        {
+            <tr>
+                <td>@cat.Name</td>
+                <td>@cat.Id</td>
+                <td>@{ WriteLiteral(cat.ReservedBy == null ? "Nee" : "Ja"); }</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</section>
