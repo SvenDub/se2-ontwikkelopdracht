@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Reflection;
 using Inject;
@@ -66,7 +65,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
             {
                 using (MySqlCommand cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = $"DELETE FROM {_entityAttribute.Table} WHERE {_identityAttribute.Column}=:Id";
+                    cmd.CommandText = $"DELETE FROM {_entityAttribute.Table} WHERE {_identityAttribute.Column}=@Id";
                     cmd.Parameters.AddWithValue("Id", id);
                     cmd.ExecuteNonQuery();
                 }
@@ -102,7 +101,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
                 using (MySqlCommand cmd = connection.CreateCommand())
                 {
                     cmd.CommandText =
-                        $"SELECT COUNT(*) FROM {_entityAttribute.Table} WHERE {_identityAttribute.Column}=:Id";
+                        $"SELECT COUNT(*) FROM {_entityAttribute.Table} WHERE {_identityAttribute.Column}=@Id";
                     cmd.Parameters.AddWithValue("Id", id);
                     return Convert.ToInt64(cmd.ExecuteScalar()) > 0;
                 }
@@ -130,7 +129,18 @@ namespace Ontwikkelopdracht.Persistence.MySql
 
         public T FindOne(ID id)
         {
-            throw new NotImplementedException();
+            using (MySqlConnection connection = CreateConnection())
+            {
+                using (MySqlCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = $"SELECT `{string.Join("`, `", DataMembers.Values)}` " +
+                                      $"FROM {_entityAttribute.Table} " +
+                                      $"WHERE {_identityAttribute.Column}=@Id";
+                    cmd.Parameters.AddWithValue("Id", id);
+
+                    return CreateFromReader(cmd.ExecuteReader());
+                }
+            }
         }
 
         public S Save<S>(S entity) where S : T
@@ -176,44 +186,63 @@ namespace Ontwikkelopdracht.Persistence.MySql
                                 propertyInfo.GetCustomAttribute<DataMemberAttribute>(true).Column))
             ).ToDictionary(pair => pair.Key, pair => pair.Value);
 
+        private T CreateFromReader(MySqlDataReader reader)
+        {
+            using (reader)
+            {
+                while (reader.Read())
+                {
+                    return CreateFromRow(reader);
+                }
+
+                throw new EntityNotFoundException();
+            }
+        }
+
         private IEnumerable<T> CreateListFromReader(MySqlDataReader reader)
         {
             using (reader)
             {
                 while (reader.Read())
                 {
-                    T entity = new T();
-                    foreach (var keyValuePair in DataMembers)
-                    {
-                        Log.D("DB", $"{keyValuePair.Value} = {reader[keyValuePair.Value]}");
-                        if (keyValuePair.Key.IsDefined(typeof(IdentityAttribute)))
-                        {
-                            keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
-                        }
-                        else if (keyValuePair.Key.IsDefined(typeof(DataMemberAttribute)))
-                        {
-                            DataMemberAttribute attribute = keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
-
-                            switch (attribute.Type)
-                            {
-                                case DataType.Value:
-                                    keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
-                                    break;
-                                case DataType.Entity:
-                                    object repo = typeof(MySqlRepository<T, ID>).GetMethod("ResolveRepository")
-                                        .MakeGenericMethod(keyValuePair.Key.PropertyType, attribute.RawType)
-                                        .Invoke(this, new object[] {});
-                                    object value = repo.GetType().GetMethod("FindOne")
-                                        .Invoke(repo, new object[] {reader[keyValuePair.Value]});
-                                    keyValuePair.Key.SetValue(entity, value);
-                                    break;
-                            }
-                        }
-                    }
-
-                    yield return entity;
+                    yield return CreateFromRow(reader);
                 }
             }
+        }
+
+        /// <summary>
+        ///     Expects reader to contain data at current row. Does not clean up reader.
+        /// </summary>
+        private T CreateFromRow(MySqlDataReader reader)
+        {
+            T entity = new T();
+            foreach (var keyValuePair in DataMembers)
+            {
+                if (keyValuePair.Key.IsDefined(typeof(IdentityAttribute)))
+                {
+                    keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
+                }
+                else if (keyValuePair.Key.IsDefined(typeof(DataMemberAttribute)))
+                {
+                    DataMemberAttribute attribute = keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
+
+                    switch (attribute.Type)
+                    {
+                        case DataType.Value:
+                            keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
+                            break;
+                        case DataType.Entity:
+                            object repo = typeof(MySqlRepository<T, ID>).GetMethod("ResolveRepository")
+                                .MakeGenericMethod(keyValuePair.Key.PropertyType, attribute.RawType)
+                                .Invoke(this, new object[] {});
+                            object value = repo.GetType().GetMethod("FindOne")
+                                .Invoke(repo, new object[] {reader[keyValuePair.Value]});
+                            keyValuePair.Key.SetValue(entity, value);
+                            break;
+                    }
+                }
+            }
+            return entity;
         }
 
         public IRepository<T, ID> ResolveRepository<T, ID>() where T : new()
