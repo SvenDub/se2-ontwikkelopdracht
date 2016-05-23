@@ -1,3 +1,10 @@
-﻿@model List<Ontwikkelopdracht.Models.Film>
+﻿@using Ontwikkelopdracht.Models
+@model List<Film>
 
 <h1>Films</h1>
+
+@foreach (Film film in Model)
+{
+    <h2>@film.Title (@film.Release.Year)</h2>
+
+}

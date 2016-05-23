@@ -54,6 +54,10 @@
       <Project>{C7F342D7-16DE-42BA-8C11-3F8346A04DAE}</Project>
       <Name>Ontwikkelopdracht.Persistence</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Util\Util.csproj">
+      <Project>{2AE26B52-21C4-403E-B48B-5F6DE7262F1E}</Project>
+      <Name>Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.config" />

@@ -7,5 +7,6 @@ namespace Ontwikkelopdracht.Persistence
     {
         public string Column { get; set; }
         public DataType Type { get; set; } = DataType.Value;
+        public Type RawType { get; set; } = typeof(int);
     }
 }

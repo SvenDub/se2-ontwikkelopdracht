@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 using Inject;
 using MySql.Data.MySqlClient;
+using Ontwikkelopdracht.Models;
 
 namespace Ontwikkelopdracht.Persistence.MySql
 {
@@ -41,6 +43,8 @@ namespace Ontwikkelopdracht.Persistence.MySql
             _identityAttribute = _identityProperty.GetCustomAttributes(true)
                 .OfType<IdentityAttribute>()
                 .First();
+
+            Log.D("DB", _entityAttribute.Table + " [ " + string.Join(", ", DataMembers.Values) + " ]");
         }
 
         public long Count()
@@ -97,7 +101,8 @@ namespace Ontwikkelopdracht.Persistence.MySql
             {
                 using (MySqlCommand cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = $"SELECT COUNT(*) FROM {_entityAttribute.Table} WHERE {_identityAttribute.Column}=:Id";
+                    cmd.CommandText =
+                        $"SELECT COUNT(*) FROM {_entityAttribute.Table} WHERE {_identityAttribute.Column}=:Id";
                     cmd.Parameters.AddWithValue("Id", id);
                     return Convert.ToInt64(cmd.ExecuteScalar()) > 0;
                 }
@@ -106,8 +111,16 @@ namespace Ontwikkelopdracht.Persistence.MySql
 
         public List<T> FindAll()
         {
-            //throw new NotImplementedException();
-            return new List<T>();
+            using (MySqlConnection connection = CreateConnection())
+            {
+                using (MySqlCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = $"SELECT `{string.Join("`, `", DataMembers.Values)}` " +
+                                      $"FROM {_entityAttribute.Table}";
+
+                    return CreateListFromReader(cmd.ExecuteReader()).ToList();
+                }
+            }
         }
 
         public List<T> FindAll(List<ID> ids)
@@ -117,14 +130,12 @@ namespace Ontwikkelopdracht.Persistence.MySql
 
         public T FindOne(ID id)
         {
-            //throw new NotImplementedException();
-            return new T();
+            throw new NotImplementedException();
         }
 
         public S Save<S>(S entity) where S : T
         {
-            //throw new NotImplementedException();
-            return entity;
+            throw new NotImplementedException();
         }
 
         public List<S> Save<S>(List<S> entities) where S : T
@@ -146,6 +157,68 @@ namespace Ontwikkelopdracht.Persistence.MySql
             MySqlConnection mySqlConnection = new MySqlConnection(mySqlConnectionStringBuilder.GetConnectionString(true));
             mySqlConnection.Open();
             return mySqlConnection;
+        }
+
+        private Dictionary<PropertyInfo, string> DataMembers => typeof(T)
+            .GetProperties()
+            .Where(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute), true))
+            .Select(
+                propertyInfo =>
+                    new KeyValuePair<PropertyInfo, string>(propertyInfo,
+                        propertyInfo.GetCustomAttribute<IdentityAttribute>(true).Column))
+            .Concat(
+                typeof(T)
+                    .GetProperties()
+                    .Where(propertyInfo => propertyInfo.IsDefined(typeof(DataMemberAttribute), true))
+                    .Select(
+                        propertyInfo =>
+                            new KeyValuePair<PropertyInfo, string>(propertyInfo,
+                                propertyInfo.GetCustomAttribute<DataMemberAttribute>(true).Column))
+            ).ToDictionary(pair => pair.Key, pair => pair.Value);
+
+        private IEnumerable<T> CreateListFromReader(MySqlDataReader reader)
+        {
+            using (reader)
+            {
+                while (reader.Read())
+                {
+                    T entity = new T();
+                    foreach (var keyValuePair in DataMembers)
+                    {
+                        Log.D("DB", $"{keyValuePair.Value} = {reader[keyValuePair.Value]}");
+                        if (keyValuePair.Key.IsDefined(typeof(IdentityAttribute)))
+                        {
+                            keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
+                        }
+                        else if (keyValuePair.Key.IsDefined(typeof(DataMemberAttribute)))
+                        {
+                            DataMemberAttribute attribute = keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
+
+                            switch (attribute.Type)
+                            {
+                                case DataType.Value:
+                                    keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
+                                    break;
+                                case DataType.Entity:
+                                    object repo = typeof(MySqlRepository<T, ID>).GetMethod("ResolveRepository")
+                                        .MakeGenericMethod(keyValuePair.Key.PropertyType, attribute.RawType)
+                                        .Invoke(this, new object[] {});
+                                    object value = repo.GetType().GetMethod("FindOne")
+                                        .Invoke(repo, new object[] {reader[keyValuePair.Value]});
+                                    keyValuePair.Key.SetValue(entity, value);
+                                    break;
+                            }
+                        }
+                    }
+
+                    yield return entity;
+                }
+            }
+        }
+
+        public IRepository<T, ID> ResolveRepository<T, ID>() where T : new()
+        {
+            return Injector.Resolve<IRepository<T, ID>>();
         }
     }
 }
