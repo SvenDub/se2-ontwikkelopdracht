@@ -7,7 +7,7 @@ namespace Ontwikkelopdracht.Persistence
     /// </summary>
     /// <typeparam name="T">The entity type the repository manages.</typeparam>
     /// <typeparam name="ID">The type of the id of the entity the repository manages.</typeparam>
-    public interface IRepository<T, ID> where T : new()
+    public interface IRepository<T> where T : new()
     {
         /// <summary>
         ///     Returns the number of entities available
@@ -19,14 +19,13 @@ namespace Ontwikkelopdracht.Persistence
         ///     Deletes the entity with the given id.
         /// </summary>
         /// <param name="id">The id of the entity.</param>
-        void Delete(ID id);
+        void Delete(int id);
 
         /// <summary>
         ///     Deletes the given entities.
         /// </summary>
-        /// <typeparam name="S">The type of the entities.</typeparam>
         /// <param name="entities">The entities to delete.</param>
-        void Delete<S>(List<S> entities) where S : T;
+        void Delete(List<T> entities);
 
         /// <summary>
         ///     Deletes a given entity.
@@ -44,7 +43,7 @@ namespace Ontwikkelopdracht.Persistence
         /// </summary>
         /// <param name="id">The entity to check.</param>
         /// <returns>True if an entity with the given id exists, false otherwise.</returns>
-        bool Exists(ID id);
+        bool Exists(int id);
 
         /// <summary>
         ///     Returns all instances of the type.
@@ -57,29 +56,27 @@ namespace Ontwikkelopdracht.Persistence
         /// </summary>
         /// <param name="ids">The IDs to check.</param>
         /// <returns>All entities with the given IDs.</returns>
-        List<T> FindAll(List<ID> ids);
+        List<T> FindAll(List<int> ids);
 
         /// <summary>
         ///     Retrieves an entity by its id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns>The entity with the given id or null if none found.</returns>
-        T FindOne(ID id);
+        T FindOne(int id);
 
         /// <summary>
         ///     Saves a given entity.
         /// </summary>
-        /// <typeparam name="S">The type of entity to save.</typeparam>
         /// <param name="entity">The entity to save.</param>
         /// <returns>The saved entity.</returns>
-        S Save<S>(S entity) where S : T;
+        T Save(T entity);
 
         /// <summary>
         ///     Saves all given entities.
         /// </summary>
-        /// <typeparam name="S">The type of entities to save.</typeparam>
         /// <param name="entities">The entities to save.</param>
         /// <returns>The saved entities.</returns>
-        List<S> Save<S>(List<S> entities) where S : T;
+        List<T> Save(List<T> entities);
     }
 }

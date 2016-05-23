@@ -5,7 +5,10 @@ namespace Ontwikkelopdracht.Models
     [Entity(Table = "auteur")]
     public class Author
     {
-        [Identity(Column = "email")]
+        [Identity(Column = "auteur_id")]
+        public int Id { get; set; }
+
+        [DataMember(Column = "email")]
         public string Email { get; set; }
 
         [DataMember(Column = "naam")]

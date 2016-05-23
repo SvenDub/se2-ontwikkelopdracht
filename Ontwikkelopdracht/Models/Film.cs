@@ -16,6 +16,7 @@ namespace Ontwikkelopdracht.Models
         public int Length { get; set; }
 
         [DataMember(Column = "release")]
+        [System.ComponentModel.DataAnnotations.DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         public DateTime Release { get; set; }
 
         [DataMember(Column = "gesproken_taal")]

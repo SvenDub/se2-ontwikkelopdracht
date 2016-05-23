@@ -1,0 +1,23 @@
+﻿@model Ontwikkelopdracht.Models.Film
+
+@using (Html.BeginForm("Save", "Film"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    @Html.LabelFor(film => film.Id)
+    @Html.EditorFor(film => film.Id)
+
+    @Html.LabelFor(film => film.Title)
+    @Html.EditorFor(film => film.Title)
+    @Html.ValidationMessageFor(film => film.Title)
+
+    @Html.LabelFor(film => film.Release)
+    @Html.EditorFor(film => film.Release)
+    @Html.ValidationMessageFor(film => film.Release)
+
+    @Html.LabelFor(film => film.Genre)
+    @Html.EditorFor(film => film.Genre.Name)
+    @Html.ValidationMessageFor(film => film.Genre.Name)
+
+    <input type="submit"/>
+}

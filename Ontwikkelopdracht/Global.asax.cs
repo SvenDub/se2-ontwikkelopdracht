@@ -33,22 +33,17 @@ namespace Ontwikkelopdracht
                             .Any(info => info.IsDefined(typeof(IdentityAttribute), true)))
                 ).ToList().ForEach(t =>
                 {
-                    Type propertyType =
-                        t.GetProperties()
-                            .First(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute), true))
-                            .PropertyType;
-
-                    Log.I("DISCOVERY", $"Found entity '{t.Name}' with ID type '{propertyType.Name}'");
+                    Log.I("DISCOVERY", $"Found entity '{t.Name}'");
 
                     typeof(MvcApplication).GetMethod("RegisterRepository")
-                        .MakeGenericMethod(t, propertyType)
+                        .MakeGenericMethod(t)
                         .Invoke(this, new object[] {});
                 });
         }
 
-        public void RegisterRepository<T, ID>() where T : new()
+        public void RegisterRepository<T>() where T : new()
         {
-            Injector.Register<IRepository<T, ID>, MySqlRepository<T, ID>>();
+            Injector.Register<IRepository<T>, MySqlRepository<T>>();
         }
     }
 }

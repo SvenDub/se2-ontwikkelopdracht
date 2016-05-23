@@ -8,7 +8,7 @@ using Ontwikkelopdracht.Models;
 
 namespace Ontwikkelopdracht.Persistence.MySql
 {
-    public class MySqlRepository<T, ID> : IRepository<T, ID> where T : new()
+    public class MySqlRepository<T> : IRepository<T> where T : new()
     {
         public IMySqlConnectionParams MySqlConnectionParams { set; protected get; } =
             Injector.Resolve<IMySqlConnectionParams>();
@@ -59,7 +59,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
-        public void Delete(ID id)
+        public void Delete(int id)
         {
             using (MySqlConnection connection = CreateConnection())
             {
@@ -72,14 +72,14 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
-        public void Delete<S>(List<S> entities) where S : T
+        public void Delete(List<T> entities)
         {
-            entities.ForEach(s => Delete(s));
+            entities.ForEach(Delete);
         }
 
         public void Delete(T entity)
         {
-            Delete((ID) _identityProperty.GetGetMethod().Invoke(entity, new object[] {}));
+            Delete((int) _identityProperty.GetGetMethod().Invoke(entity, new object[] {}));
         }
 
         public void DeleteAll()
@@ -94,7 +94,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
-        public bool Exists(ID id)
+        public bool Exists(int id)
         {
             using (MySqlConnection connection = CreateConnection())
             {
@@ -122,12 +122,12 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
-        public List<T> FindAll(List<ID> ids)
+        public List<T> FindAll(List<int> ids)
         {
             return ids.Select(FindOne).ToList();
         }
 
-        public T FindOne(ID id)
+        public T FindOne(int id)
         {
             using (MySqlConnection connection = CreateConnection())
             {
@@ -143,12 +143,68 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
-        public S Save<S>(S entity) where S : T
+        public T Save(T entity)
         {
-            throw new NotImplementedException();
+            int id = (int) _identityProperty.GetValue(entity);
+            if (Exists(id))
+            {
+                // Update
+                using (MySqlConnection connection = CreateConnection())
+                {
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        string[] parameters = new string[DataMembersWithoutIdentity.Count];
+                        int i = -1;
+                        foreach (var keyValuePair in DataMembersWithoutIdentity)
+                        {
+                            i++;
+                            parameters[i] = $"`{keyValuePair.Value}`=@{keyValuePair.Value}";
+                        }
+
+                        cmd.CommandText =
+                            $"UPDATE {_entityAttribute.Table} " +
+                            $"SET {string.Join(", ", parameters)} " +
+                            $"WHERE `{_identityAttribute.Column}`=@Id";
+
+                        cmd.Parameters.AddWithValue("Id", id);
+
+                        AddUpdateParametersForEntity(cmd, entity);
+
+
+                        cmd.ExecuteNonQuery();
+                        return FindOne(id);
+                    }
+                }
+            }
+            else
+            {
+                // Insert
+                using (MySqlConnection connection = CreateConnection())
+                {
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        string[] parameters = new string[DataMembersWithoutIdentity.Count];
+                        int i = -1;
+                        foreach (var keyValuePair in DataMembersWithoutIdentity)
+                        {
+                            i++;
+                            parameters[i] = $"@{keyValuePair.Value}";
+                        }
+
+                        cmd.CommandText =
+                            $"INSERT INTO {_entityAttribute.Table} (`{string.Join("`, `", DataMembersWithoutIdentity.Values)}`) " +
+                            $"VALUES ({string.Join(", ", parameters)})";
+
+                        AddInsertParametersForEntity(cmd, entity);
+
+                        cmd.ExecuteNonQuery();
+                        return FindOne((int) cmd.LastInsertedId);
+                    }
+                }
+            }
         }
 
-        public List<S> Save<S>(List<S> entities) where S : T
+        public List<T> Save(List<T> entities)
         {
             return entities.Select(Save).ToList();
         }
@@ -176,15 +232,17 @@ namespace Ontwikkelopdracht.Persistence.MySql
                 propertyInfo =>
                     new KeyValuePair<PropertyInfo, string>(propertyInfo,
                         propertyInfo.GetCustomAttribute<IdentityAttribute>(true).Column))
-            .Concat(
-                typeof(T)
-                    .GetProperties()
-                    .Where(propertyInfo => propertyInfo.IsDefined(typeof(DataMemberAttribute), true))
-                    .Select(
-                        propertyInfo =>
-                            new KeyValuePair<PropertyInfo, string>(propertyInfo,
-                                propertyInfo.GetCustomAttribute<DataMemberAttribute>(true).Column))
-            ).ToDictionary(pair => pair.Key, pair => pair.Value);
+            .Concat(DataMembersWithoutIdentity)
+            .ToDictionary(pair => pair.Key, pair => pair.Value);
+
+        private Dictionary<PropertyInfo, string> DataMembersWithoutIdentity => typeof(T)
+            .GetProperties()
+            .Where(propertyInfo => propertyInfo.IsDefined(typeof(DataMemberAttribute), true))
+            .Select(
+                propertyInfo =>
+                    new KeyValuePair<PropertyInfo, string>(propertyInfo,
+                        propertyInfo.GetCustomAttribute<DataMemberAttribute>(true).Column))
+            .ToDictionary(pair => pair.Key, pair => pair.Value);
 
         private T CreateFromReader(MySqlDataReader reader)
         {
@@ -218,6 +276,8 @@ namespace Ontwikkelopdracht.Persistence.MySql
             T entity = new T();
             foreach (var keyValuePair in DataMembers)
             {
+                if (reader.IsDBNull(reader.GetOrdinal(keyValuePair.Value))) continue;
+
                 if (keyValuePair.Key.IsDefined(typeof(IdentityAttribute)))
                 {
                     keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
@@ -232,8 +292,8 @@ namespace Ontwikkelopdracht.Persistence.MySql
                             keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
                             break;
                         case DataType.Entity:
-                            object repo = typeof(MySqlRepository<T, ID>).GetMethod("ResolveRepository")
-                                .MakeGenericMethod(keyValuePair.Key.PropertyType, attribute.RawType)
+                            object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
+                                .MakeGenericMethod(keyValuePair.Key.PropertyType)
                                 .Invoke(this, new object[] {});
                             object value = repo.GetType().GetMethod("FindOne")
                                 .Invoke(repo, new object[] {reader[keyValuePair.Value]});
@@ -245,9 +305,78 @@ namespace Ontwikkelopdracht.Persistence.MySql
             return entity;
         }
 
-        public IRepository<T, ID> ResolveRepository<T, ID>() where T : new()
+        private void AddInsertParametersForEntity<S>(MySqlCommand cmd, S entity) where S : T
         {
-            return Injector.Resolve<IRepository<T, ID>>();
+            foreach (var keyValuePair in DataMembersWithoutIdentity)
+            {
+                DataMemberAttribute attribute = keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
+
+                switch (attribute.Type)
+                {
+                    case DataType.Value:
+                        cmd.Parameters.AddWithValue(attribute.Column, keyValuePair.Key.GetValue(entity));
+                        break;
+                    case DataType.Entity:
+                        object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
+                            .MakeGenericMethod(keyValuePair.Key.PropertyType)
+                            .Invoke(this, new object[] {});
+
+                        object nestedEntity = repo.GetType()
+                            .GetMethod("Save", new Type[] {keyValuePair.Key.PropertyType})
+                            .Invoke(repo, new object[] {keyValuePair.Key.GetValue(entity)});
+
+                        object nestedId = nestedEntity.GetType()
+                            .GetProperties()
+                            .First(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute)))
+                            .GetValue(nestedEntity);
+                        cmd.Parameters.AddWithValue(attribute.Column, nestedId);
+                        break;
+                }
+            }
+        }
+
+        private void AddUpdateParametersForEntity<S>(MySqlCommand cmd, S entity)
+        {
+            foreach (var keyValuePair in DataMembers)
+            {
+                if (keyValuePair.Key.IsDefined(typeof(IdentityAttribute)))
+                {
+                    IdentityAttribute attribute =
+                        keyValuePair.Key.GetCustomAttribute<IdentityAttribute>();
+
+                    cmd.Parameters.AddWithValue(attribute.Column, keyValuePair.Key.GetValue(entity));
+                }
+                else if (keyValuePair.Key.IsDefined(typeof(DataMemberAttribute)))
+                {
+                    DataMemberAttribute attribute =
+                        keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
+
+                    switch (attribute.Type)
+                    {
+                        case DataType.Value:
+                            cmd.Parameters.AddWithValue(attribute.Column, keyValuePair.Key.GetValue(entity));
+                            break;
+                        case DataType.Entity:
+                            object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
+                                .MakeGenericMethod(keyValuePair.Key.PropertyType)
+                                .Invoke(this, new object[] {});
+                            object nestedEntity = repo.GetType()
+                                .GetMethod("Save", new Type[] {keyValuePair.Key.PropertyType})
+                                .Invoke(repo, new object[] {keyValuePair.Key.GetValue(entity)});
+                            object nestedId = nestedEntity.GetType()
+                                .GetProperties()
+                                .First(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute)))
+                                .GetValue(nestedEntity);
+                            cmd.Parameters.AddWithValue(attribute.Column, nestedId);
+                            break;
+                    }
+                }
+            }
+        }
+
+        public IRepository<T> ResolveRepository<T>() where T : new()
+        {
+            return Injector.Resolve<IRepository<T>>();
         }
     }
 }

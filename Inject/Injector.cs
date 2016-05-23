@@ -8,7 +8,7 @@ namespace Inject
 {
     /// <summary>
     ///     Handles dependency injection. Types can be registered using <see cref="Register{T,T}" /> or in bulk with
-    ///     <see cref="Register" />. Types can be resolved using <see cref="Resolve{T}" />.
+    ///     <see cref="Register(System.Collections.Generic.IDictionary{System.Type,System.Type})" />. Types can be resolved using <see cref="Resolve{T}" />.
     /// </summary>
     public static class Injector
     {
@@ -33,7 +33,7 @@ namespace Inject
         {
             Types[typeof (TContract)] = typeof (TImplementation);
 
-            Log.I(Tag, $"Registring {typeof(TContract)} => {typeof(TImplementation)}");
+            Log.I(Tag, $"Registering {typeof(TContract)} => {typeof(TImplementation)}");
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Inject
         {
             Types[contract] = implementation;
 
-            Log.I(Tag, $"Registring {contract} => {implementation}");
+            Log.I(Tag, $"Registering {contract} => {implementation}");
         }
 
         /// <summary>
