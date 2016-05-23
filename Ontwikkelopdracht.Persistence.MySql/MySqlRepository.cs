@@ -305,7 +305,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
             return entity;
         }
 
-        private void AddInsertParametersForEntity<S>(MySqlCommand cmd, S entity) where S : T
+        private void AddInsertParametersForEntity<TEntity>(MySqlCommand cmd, TEntity entity) where TEntity : T
         {
             foreach (var keyValuePair in DataMembersWithoutIdentity)
             {
@@ -335,7 +335,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
-        private void AddUpdateParametersForEntity<S>(MySqlCommand cmd, S entity)
+        private void AddUpdateParametersForEntity<TEntity>(MySqlCommand cmd, TEntity entity)
         {
             foreach (var keyValuePair in DataMembers)
             {
@@ -374,9 +374,9 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
-        public IRepository<T> ResolveRepository<T>() where T : new()
+        public IRepository<TEntity> ResolveRepository<TEntity>() where TEntity : new()
         {
-            return Injector.Resolve<IRepository<T>>();
+            return Injector.Resolve<IRepository<TEntity>>();
         }
     }
 }
