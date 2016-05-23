@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace Ontwikkelopdracht.Controllers
+namespace Ontwikkelopdracht.Areas.Admin.Controllers
 {
     public class HomeController : Controller
     {

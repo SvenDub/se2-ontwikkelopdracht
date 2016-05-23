@@ -105,6 +105,11 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Error.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Admin\Views\Web.config" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Content\main.css" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
@@ -113,14 +118,20 @@
     <Content Include="Views\Film\Details.cshtml" />
     <Content Include="Views\Film\Index.cshtml" />
     <Content Include="Views\Film\Save.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Order\Save.cshtml" />
-    <Content Include="Web.config" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\FilmController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -157,6 +168,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas" />
+    <Folder Include="Areas\Admin" />
+    <Folder Include="Areas\Admin\Controllers" />
+    <Folder Include="Areas\Admin\Models" />
+    <Folder Include="Areas\Admin\Views" />
+    <Folder Include="Areas\Admin\Views\Home" />
+    <Folder Include="Areas\Admin\Views\Shared" />
     <Folder Include="Content\Images" />
     <Folder Include="Models" />
     <Folder Include="Views\Blog" />
