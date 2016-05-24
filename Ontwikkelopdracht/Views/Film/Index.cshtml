@@ -1,10 +1,31 @@
 ﻿@using Ontwikkelopdracht.Models
+@using Util
 @model List<Film>
 
-<h1>Films</h1>
+<div class="list-group">
+    @foreach (Film film in Model)
+    {
+        <div class="list-group-item">
+            <div class="row-action-primary">
+                  <i class="material-icons">movie</i>
+                </div>
+            <div class="row-content">
+                <div class="least-content">@film.Genre.Name</div>
+                <h4 class="list-group-item-heading">
+                    <a href="@Url.Action("Details", "Film", new {id = film.Id})">@film.Title (@film.Release.Year)</a>
+                </h4>
 
-@foreach (Film film in Model)
-{
-    <h2>@film.Title (@film.Release.Year)</h2>
-    <p>Genre:@film.Genre.Name</p>
-}
+                <p class="list-group-item-text">
+                    @Html.DisplayNameFor(list => film.Language): @Html.DisplayFor(list => film.Language)<br>
+                    @if (!film.Subtitles.IsEmpty())
+                    {
+                        <text>
+                            @Html.DisplayNameFor(list => film.Subtitles):
+                            @Html.DisplayFor(list => film.Subtitles)
+                        </text>
+                    }</p>
+            </div>
+        </div>
+        <div class="list-group-separator"></div>
+    }
+</div>
