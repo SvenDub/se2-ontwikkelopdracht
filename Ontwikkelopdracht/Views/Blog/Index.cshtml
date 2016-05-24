@@ -7,7 +7,7 @@
 
 <h1>Blogs</h1>
 <div class="list-group">
-    @foreach (Blog blog in Model)
+    @foreach (Blog blog in Model.OrderByDescending(blog => blog.Date))
     {
         <div class="list-group-item">
             <div class="row-action-primary">
