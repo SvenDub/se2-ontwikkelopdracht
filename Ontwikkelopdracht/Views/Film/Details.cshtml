@@ -1,8 +1,10 @@
-﻿@using Util
-@model Ontwikkelopdracht.Models.Film
+﻿@using System.Globalization
+@using Ontwikkelopdracht.Models
+@using Util
+@model Film
 
 @{
-    ViewBag.Title = Model.Title + " (" +Model.Release.Year + ")";
+    ViewBag.Title = Model.Title + " (" + Model.Release.Year + ")";
 }
 
 <h1>@Model.Title (@Model.Release.Year)</h1>
@@ -12,8 +14,36 @@
     <text>
         @Html.DisplayNameFor(film => film.Subtitles):
         @Html.DisplayFor(film => film.Subtitles)
-    </text><br>
+    </text>
+    <br>
 }
 
 @Html.DisplayNameFor(film => film.Genre): @Html.DisplayFor(film => film.Genre.Name)<br>
 @Html.DisplayNameFor(film => film.Length): @string.Format(new PluralFormatProvider(), "{0:minuut;minuten}", Model.Length)<br>
+
+<h2>Voorstellingen</h2>
+<div class="list-group">
+    @foreach (Show show in ((List<Show>) ViewBag.Shows).OrderBy(show => show.Date))
+    {
+        <div class="list-group-item">
+            <div class="row-action-primary">
+                <i class="material-icons">movie</i>
+            </div>
+            <div class="row-content">
+                <div class="least-content">@show.Date.ToString("HH:mm")</div>
+                <h4 class="list-group-item-heading">
+                    @show.Date.ToString("dd MMM yyyy", new CultureInfo("nl-NL"))
+                </h4>
+            </div>
+        </div>
+        <div class="list-group-separator"></div>
+    }
+    @if (ViewBag.Shows.Count == 0)
+    {
+        <div class="alert alert-dismissible alert-warning">
+            <h4>Geen voorstellingen beschikbaar</h4>
+
+            <p>Probeer het later nog eens.</p>
+        </div>
+    }
+</div>

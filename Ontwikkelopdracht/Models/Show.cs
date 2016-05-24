@@ -1,5 +1,6 @@
 ﻿using System;
 using Ontwikkelopdracht.Persistence;
+using DataType = Ontwikkelopdracht.Persistence.DataType;
 
 namespace Ontwikkelopdracht.Models
 {
