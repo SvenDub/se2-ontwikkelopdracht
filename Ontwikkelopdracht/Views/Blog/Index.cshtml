@@ -1,3 +1,36 @@
-﻿@model List<Ontwikkelopdracht.Models.Blog>
+﻿@using System.Globalization
+@using Ontwikkelopdracht.Models
+@model List<Ontwikkelopdracht.Models.Blog>
 
-<h1>Blog</h1>
+@{
+    ViewBag.Title = "Blogs";
+}
+
+<h1>Blogs</h1>
+<div class="list-group">
+    @foreach (Blog blog in Model)
+    {
+        <div class="list-group-item">
+            <div class="row-action-primary">
+                <i class="material-icons">forum</i>
+            </div>
+            <div class="row-content">
+                <div class="least-content">@blog.Date.ToString("d", new CultureInfo("nl-NL"))</div>
+                <h4 class="list-group-item-heading">
+                    <a href="@Url.Action("Details", "Blog", new {id = blog.Id})">@blog.Title</a>
+                </h4>
+
+                <p class="list-group-item-text">
+                    @Html.DisplayNameFor(list => blog.Author): @Html.DisplayFor(list => blog.Author.Name)<br>
+                </p>
+            </div>
+        </div>
+        <div class="list-group-separator"></div>
+    }
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-dismissible alert-warning">
+            <h4>Geen resultaten gevonden</h4>
+        </div>
+    }
+</div>

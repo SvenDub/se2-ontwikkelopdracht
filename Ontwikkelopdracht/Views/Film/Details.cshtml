@@ -30,9 +30,9 @@
                 <i class="material-icons">movie</i>
             </div>
             <div class="row-content">
-                <div class="least-content">@show.Date.ToString("HH:mm")</div>
+                <div class="least-content">@show.Date.ToString("t", new CultureInfo("nl-NL"))</div>
                 <h4 class="list-group-item-heading">
-                    @show.Date.ToString("dd MMM yyyy", new CultureInfo("nl-NL"))
+                    @show.Date.ToString("D", new CultureInfo("nl-NL"))
                 </h4>
             </div>
         </div>
