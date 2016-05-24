@@ -2,22 +2,22 @@
 
 namespace Ontwikkelopdracht.Models
 {
-    [Entity(Table = "gebruiker")]
+    [Entity(Table = "GEBRUIKER")]
     public class User
     {
-        [Identity(Column = "user_id")]
+        [Identity(Column = "USER_ID")]
         public int Id { get; set; }
 
-        [DataMember(Column = "email")]
+        [DataMember(Column = "EMAIL")]
         public string Email { get; set; }
 
-        [DataMember(Column = "naam")]
+        [DataMember(Column = "NAAM")]
         public string Name { get; set; }
 
-        [DataMember(Column = "wachtwoord")]
+        [DataMember(Column = "WACHTWOORD")]
         public string Password { get; set; }
 
-        [DataMember(Column = "admin")]
+        [DataMember(Column = "ADMIN")]
         public bool Admin { get; set; }
     }
 }

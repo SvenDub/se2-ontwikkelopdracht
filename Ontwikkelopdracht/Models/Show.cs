@@ -3,16 +3,16 @@ using Ontwikkelopdracht.Persistence;
 
 namespace Ontwikkelopdracht.Models
 {
-    [Entity(Table = "voorstelling")]
+    [Entity(Table = "VOORSTELLING")]
     public class Show
     {
-        [Identity(Column = "voorstelling_id")]
+        [Identity(Column = "VOORSTELLING_ID")]
         public int Id { get; set; }
 
-        [DataMember(Column = "film_id", Type = DataType.Entity)]
+        [DataMember(Column = "FILM_ID", Type = DataType.Entity)]
         public Film Film { get; set; }
 
-        [DataMember(Column = "datum")]
+        [DataMember(Column = "DATUM")]
         public DateTime Date { get; set; }
     }
 }

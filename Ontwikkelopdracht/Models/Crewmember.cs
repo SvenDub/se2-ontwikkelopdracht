@@ -3,22 +3,22 @@ using Ontwikkelopdracht.Persistence;
 
 namespace Ontwikkelopdracht.Models
 {
-    [Entity(Table = "crew")]
+    [Entity(Table = "CREW")]
     public class Crewmember
     {
-        [Identity(Column = "crew_id")]
+        [Identity(Column = "CREW_ID")]
         public int Id { get; set; }
 
-        [DataMember(Column = "naam")]
+        [DataMember(Column = "NAAM")]
         public string Name { get; set; }
 
-        [DataMember(Column = "geboortedatum")]
+        [DataMember(Column = "GEBOORTEDATUM")]
         public DateTime Birth { get; set; }
 
-        [DataMember(Column = "geslacht")]
+        [DataMember(Column = "GESLACHT")]
         public Gender Gender { get; set; }
 
-        [DataMember(Column = "bio")]
+        [DataMember(Column = "BIO")]
         public string Bio { get; set; }
     }
 }

@@ -3,29 +3,29 @@ using Ontwikkelopdracht.Persistence;
 
 namespace Ontwikkelopdracht.Models
 {
-    [Entity(Table = "film")]
+    [Entity(Table = "FILM")]
     public class Film
     {
-        [Identity(Column = "film_id")]
+        [Identity(Column = "FILM_ID")]
         public int Id { get; set; }
 
-        [DataMember(Column = "titel")]
+        [DataMember(Column = "TITEL")]
         public string Title { get; set; }
 
-        [DataMember(Column = "duur")]
+        [DataMember(Column = "DUUR")]
         public int Length { get; set; }
 
-        [DataMember(Column = "release")]
+        [DataMember(Column = "RELEASE")]
         [System.ComponentModel.DataAnnotations.DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         public DateTime Release { get; set; }
 
-        [DataMember(Column = "gesproken_taal")]
+        [DataMember(Column = "GESPROKEN_TAAL")]
         public string Language { get; set; }
 
-        [DataMember(Column = "ondertitel_taal")]
+        [DataMember(Column = "ONDERTITEL_TAAL")]
         public string Subtitles { get; set; }
 
-        [DataMember(Column = "genre_id", Type = DataType.Entity)]
+        [DataMember(Column = "GENRE_ID", Type = DataType.Entity)]
         public Genre Genre { get; set; }
     }
 }

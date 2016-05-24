@@ -2,19 +2,19 @@
 
 namespace Ontwikkelopdracht.Models
 {
-    [Entity(Table = "auteur")]
+    [Entity(Table = "AUTEUR")]
     public class Author
     {
-        [Identity(Column = "auteur_id")]
+        [Identity(Column = "AUTEUR_ID")]
         public int Id { get; set; }
 
-        [DataMember(Column = "email")]
+        [DataMember(Column = "EMAIL")]
         public string Email { get; set; }
 
-        [DataMember(Column = "naam")]
+        [DataMember(Column = "NAAM")]
         public string Name { get; set; }
 
-        [DataMember(Column = "wachtwoord")]
+        [DataMember(Column = "WACHTWOORD")]
         public string Password { get; set; }
     }
 }

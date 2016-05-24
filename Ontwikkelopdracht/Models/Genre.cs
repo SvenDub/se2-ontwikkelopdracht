@@ -2,13 +2,13 @@
 
 namespace Ontwikkelopdracht.Models
 {
-    [Entity(Table = "genre")]
+    [Entity(Table = "GENRE")]
     public class Genre
     {
-        [Identity(Column = "genre_id")]
+        [Identity(Column = "GENRE_ID")]
         public int Id { get; set; }
 
-        [DataMember(Column = "naam")]
+        [DataMember(Column = "NAAM")]
         public string Name { get; set; }
     }
 }

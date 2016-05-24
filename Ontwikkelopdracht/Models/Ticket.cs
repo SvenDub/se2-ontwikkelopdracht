@@ -2,19 +2,19 @@
 
 namespace Ontwikkelopdracht.Models
 {
-    [Entity(Table = "kaartje")]
+    [Entity(Table = "KAARTJE")]
     public class Ticket
     {
-        [Identity(Column = "kaartje_id")]
+        [Identity(Column = "KAARTJE_ID")]
         public int Id { get; set; }
 
-        [DataMember(Column = "voorstelling_id", Type = DataType.Entity)]
+        [DataMember(Column = "VOORSTELLING_ID", Type = DataType.Entity)]
         public Show Show { get; set; }
 
-        [DataMember(Column = "stoel_id")]
+        [DataMember(Column = "STOEL_ID")]
         public int Seat { get; set; }
 
-        [DataMember(Column = "bestelling_id")]
+        [DataMember(Column = "BESTELLING_ID")]
         public int Order { get; set; }
     }
 }
