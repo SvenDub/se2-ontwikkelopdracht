@@ -1,15 +1,32 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
+using Inject;
 using Ontwikkelopdracht.Models;
+using Ontwikkelopdracht.Persistence;
 
 namespace Ontwikkelopdracht.Controllers
 {
     public class FilmController : EntityController<Film>
     {
+        private readonly IRepository<Show> _showRepository = Injector.Resolve<IRepository<Show>>();
+
         public ActionResult Index() => View(Repository.FindAll());
 
-        public ActionResult Details(int id) => View(Repository.FindOne(id));
+        public ActionResult Search(string query)
+            =>
+            View("Index",
+                Repository
+                    .FindAllWhere(film => film.Title.ToLower().IndexOf(query, StringComparison.InvariantCultureIgnoreCase) >= 0));
 
-        public ActionResult Save() => View();
+        public ActionResult Details(int id)
+        {
+            ViewBag.Shows = _showRepository.FindAllWhere(show => show.Film.Id == id);
+
+            return View(Repository.FindOne(id));
+        }
+
+        /*public ActionResult Save() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -18,6 +35,6 @@ namespace Ontwikkelopdracht.Controllers
             Film updated = Repository.Save(film);
 
             return RedirectToAction("Details", new {id = updated.Id});
-        }
+        }*/
     }
 }

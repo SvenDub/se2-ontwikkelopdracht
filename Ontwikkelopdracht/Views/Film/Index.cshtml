@@ -1,10 +1,57 @@
 ﻿@using Ontwikkelopdracht.Models
+@using Util
 @model List<Film>
 
-<h1>Films</h1>
-
-@foreach (Film film in Model)
-{
-    <h2>@film.Title (@film.Release.Year)</h2>
-    <p>Genre:@film.Genre.Name</p>
+@{
+    ViewBag.Title = "Films";
 }
+
+@using (Html.BeginForm("Search", "Film", FormMethod.Get))
+{
+    <div class="form-group label-floating">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="material-icons">search</i></span>
+            <label class="control-label" for="query">Zoek op titel</label>
+            @Html.Editor("query", new {htmlAttributes = new {@class = "form-control"}})
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">Zoeken</button>
+            </span>
+        </div>
+    </div>
+}
+<p>@string.Format(new PluralFormatProvider(), "{0:resultaat;resultaten}", Model.Count)</p>
+<div class="list-group">
+    @foreach (Film film in Model)
+    {
+        <div class="list-group-item">
+            <div class="row-action-primary">
+                <i class="material-icons">movie</i>
+            </div>
+            <div class="row-content">
+                <div class="least-content">@film.Genre.Name</div>
+                <h4 class="list-group-item-heading">
+                    <a href="@Url.Action("Details", "Film", new {id = film.Id})">@film.Title (@film.Release.Year)</a>
+                </h4>
+
+                <p class="list-group-item-text">
+                    @Html.DisplayNameFor(list => film.Language): @Html.DisplayFor(list => film.Language)<br>
+                    @if (!film.Subtitles.IsEmpty())
+                    {
+                        <text>
+                            @Html.DisplayNameFor(list => film.Subtitles):
+                            @Html.DisplayFor(list => film.Subtitles)
+                        </text>
+                    }</p>
+            </div>
+        </div>
+        <div class="list-group-separator"></div>
+    }
+@if (Model.Count == 0)
+{
+    <div class="alert alert-dismissible alert-warning">
+      <h4>Geen resultaten gevonden</h4>
+
+      <p>Probeer een andere zoekopdracht.</p>
+    </div>
+}
+</div>
