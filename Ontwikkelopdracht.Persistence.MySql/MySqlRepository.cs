@@ -127,6 +127,16 @@ namespace Ontwikkelopdracht.Persistence.MySql
             return ids.Select(FindOne).ToList();
         }
 
+        public List<T> FindAllWhere(Func<T, bool> predicate)
+        {
+            return FindAll().Where(predicate).ToList();
+        }
+
+        public List<T> FindAllWhere(Func<T, int, bool> predicate)
+        {
+            return FindAll().Where(predicate).ToList();
+        }
+
         public T FindOne(int id)
         {
             using (MySqlConnection connection = CreateConnection())

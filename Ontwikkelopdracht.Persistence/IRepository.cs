@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Ontwikkelopdracht.Persistence
 {
@@ -57,6 +58,20 @@ namespace Ontwikkelopdracht.Persistence
         /// <param name="ids">The IDs to check.</param>
         /// <returns>All entities with the given IDs.</returns>
         List<T> FindAll(List<int> ids);
+
+        /// <summary>
+        ///     Returns all instances of the type that satisfy the given predicate.
+        /// </summary>
+        /// <param name="predicate">The condition to check.</param>
+        /// <returns>All entities that satisfy the given predicate.</returns>
+        List<T> FindAllWhere(Func<T, bool> predicate);
+
+        /// <summary>
+        ///     Returns all instances of the type that satisfy the given predicate.
+        /// </summary>
+        /// <param name="predicate">The condition to check.</param>
+        /// <returns>All entities that satisfy the given predicate.</returns>
+        List<T> FindAllWhere(Func<T, int, bool> predicate);
 
         /// <summary>
         ///     Retrieves an entity by its id.
