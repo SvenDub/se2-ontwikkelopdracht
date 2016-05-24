@@ -147,6 +147,7 @@
     <Compile Include="Models\Film.cs" />
     <Compile Include="Models\Gender.cs" />
     <Compile Include="Models\Genre.cs" />
+    <Compile Include="Models\InternationalizationAttribute.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\ProductionMySqlConnectionParams.cs" />
     <Compile Include="Models\Show.cs" />

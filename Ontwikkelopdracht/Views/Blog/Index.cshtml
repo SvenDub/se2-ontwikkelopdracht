@@ -1,5 +1,4 @@
-﻿@using System.Globalization
-@using Ontwikkelopdracht.Models
+﻿@using Ontwikkelopdracht.Models
 @model List<Blog>
 
 @{
@@ -15,7 +14,7 @@
                 <i class="material-icons">forum</i>
             </div>
             <div class="row-content">
-                <div class="least-content">@blog.Date.ToString("d", new CultureInfo("nl-NL"))</div>
+                <div class="least-content">@blog.Date.ToString("d")</div>
                 <h4 class="list-group-item-heading">
                     <a href="@Url.Action("Details", "Blog", new {id = blog.Id})">@blog.Title</a>
                 </h4>

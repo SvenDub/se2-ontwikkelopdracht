@@ -18,7 +18,6 @@ namespace Ontwikkelopdracht.Models
 
         [DataMember(Column = "DUUR")]
         [DisplayName("Duur")]
-        [DisplayFormat(DataFormatString = "{0:minuut:minuten}")]
         public int Length { get; set; }
 
         [DataMember(Column = "RELEASE")]
