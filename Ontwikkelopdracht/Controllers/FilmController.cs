@@ -1,6 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
 using Ontwikkelopdracht.Models;
-using Util;
 
 namespace Ontwikkelopdracht.Controllers
 {
@@ -10,6 +11,13 @@ namespace Ontwikkelopdracht.Controllers
         {
             return View(Repository.FindAll());
         }
+
+        public ActionResult Search(string query)
+            =>
+            View("Index",
+                Repository.FindAll()
+                    .Where(film => film.Title.ToLower().IndexOf(query, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    .ToList());
 
         public ActionResult Details(int id) => View(Repository.FindOne(id));
 
