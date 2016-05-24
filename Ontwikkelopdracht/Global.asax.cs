@@ -7,6 +7,7 @@ using Inject;
 using Ontwikkelopdracht.Models;
 using Ontwikkelopdracht.Persistence;
 using Ontwikkelopdracht.Persistence.MySql;
+using Util;
 
 namespace Ontwikkelopdracht
 {

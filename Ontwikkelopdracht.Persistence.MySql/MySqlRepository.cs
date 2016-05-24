@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Inject;
 using MySql.Data.MySqlClient;
-using Ontwikkelopdracht.Models;
+using Util;
 
 namespace Ontwikkelopdracht.Persistence.MySql
 {

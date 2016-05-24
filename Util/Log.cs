@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ontwikkelopdracht.Models
+namespace Util
 {
     public static class Log
     {
