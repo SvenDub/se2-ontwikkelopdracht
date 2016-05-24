@@ -1,4 +1,19 @@
-﻿@model Ontwikkelopdracht.Models.Film
+﻿@using Util
+@model Ontwikkelopdracht.Models.Film
+
+@{
+    ViewBag.Title = Model.Title + " (" +Model.Release.Year + ")";
+}
 
 <h1>@Model.Title (@Model.Release.Year)</h1>
-<p>Genre:@Model.Genre.Name</p>
+@Html.DisplayNameFor(film => film.Language): @Html.DisplayFor(film => film.Language)<br>
+@if (!Model.Subtitles.IsEmpty())
+{
+    <text>
+        @Html.DisplayNameFor(film => film.Subtitles):
+        @Html.DisplayFor(film => film.Subtitles)
+    </text><br>
+}
+
+@Html.DisplayNameFor(film => film.Genre): @Html.DisplayFor(film => film.Genre.Name)<br>
+@Html.DisplayNameFor(film => film.Length): @string.Format(new PluralFormatProvider(), "{0:minuut;minuten}", Model.Length)<br>

@@ -21,7 +21,7 @@ namespace Ontwikkelopdracht.Controllers
 
         public ActionResult Details(int id) => View(Repository.FindOne(id));
 
-        public ActionResult Save() => View();
+        /*public ActionResult Save() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -30,6 +30,6 @@ namespace Ontwikkelopdracht.Controllers
             Film updated = Repository.Save(film);
 
             return RedirectToAction("Details", new {id = updated.Id});
-        }
+        }*/
     }
 }

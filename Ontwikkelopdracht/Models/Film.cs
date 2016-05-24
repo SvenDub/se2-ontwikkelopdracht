@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using Ontwikkelopdracht.Persistence;
+using DataType = Ontwikkelopdracht.Persistence.DataType;
 
 namespace Ontwikkelopdracht.Models
 {
@@ -16,11 +18,12 @@ namespace Ontwikkelopdracht.Models
 
         [DataMember(Column = "DUUR")]
         [DisplayName("Duur")]
+        [DisplayFormat(DataFormatString = "{0:minuut:minuten}")]
         public int Length { get; set; }
 
         [DataMember(Column = "RELEASE")]
         [DisplayName("Release")]
-        [System.ComponentModel.DataAnnotations.DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         public DateTime Release { get; set; }
 
         [DataMember(Column = "GESPROKEN_TAAL")]
