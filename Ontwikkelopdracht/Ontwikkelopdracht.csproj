@@ -110,6 +110,7 @@
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Admin\Views\Web.config" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="bower.json" />
     <Content Include="Content\main.css" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
