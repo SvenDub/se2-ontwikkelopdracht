@@ -111,6 +111,7 @@
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Error.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Admin\Views\Show\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Show\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Show\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Web.config" />
