@@ -15,5 +15,7 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
                     .FindAllWhere(
                         show =>
                             show.Film.Title.ToLower().IndexOf(query, StringComparison.InvariantCultureIgnoreCase) >= 0));
+
+        public ActionResult Details(int id) => View(Repository.FindOne(id));
     }
 }
