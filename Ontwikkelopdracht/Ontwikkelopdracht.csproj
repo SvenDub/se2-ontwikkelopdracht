@@ -114,6 +114,7 @@
     <Content Include="Content\main.css" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
+    <Content Include="Views\Blog\Add.cshtml" />
     <Content Include="Views\Blog\Details.cshtml" />
     <Content Include="Views\Blog\Index.cshtml" />
     <Content Include="Views\Film\Details.cshtml" />
@@ -147,6 +148,7 @@
     <Compile Include="Models\Film.cs" />
     <Compile Include="Models\Gender.cs" />
     <Compile Include="Models\Genre.cs" />
+    <Compile Include="Models\InternationalizationAttribute.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\ProductionMySqlConnectionParams.cs" />
     <Compile Include="Models\Show.cs" />

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Ontwikkelopdracht.Persistence;
+using DataType = Ontwikkelopdracht.Persistence.DataType;
 
 namespace Ontwikkelopdracht.Models
 {
@@ -14,6 +16,8 @@ namespace Ontwikkelopdracht.Models
         public User User { get; set; }
 
         [DataMember(Column = "DATUM")]
+        [DisplayFormat(DataFormatString = "{0:D}")]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         public DateTime Date { get; set; }
 
         [DataMember(Column = "PRIJS")]

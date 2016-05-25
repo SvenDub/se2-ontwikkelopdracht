@@ -1,3 +1,12 @@
 ﻿@model Ontwikkelopdracht.Models.Blog
 
+@{
+    ViewBag.Title = Model.Title;
+}
+
 <h1>@Model.Title</h1>
+<p>
+    @Html.DisplayNameFor(blog => blog.Author): @Html.DisplayFor(blog => blog.Author.Name)<br>
+    @Html.DisplayNameFor(blog => blog.Date): @Html.DisplayFor(blog => blog.Date)
+</p>
+@Model.Body
