@@ -6,7 +6,7 @@
 }
 
 <h1>Blogs</h1>
-<div class="list-group">
+<div class="list-group list-group-fab">
     @foreach (Blog blog in Model.OrderByDescending(blog => blog.Date))
     {
         <div class="list-group-item">
@@ -32,4 +32,5 @@
             <h4>Geen resultaten gevonden</h4>
         </div>
     }
+    <a href="@Url.Action("Add", "Blog")" class="btn btn-primary btn-fab"><i class="material-icons">add</i></a>
 </div>

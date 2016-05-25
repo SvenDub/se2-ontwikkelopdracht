@@ -6,3 +6,14 @@
 body {
     padding-top: 70px;
   }
+
+.list-group-fab {
+    position: relative;
+    padding-bottom: 56px;
+}
+
+.btn-fab {
+    position: absolute !important;
+    right: 0;
+    bottom: 0;
+}
