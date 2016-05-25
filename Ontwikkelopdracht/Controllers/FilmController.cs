@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Mvc;
 using Inject;
 using Ontwikkelopdracht.Models;
@@ -25,16 +24,5 @@ namespace Ontwikkelopdracht.Controllers
 
             return View(Repository.FindOne(id));
         }
-
-        /*public ActionResult Save() => View();
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Save(Film film)
-        {
-            Film updated = Repository.Save(film);
-
-            return RedirectToAction("Details", new {id = updated.Id});
-        }*/
     }
 }
