@@ -266,9 +266,9 @@ insert into VOORSTELLING (VOORSTELLING_ID, FILM_ID, ZAAL_ID, EVENT_ID, DATUM) va
 
 -- GEBRUIKER
 
-insert into GEBRUIKER (EMAIL, NAAM, WACHTWOORD) values ('sven.dubbeld1@gmail.com', 'Sven Dubbeld', 'Wachtwoord');
-insert into GEBRUIKER (EMAIL, NAAM, WACHTWOORD) values ('sven@svendubbeld.nl', 'Hr. S. Dubbeld', 'Wachtwoord');
-insert into GEBRUIKER (EMAIL, NAAM, WACHTWOORD) values ('s.dubbeld@student.fontys.nl', 'S. Dubbeld', 'Wachtwoord');
+insert into GEBRUIKER (EMAIL, NAAM, WACHTWOORD, ADMIN) values ('sven.dubbeld1@gmail.com', 'Sven Dubbeld', 'Wachtwoord', 0);
+insert into GEBRUIKER (EMAIL, NAAM, WACHTWOORD, ADMIN) values ('sven@svendubbeld.nl', 'Hr. S. Dubbeld', 'Wachtwoord', 1);
+insert into GEBRUIKER (EMAIL, NAAM, WACHTWOORD, ADMIN) values ('s.dubbeld@student.fontys.nl', 'S. Dubbeld', 'Wachtwoord', 0);
 
 -- BESTELLING
 

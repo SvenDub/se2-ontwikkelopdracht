@@ -299,7 +299,14 @@ namespace Ontwikkelopdracht.Persistence.MySql
                     switch (attribute.Type)
                     {
                         case DataType.Value:
-                            keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
+                            if (keyValuePair.Key.PropertyType == typeof(bool))
+                            {
+                                keyValuePair.Key.SetValue(entity, Convert.ToBoolean(reader[keyValuePair.Value]));
+                            }
+                            else
+                            {
+                                keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
+                            }
                             break;
                         case DataType.Entity:
                             object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
