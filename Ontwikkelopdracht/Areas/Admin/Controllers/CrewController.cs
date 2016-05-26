@@ -12,5 +12,16 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
             => View("Index", Repository.FindAllWhere(crewmember => crewmember.Name.ContainsIgnoreCase(query)));
 
         public ActionResult Details(int id) => View(Repository.FindOne(id));
+
+        public ActionResult Add() => View();
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Save(Crewmember crew)
+        {
+            Crewmember saved = Repository.Save(crew);
+
+            return RedirectToAction("Details", new {id = saved.Id});
+        }
     }
 }
