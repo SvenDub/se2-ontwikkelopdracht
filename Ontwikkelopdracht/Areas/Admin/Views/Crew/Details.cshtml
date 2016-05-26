@@ -1,0 +1,15 @@
+﻿@using Ontwikkelopdracht.Models
+@using Util
+@model Crewmember
+
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<h1>@ViewBag.Title</h1>
+@Html.DisplayNameFor(crew => crew.Gender): @Html.DisplayFor(crew => crew.Gender)<br>
+@Html.DisplayNameFor(crew => crew.Birth): @Html.DisplayFor(crew => crew.Birth)<br>
+
+<p>
+    @Html.DisplayFor(crew => crew.Bio)
+</p>

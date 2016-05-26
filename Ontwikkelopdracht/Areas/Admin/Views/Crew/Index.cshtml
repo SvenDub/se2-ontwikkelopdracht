@@ -28,9 +28,9 @@
                 <i class="material-icons">person</i>
             </div>
             <div class="row-content">
-                <div class="least-content">@crewmember.Birth.ToShortDateString()</div>
+                <div class="least-content">@Html.DisplayFor(list => crewmember.Birth)</div>
                 <h4 class="list-group-item-heading">
-                    <a href="@Url.Action("Details", "Crew", new {id = crewmember.Id})">@crewmember.Name</a>
+                    <a href="@Url.Action("Details", "Crew", new {id = crewmember.Id})">@Html.DisplayFor(list => crewmember.Name)</a>
                 </h4>
 
                 <p class="list-group-item-text">

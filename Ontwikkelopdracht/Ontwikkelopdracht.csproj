@@ -105,6 +105,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Admin\Views\Crew\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Crew\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Film\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Film\Details.cshtml" />
@@ -130,6 +131,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Order\Save.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Enum.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
@@ -197,6 +199,7 @@
     <Folder Include="Views\Blog" />
     <Folder Include="Views\Film" />
     <Folder Include="Views\Order" />
+    <Folder Include="Views\Shared\DisplayTemplates" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

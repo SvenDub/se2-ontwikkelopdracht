@@ -10,5 +10,7 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
 
         public ActionResult Search(string query)
             => View("Index", Repository.FindAllWhere(crewmember => crewmember.Name.ContainsIgnoreCase(query)));
+
+        public ActionResult Details(int id) => View(Repository.FindOne(id));
     }
 }
