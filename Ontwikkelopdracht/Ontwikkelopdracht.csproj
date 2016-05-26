@@ -105,6 +105,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Admin\Views\Crew\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Film\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Film\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Film\Index.cshtml" />
@@ -139,6 +140,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\CrewController.cs" />
     <Compile Include="Areas\Admin\Controllers\FilmController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShowController.cs" />
@@ -185,6 +187,7 @@
     <Folder Include="Areas\Admin\Film" />
     <Folder Include="Areas\Admin\Models" />
     <Folder Include="Areas\Admin\Views" />
+    <Folder Include="Areas\Admin\Views\Crew" />
     <Folder Include="Areas\Admin\Views\Film" />
     <Folder Include="Areas\Admin\Views\Home" />
     <Folder Include="Areas\Admin\Views\Shared" />

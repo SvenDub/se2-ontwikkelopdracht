@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Inject;
 using Ontwikkelopdracht.Models;
 using Ontwikkelopdracht.Persistence;
+using Util;
 
 namespace Ontwikkelopdracht.Controllers
 {
@@ -13,10 +14,7 @@ namespace Ontwikkelopdracht.Controllers
         public ActionResult Index() => View(Repository.FindAll());
 
         public ActionResult Search(string query)
-            =>
-            View("Index",
-                Repository
-                    .FindAllWhere(film => film.Title.ToLower().IndexOf(query, StringComparison.InvariantCultureIgnoreCase) >= 0));
+            => View("Index", Repository.FindAllWhere(film => film.Title.ContainsIgnoreCase(query)));
 
         public ActionResult Details(int id)
         {

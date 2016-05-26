@@ -34,7 +34,7 @@ CREATE TABLE CREW (
   CREW_ID INT PRIMARY KEY AUTO_INCREMENT,
   NAAM TEXT(100) NOT NULL,
   GEBOORTEDATUM DATE NOT NULL,
-  GESLACHT CHAR(1) NOT NULL CHECK (UPPER(GESLACHT) IN ('M', 'V')),
+  GESLACHT INT(1) NOT NULL CHECK (GESLACHT IN (0, 1)),
   BIO LONGTEXT NOT NULL
 );
 
@@ -177,7 +177,7 @@ CREATE TABLE AUTEUR (
 CREATE TABLE BLOG (
   BLOG_ID INT PRIMARY KEY AUTO_INCREMENT,
   TITEL TEXT(100) NOT NULL,
-  DATUM DATE NOT NULL,
+  DATUM DATETIME NOT NULL,
   BODY LONGTEXT NOT NULL,
   AUTEUR INT NOT NULL REFERENCES AUTEUR (AUTEUR_ID)
 );
@@ -186,16 +186,16 @@ CREATE TABLE BLOG (
 
 -- CREW
 
-insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (1, 'Carlos Arnold', '1970-09-22', 'M', 'Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede. Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem. Fusce consequat. Nulla nisl. Nunc nisl.');
-insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (2, 'Bruce Young', '1988-05-26', 'M', 'Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat. Praesent blandit. Nam nulla.');
-insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (3, 'Adam Castillo', '1971-04-16', 'M', 'Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque. Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla.');
-insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (4, 'Barbara Thomas', '1989-04-20', 'V', 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien.');
-insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (5, 'Marilyn Hernandez', '1968-03-28', 'V', 'Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem. Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus. Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.');
-insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (6, 'Irene Peterson', '1963-03-16', 'V', 'Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh. Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est.');
-insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (7, 'Margaret Riley', '1961-10-08', 'V', 'Duis at velit eu est congue elementum. In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros.');
-insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (8, 'Louis Wilson', '1985-03-09', 'M', 'Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.');
-insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (9, 'Phyllis Long', '1991-02-21', 'V', 'Nullam molestie nibh in lectus. Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.');
-insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (10, 'Julie Franklin', '1968-10-30', 'V', 'Vivamus vel nulla eget eros elementum pellentesque. Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus. Phasellus in felis. Donec semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis.');
+insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (1, 'Carlos Arnold', '1970-09-22', 0, 'Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede. Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem. Fusce consequat. Nulla nisl. Nunc nisl.');
+insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (2, 'Bruce Young', '1988-05-26', 0, 'Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat. Praesent blandit. Nam nulla.');
+insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (3, 'Adam Castillo', '1971-04-16', 0, 'Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque. Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla.');
+insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (4, 'Barbara Thomas', '1989-04-20', 1, 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien.');
+insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (5, 'Marilyn Hernandez', '1968-03-28', 1, 'Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem. Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus. Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.');
+insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (6, 'Irene Peterson', '1963-03-16', 1, 'Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh. Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est.');
+insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (7, 'Margaret Riley', '1961-10-08', 1, 'Duis at velit eu est congue elementum. In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros.');
+insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (8, 'Louis Wilson', '1985-03-09', 0, 'Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.');
+insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (9, 'Phyllis Long', '1991-02-21', 1, 'Nullam molestie nibh in lectus. Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.');
+insert into CREW (CREW_ID, NAAM, GEBOORTEDATUM, GESLACHT, BIO) values (10, 'Julie Franklin', '1968-10-30', 1, 'Vivamus vel nulla eget eros elementum pellentesque. Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus. Phasellus in felis. Donec semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis.');
 
 -- CREW_TYPE
 
