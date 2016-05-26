@@ -1,0 +1,14 @@
+﻿@using Ontwikkelopdracht.Models
+@model User
+
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<h1>@ViewBag.Title</h1>
+@Html.DisplayNameFor(user => user.Email): <a href="mailto:@Html.DisplayFor(user => user.Email)">@Html.DisplayFor(user => user.Email)</a><br>
+<div class="checkbox">
+    <label>
+        @Html.DisplayFor(user => user.Admin) @Html.DisplayNameFor(user => user.Admin)
+    </label>
+</div>
