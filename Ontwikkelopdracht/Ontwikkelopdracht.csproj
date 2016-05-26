@@ -117,6 +117,7 @@
     <Content Include="Areas\Admin\Views\Show\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Show\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Show\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\User\Add.cshtml" />
     <Content Include="Areas\Admin\Views\User\Details.cshtml" />
     <Content Include="Areas\Admin\Views\User\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Web.config" />

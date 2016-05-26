@@ -35,7 +35,7 @@
                     }
                 </div>
                 <h4 class="list-group-item-heading">
-                    <a href="@Url.Action("Details", "User", new {id = user.Id})">@Html.DisplayFor(list => user.Name) &lt;@Html.DisplayFor(list => user.Email)&gt;</a>
+                    <a href="@Url.Action("Details", "User", new {id = user.Id})">@Html.DisplayFor(list => user.Name) &lt;@Html.DisplayTextFor(list => user.Email)&gt;</a>
                 </h4>
             </div>
         </div>
