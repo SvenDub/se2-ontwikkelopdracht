@@ -31,7 +31,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Pathé Admin</a>
+            @Html.ActionLink("Pathé Admin", "Index", "Home", new {}, new {@class = "navbar-brand"})
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -60,6 +60,9 @@
                     <li>
                         @Html.ActionLink("Login", "Index", "Login")
                     </li>
+                    <li>
+                        @Html.ActionLink("Terug naar site", "Index", "Home", new {Area = ""}, new {})
+                    </li>
                 }
                 else
                 {
@@ -72,6 +75,9 @@
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
+                                <li>
+                                    @Html.ActionLink("Terug naar site", "Index", "Home", new {Area = ""}, new {})
+                                </li>
                                 <li>
                                     @Html.ActionLink("Account", "Details", "User", new {id = user.Id}, new {})
                                 </li>
