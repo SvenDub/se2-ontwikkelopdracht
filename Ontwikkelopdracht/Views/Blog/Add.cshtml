@@ -11,6 +11,7 @@
     @Html.AntiForgeryToken()
     @Html.ValidationSummary()
     @Html.HiddenFor(blog => blog.Id)
+    @Html.HiddenFor(blog => blog.Author)
 
     <div class="form-group label-floating">
         @Html.LabelFor(blog => blog.Title, new {@class = "control-label"})
@@ -22,11 +23,6 @@
         @Html.TextAreaFor(blog => blog.Body, new {@class = "form-control", rows = "15"})
     </div>
 
-    <div class="form-group">
-        @Html.LabelFor(blog => blog.Author, new {@class = "control-label"})
-        @Html.DropDownListFor(blog => blog.Author.Id, (IEnumerable<SelectListItem>) ViewBag.Author, new {@class = "form-control"})
-    </div>
-
     <input class="btn btn-primary btn-raised" type="submit" value="Toevoegen"/>
-    <input class="btn btn-raised" type="button" onclick="location.href='@Url.Action("Index", "Blog")'" value="Annuleren"/>
+    <input class="btn btn-raised" type="button" onclick="location.href = '@Url.Action("Index", "Blog")'" value="Annuleren"/>
 }

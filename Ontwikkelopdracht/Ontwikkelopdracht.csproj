@@ -137,6 +137,8 @@
     <Content Include="Views\Film\Index.cshtml" />
     <Content Include="Views\Film\Save.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Login\Unauthorized.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Order\Save.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Enum.cshtml" />
@@ -160,12 +162,12 @@
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\FilmController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AuthenticationAttribute.cs" />
-    <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Blog.cs" />
     <Compile Include="Models\Crewmember.cs" />
     <Compile Include="Models\EntityController.cs" />
@@ -174,6 +176,7 @@
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\InternationalizationAttribute.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\SessionVars.cs" />
     <Compile Include="Models\Show.cs" />
     <Compile Include="Models\Ticket.cs" />
     <Compile Include="Models\User.cs" />
@@ -211,6 +214,7 @@
     <Folder Include="Models" />
     <Folder Include="Views\Blog" />
     <Folder Include="Views\Film" />
+    <Folder Include="Views\Login" />
     <Folder Include="Views\Order" />
     <Folder Include="Views\Shared\DisplayTemplates" />
   </ItemGroup>

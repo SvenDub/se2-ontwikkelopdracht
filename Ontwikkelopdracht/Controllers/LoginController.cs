@@ -3,7 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Ontwikkelopdracht.Models;
 
-namespace Ontwikkelopdracht.Areas.Admin.Controllers
+namespace Ontwikkelopdracht.Controllers
 {
     public class LoginController : EntityController<User>
     {

@@ -25,6 +25,6 @@ namespace Ontwikkelopdracht.Models
 
         [DataMember(Column = "AUTEUR", Type = DataType.Entity)]
         [DisplayName("Auteur")]
-        public Author Author { get; set; }
+        public User Author { get; set; }
     }
 }

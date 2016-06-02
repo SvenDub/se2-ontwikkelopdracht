@@ -1,4 +1,6 @@
 ﻿@using System.Web.UI.WebControls
+@using Ontwikkelopdracht.Models
+@using Util
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -29,7 +31,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Pathé</a>
+            @Html.ActionLink("Pathé", "Index", "Home", new {}, new {@class = "navbar-brand"})
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -42,6 +44,39 @@
                 <li>
                     @Html.ActionLink("Blogs", "Index", "Blog")
                 </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                @if (HttpContext.Current.Session[SessionVars.User] == null)
+                {
+                    <li>
+                        @Html.ActionLink("Login", "Index", "Login")
+                    </li>
+                }
+                else
+                {
+                    {
+                        User user = (User) HttpContext.Current.Session[SessionVars.User];
+                        <li class="dropdown">
+                            <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img class="login-avatar" src="@Gravatar.GetUrl(user.Email, "404")" onerror="this.remove()" alt="person">
+                                @user.Name
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @if (user.Admin)
+                                {
+                                    <li>
+                                        @Html.ActionLink("Admin panel", "Index", "Home", new {Area = "Admin"}, new {})
+                                    </li>
+                                    <li class="divider"></li>
+                                }
+                                <li>
+                                    @Html.ActionLink("Logout", "Logout", "Login")
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                }
             </ul>
         </div>
     </div>
