@@ -4,7 +4,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Inject;
-using Ontwikkelopdracht.Models;
 using Ontwikkelopdracht.Persistence;
 using Ontwikkelopdracht.Persistence.MySql;
 using Util;
