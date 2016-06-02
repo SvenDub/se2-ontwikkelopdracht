@@ -4,6 +4,7 @@ using Util;
 
 namespace Ontwikkelopdracht.Areas.Admin.Controllers
 {
+    [Authentication(Admin = true)]
     public class CrewController : EntityController<Crewmember>
     {
         public ActionResult Index() => View(Repository.FindAll());

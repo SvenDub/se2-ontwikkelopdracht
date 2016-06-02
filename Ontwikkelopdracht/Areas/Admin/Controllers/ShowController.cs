@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Inject;
 using Ontwikkelopdracht.Models;
 using Ontwikkelopdracht.Persistence;
@@ -7,6 +6,7 @@ using Util;
 
 namespace Ontwikkelopdracht.Areas.Admin.Controllers
 {
+    [Authentication(Admin = true)]
     public class ShowController : EntityController<Show>
     {
         private readonly IRepository<Film> _filmRepository = Injector.Resolve<IRepository<Film>>();

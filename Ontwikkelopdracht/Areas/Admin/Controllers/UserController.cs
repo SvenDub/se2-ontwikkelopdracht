@@ -4,6 +4,7 @@ using Util;
 
 namespace Ontwikkelopdracht.Areas.Admin.Controllers
 {
+    [Authentication(Admin = true)]
     public class UserController : EntityController<User>
     {
         public ActionResult Index() => View(Repository.FindAll());

@@ -6,6 +6,7 @@ using Util;
 
 namespace Ontwikkelopdracht.Areas.Admin.Controllers
 {
+    [Authentication(Admin = true)]
     public class OrderController : EntityController<Order>
     {
         private readonly IRepository<Ticket> _ticketRepository = Injector.Resolve<IRepository<Ticket>>();

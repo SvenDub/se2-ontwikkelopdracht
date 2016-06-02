@@ -112,6 +112,8 @@
     <Content Include="Areas\Admin\Views\Film\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Film\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Login\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Login\Unauthorized.cshtml" />
     <Content Include="Areas\Admin\Views\Order\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Order\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Error.cshtml" />
@@ -151,6 +153,7 @@
     <Compile Include="Areas\Admin\Controllers\CrewController.cs" />
     <Compile Include="Areas\Admin\Controllers\FilmController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\LoginController.cs" />
     <Compile Include="Areas\Admin\Controllers\OrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShowController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
@@ -161,6 +164,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AuthenticationAttribute.cs" />
     <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Blog.cs" />
     <Compile Include="Models\Crewmember.cs" />
@@ -198,6 +202,7 @@
     <Folder Include="Areas\Admin\Views\Crew" />
     <Folder Include="Areas\Admin\Views\Film" />
     <Folder Include="Areas\Admin\Views\Home" />
+    <Folder Include="Areas\Admin\Views\Login" />
     <Folder Include="Areas\Admin\Views\Order" />
     <Folder Include="Areas\Admin\Views\Shared" />
     <Folder Include="Areas\Admin\Views\Show" />

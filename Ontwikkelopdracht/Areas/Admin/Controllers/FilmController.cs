@@ -5,6 +5,7 @@ using Ontwikkelopdracht.Persistence;
 
 namespace Ontwikkelopdracht.Areas.Admin.Controllers
 {
+    [Authentication(Admin = true)]
     public class FilmController : Ontwikkelopdracht.Controllers.FilmController
     {
         private readonly IRepository<Genre> _genreRepository = Injector.Resolve<IRepository<Genre>>();
