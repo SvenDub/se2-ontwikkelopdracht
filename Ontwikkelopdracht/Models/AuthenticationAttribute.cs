@@ -24,7 +24,7 @@ namespace Ontwikkelopdracht.Models
                     User dbUser = _userRepository.FindOne(user.Id);
                     filterContext.HttpContext.Session["user"] = dbUser;
 
-                    if (!dbUser.Admin)
+                    if (Admin && !dbUser.Admin)
                     {
                         RedirectToUnauthorized(filterContext);
                     }
