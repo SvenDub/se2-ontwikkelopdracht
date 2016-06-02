@@ -1,8 +1,10 @@
 FROM mono:4.2
 RUN apt-get update -y \
-	&& apt-get -y install mono-xsp4
+	&& apt-get -y install mono-xsp4 \
+		nuget
 ADD . /app/
 RUN cd app/ \
+	&& nuget restore \
 	&& xbuild /t:clean \
 	&& xbuild
 WORKDIR /app/Ontwikkelopdracht
