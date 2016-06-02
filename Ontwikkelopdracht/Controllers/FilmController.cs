@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Mvc;
 using Inject;
 using Ontwikkelopdracht.Models;
 using Ontwikkelopdracht.Persistence;
+using Util;
 
 namespace Ontwikkelopdracht.Controllers
 {
@@ -14,10 +14,7 @@ namespace Ontwikkelopdracht.Controllers
         public ActionResult Index() => View(Repository.FindAll());
 
         public ActionResult Search(string query)
-            =>
-            View("Index",
-                Repository
-                    .FindAllWhere(film => film.Title.ToLower().IndexOf(query, StringComparison.InvariantCultureIgnoreCase) >= 0));
+            => View("Index", Repository.FindAllWhere(film => film.Title.ContainsIgnoreCase(query)));
 
         public ActionResult Details(int id)
         {
@@ -25,16 +22,5 @@ namespace Ontwikkelopdracht.Controllers
 
             return View(Repository.FindOne(id));
         }
-
-        /*public ActionResult Save() => View();
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Save(Film film)
-        {
-            Film updated = Repository.Save(film);
-
-            return RedirectToAction("Details", new {id = updated.Id});
-        }*/
     }
 }

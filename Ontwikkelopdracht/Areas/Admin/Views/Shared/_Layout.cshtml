@@ -1,4 +1,6 @@
 ﻿@using System.Web.UI.WebControls
+@using Ontwikkelopdracht.Models
+@using Util
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -11,13 +13,99 @@
     <title>@ViewBag.Title - Pathé Admin</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="@Url.Content("~/Content/main.css")">
 
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="~/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/bower_components/bootstrap-material-design/dist/css/bootstrap-material-design.min.css">
+    <link rel="stylesheet" href="~/bower_components/bootstrap-material-design/dist/css/ripples.min.css">
 </head>
 <body>
-<a href="@Url.Action("Index", "Home")">
+<nav class="navbar navbar-yellow navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Pathé Admin", "Index", "Home", new {}, new {@class = "navbar-brand"})
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    @Html.ActionLink("Home", "Index", "Home")
+                </li>
+                <li>
+                    @Html.ActionLink("Films", "Index", "Film")
+                </li>
+                <li>
+                    @Html.ActionLink("Voorstellingen", "Index", "Show")
+                </li>
+                <li>
+                    @Html.ActionLink("Crew", "Index", "Crew")
+                </li>
+                <li>
+                    @Html.ActionLink("Gebruikers", "Index", "User")
+                </li>
+                <li>
+                    @Html.ActionLink("Bestellingen", "Index", "Order")
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                @if (HttpContext.Current.Session["user"] == null)
+                {
+                    <li>
+                        @Html.ActionLink("Login", "Index", "Login")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Terug naar site", "Index", "Home", new {Area = ""}, new {})
+                    </li>
+                }
+                else
+                {
+                    {
+                        User user = (User) HttpContext.Current.Session["user"];
+                        <li class="dropdown">
+                            <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img class="login-avatar" src="@Gravatar.GetUrl(user.Email, "404")" onerror="this.remove()" alt="person">
+                                @user.Name
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    @Html.ActionLink("Terug naar site", "Index", "Home", new {Area = ""}, new {})
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Account", "Details", "User", new {id = user.Id}, new {})
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    @Html.ActionLink("Logout", "Logout", "Login")
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
 
-</a>
-@RenderBody()
+<div class="container-fluid">
+    <div class="well">
+        @RenderBody()
+    </div>
+</div>
+
+<script src="~/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="~/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="~/bower_components/bootstrap-material-design/dist/js/material.min.js"></script>
+<script src="~/bower_components/bootstrap-material-design/dist/js/ripples.min.js"></script>
+<script>
+    $.material.init();
+</script>
 </body>
 </html>

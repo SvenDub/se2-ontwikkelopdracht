@@ -1,0 +1,16 @@
+﻿@using Ontwikkelopdracht.Models
+@using Util
+@model User
+
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<img class="circle pull-right" src="@Gravatar.GetUrl(Model.Email, "404")" onerror="this.remove()" alt="person">
+<h1>@ViewBag.Title</h1>
+@Html.DisplayNameFor(user => user.Email): @Html.DisplayFor(user => user.Email)<br>
+<div class="checkbox">
+    <label>
+        @Html.DisplayFor(user => user.Admin) @Html.DisplayNameFor(user => user.Admin)
+    </label>
+</div>

@@ -1,6 +1,4 @@
-﻿using Ontwikkelopdracht.Persistence.MySql;
-
-namespace Ontwikkelopdracht.Models
+﻿namespace Ontwikkelopdracht.Persistence.MySql
 {
     public class ProductionMySqlConnectionParams : IMySqlConnectionParams
     {

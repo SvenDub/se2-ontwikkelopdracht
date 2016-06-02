@@ -1,4 +1,5 @@
-﻿using Ontwikkelopdracht.Persistence;
+﻿using System.ComponentModel;
+using Ontwikkelopdracht.Persistence;
 
 namespace Ontwikkelopdracht.Models
 {
@@ -12,6 +13,7 @@ namespace Ontwikkelopdracht.Models
         public Show Show { get; set; }
 
         [DataMember(Column = "STOEL_ID")]
+        [DisplayName("Stoel")]
         public int Seat { get; set; }
 
         [DataMember(Column = "BESTELLING_ID")]

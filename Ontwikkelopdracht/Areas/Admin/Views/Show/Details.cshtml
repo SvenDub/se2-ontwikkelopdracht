@@ -1,0 +1,8 @@
+﻿@model Ontwikkelopdracht.Models.Show
+
+@{
+    ViewBag.Title = Model.Date.ToLongDateString() + " (" + Model.Film.Title + ")";
+}
+
+<h1>@ViewBag.Title</h1>
+@Model.Date.ToShortTimeString()
