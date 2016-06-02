@@ -14,13 +14,15 @@ namespace Ontwikkelopdracht.Controllers
 
         public ActionResult Details(int id) => View(Repository.FindOne(id));
 
+        [Authentication(Admin = true)]
         public ActionResult Add()
         {
-            ViewBag.Author = new SelectList(_userRepository.FindAll(), "Id", "Name");
+            ViewBag.Author = new SelectList(_userRepository.FindAllWhere(user => user.Admin), "Id", "Name");
             return View();
         }
 
         [HttpPost]
+        [Authentication(Admin = true)]
         public ActionResult Save(Blog blog)
         {
             blog.Date = DateTime.Now;
@@ -31,6 +33,7 @@ namespace Ontwikkelopdracht.Controllers
         }
 
         [HttpDelete]
+        [Authentication(Admin = true)]
         public ActionResult Delete(int id)
         {
             Repository.Delete(id);
