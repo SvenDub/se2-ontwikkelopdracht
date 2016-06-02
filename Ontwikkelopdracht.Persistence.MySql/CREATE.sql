@@ -135,7 +135,7 @@ CREATE TABLE GEBRUIKER (
   USER_ID INT PRIMARY KEY AUTO_INCREMENT,
   EMAIL VARCHAR(100) UNIQUE CHECK(REGEXP_LIKE (EMAIL,'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')),
   NAAM TEXT(100) NOT NULL,
-  WACHTWOORD TEXT(2000) NOT NULL,
+  WACHTWOORD TEXT(2000) NOT NULL CHECK (UPPER(WACHTWOORD) != WACHTWOORD AND LOWER(WACHTWOORD) != WACHTWOORD AND LENGTH(WACHTWOORD) >= 8),
   ADMIN INT(1) NOT NULL DEFAULT 0
 );
 
@@ -167,19 +167,12 @@ CREATE TABLE KAARTJE (
   CONSTRAINT PK_KAARTJE UNIQUE (VOORSTELLING_ID, STOEL_ID)
 );
 
-CREATE TABLE AUTEUR (
-  AUTEUR_ID INT PRIMARY KEY AUTO_INCREMENT,
-  EMAIL VARCHAR(100) UNIQUE CHECK(REGEXP_LIKE (EMAIL,'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')),
-  NAAM TEXT(100) NOT NULL,
-  WACHTWOORD TEXT(2000) NOT NULL CHECK (UPPER(WACHTWOORD) != WACHTWOORD AND LOWER(WACHTWOORD) != WACHTWOORD AND LENGTH(WACHTWOORD) >= 8)
-);
-
 CREATE TABLE BLOG (
   BLOG_ID INT PRIMARY KEY AUTO_INCREMENT,
   TITEL TEXT(100) NOT NULL,
   DATUM DATETIME NOT NULL,
   BODY LONGTEXT NOT NULL,
-  AUTEUR INT NOT NULL REFERENCES AUTEUR (AUTEUR_ID)
+  AUTEUR INT NOT NULL REFERENCES GEBRUIKER (USER_ID)
 );
 
 ---- INSERT
@@ -269,6 +262,11 @@ insert into VOORSTELLING (VOORSTELLING_ID, FILM_ID, ZAAL_ID, EVENT_ID, DATUM) va
 insert into GEBRUIKER (EMAIL, NAAM, WACHTWOORD, ADMIN) values ('sven.dubbeld1@gmail.com', 'Sven Dubbeld', 'Wachtwoord', 0);
 insert into GEBRUIKER (EMAIL, NAAM, WACHTWOORD, ADMIN) values ('sven@svendubbeld.nl', 'S. Dubbeld', 'Wachtwoord', 1);
 insert into GEBRUIKER (EMAIL, NAAM, WACHTWOORD, ADMIN) values ('s.dubbeld@student.fontys.nl', 'Dubbeld, S.', 'Wachtwoord', 0);
+insert into GEBRUIKER (EMAIL, NAAM, WACHTWOORD, ADMIN) values ('rwright0@tamu.edu', 'Ryan Wright', 'qiM9TSpzsb', 1);
+insert into GEBRUIKER (EMAIL, NAAM, WACHTWOORD, ADMIN) values ('daustin1@sakura.ne.jp', 'Denise Austin', 'y0F6mSfCvd', 1);
+insert into GEBRUIKER (EMAIL, NAAM, WACHTWOORD, ADMIN) values ('rschmidt2@furl.net', 'An Schmidt', 'pXnHQdfuuYv', 1);
+insert into GEBRUIKER (EMAIL, NAAM, WACHTWOORD, ADMIN) values ('rchavez3@patch.com', 'Rachel Chavez', 'yfRtz35gci', 1);
+insert into GEBRUIKER (EMAIL, NAAM, WACHTWOORD, ADMIN) values ('astone4@who.int', 'Alice Stone', '0Tr4nYBZ', 1);
 
 -- BESTELLING
 
@@ -307,18 +305,10 @@ insert into MEDIA_ITEM_SUGGESTION (FIRST_ITEM_ID, SECOND_ITEM_ID) values (1, 2);
 insert into MEDIA_ITEM_SUGGESTION (FIRST_ITEM_ID, SECOND_ITEM_ID) values (5, 3);
 insert into MEDIA_ITEM_SUGGESTION (FIRST_ITEM_ID, SECOND_ITEM_ID) values (4, 1);
 
--- AUTEUR
-
-insert into AUTEUR (EMAIL, NAAM, WACHTWOORD) values ('rwright0@tamu.edu', 'Ryan Wright', 'qiM9TSpzsb');
-insert into AUTEUR (EMAIL, NAAM, WACHTWOORD) values ('daustin1@sakura.ne.jp', 'Denise Austin', 'y0F6mSfCvd');
-insert into AUTEUR (EMAIL, NAAM, WACHTWOORD) values ('rschmidt2@furl.net', 'An Schmidt', 'pXnHQdfuuYv');
-insert into AUTEUR (EMAIL, NAAM, WACHTWOORD) values ('rchavez3@patch.com', 'Rachel Chavez', 'yfRtz35gci');
-insert into AUTEUR (EMAIL, NAAM, WACHTWOORD) values ('astone4@who.int', 'Alice Stone', '0Tr4nYBZ');
-
 -- BLOG
 
-insert into BLOG (BLOG_ID, TITEL, DATUM, BODY, AUTEUR) values (1, 'Etiam faucibus cursus urna.', '2015-10-28', 'In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem. Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit. Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque. Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.', 2);
-insert into BLOG (BLOG_ID, TITEL, DATUM, BODY, AUTEUR) values (2, 'Proin at turpis a pede posuere nonummy.', '2015-11-13', 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo.', 2);
-insert into BLOG (BLOG_ID, TITEL, DATUM, BODY, AUTEUR) values (3, 'Nullam varius.', '2015-12-05', 'Morbi ut odio. Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.', 5);
-insert into BLOG (BLOG_ID, TITEL, DATUM, BODY, AUTEUR) values (4, 'Donec quis orci eget orci vehicula condimentum.', '2015-06-24', 'Morbi a ipsum. Integer a nibh. In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam.', 3);
-insert into BLOG (BLOG_ID, TITEL, DATUM, BODY, AUTEUR) values (5, 'Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.', '2015-07-04', 'Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem. Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.', 5);
+insert into BLOG (BLOG_ID, TITEL, DATUM, BODY, AUTEUR) values (1, 'Etiam faucibus cursus urna.', '2015-10-28', 'In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem. Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit. Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque. Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.', 5);
+insert into BLOG (BLOG_ID, TITEL, DATUM, BODY, AUTEUR) values (2, 'Proin at turpis a pede posuere nonummy.', '2015-11-13', 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo.', 5);
+insert into BLOG (BLOG_ID, TITEL, DATUM, BODY, AUTEUR) values (3, 'Nullam varius.', '2015-12-05', 'Morbi ut odio. Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.', 8);
+insert into BLOG (BLOG_ID, TITEL, DATUM, BODY, AUTEUR) values (4, 'Donec quis orci eget orci vehicula condimentum.', '2015-06-24', 'Morbi a ipsum. Integer a nibh. In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam.', 6);
+insert into BLOG (BLOG_ID, TITEL, DATUM, BODY, AUTEUR) values (5, 'Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.', '2015-07-04', 'Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem. Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.', 8);

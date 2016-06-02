@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using Inject;
 using Ontwikkelopdracht.Models;
 using Ontwikkelopdracht.Persistence;
-using Util;
 
 namespace Ontwikkelopdracht.Controllers
 {
     public class BlogController : EntityController<Blog>
     {
-        private readonly IRepository<Author> _authorRepository = Injector.Resolve<IRepository<Author>>();
+        private readonly IRepository<User> _userRepository = Injector.Resolve<IRepository<User>>();
 
         public ActionResult Index() => View(Repository.FindAll());
 
@@ -19,7 +16,7 @@ namespace Ontwikkelopdracht.Controllers
 
         public ActionResult Add()
         {
-            ViewBag.Author = new SelectList(_authorRepository.FindAll(), "Id", "Name");
+            ViewBag.Author = new SelectList(_userRepository.FindAll(), "Id", "Name");
             return View();
         }
 
@@ -27,7 +24,7 @@ namespace Ontwikkelopdracht.Controllers
         public ActionResult Save(Blog blog)
         {
             blog.Date = DateTime.Now;
-            blog.Author = _authorRepository.FindOne(blog.Author.Id);
+            blog.Author = _userRepository.FindOne(blog.Author.Id);
             Blog saved = Repository.Save(blog);
 
             return RedirectToAction("Details", new {id = saved.Id});
