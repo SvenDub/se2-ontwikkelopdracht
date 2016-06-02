@@ -7,11 +7,12 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
 {
     public class LoginController : EntityController<User>
     {
-        public ActionResult Index(string returnUrl)
+        public ActionResult Index(string returnUrl, bool failed = false)
         {
             if (Session["userId"] == null)
             {
                 ViewBag.RedirectUrl = returnUrl;
+                ViewBag.Failed = failed;
                 return View();
             }
             else
@@ -45,7 +46,7 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Index", new { returnUrl = returnUrl });
+                    return RedirectToAction("Index", new { returnUrl = returnUrl, failed = true });
                 }
             }
             else

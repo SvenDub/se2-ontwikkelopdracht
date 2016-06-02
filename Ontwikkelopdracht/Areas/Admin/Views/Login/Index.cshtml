@@ -1,6 +1,19 @@
 ﻿@model Ontwikkelopdracht.Models.User
 
-<h1>Login</h1>
+@{
+    ViewBag.Title = "Login";
+}
+
+<h1>@ViewBag.Title</h1>
+
+@if (ViewBag.Failed)
+{
+    <div class="alert alert-dismissible alert-danger">
+        <h4>Inloggen mislukt</h4>
+
+        <p>De opgegeven combinatie van gebruikersnaam en wachtwoord is niet correct.</p>
+    </div>
+}
 
 @using (Html.BeginForm("Index", "Login", FormMethod.Post))
 {
