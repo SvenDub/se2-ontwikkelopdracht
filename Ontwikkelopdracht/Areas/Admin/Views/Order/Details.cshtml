@@ -1,0 +1,39 @@
+﻿@using Ontwikkelopdracht.Models
+@model Order
+
+@{
+    ViewBag.Title = Model.User.Name;
+}
+
+<h1>@Model.User.Name</h1>
+@Html.DisplayNameFor(order => order.Cost): @Html.FormatValue(Model.Cost / 100f, "{0:C}")<br>
+
+<h2>Voorstellingen</h2>
+<div class="list-group">
+    @foreach (Ticket ticket in Model.Tickets.OrderBy(ticket => ticket.Id))
+    {
+        <div class="list-group-item">
+            <div class="row-action-primary">
+                <i class="material-icons">receipt</i>
+            </div>
+            <div class="row-content">
+                <div class="least-content">@Html.DisplayFor(order => ticket.Show.Date)</div>
+                <h4 class="list-group-item-heading">
+                    @Html.DisplayFor(order => ticket.Show.Film.Title)
+                </h4>
+
+                <p class="list-group-item-text">
+                    @Html.DisplayNameFor(order => ticket.Seat)
+                    @Html.DisplayFor(order => ticket.Seat)
+                </p>
+            </div>
+        </div>
+        <div class="list-group-separator"></div>
+    }
+    @if (Model.Tickets.Count == 0)
+    {
+        <div class="alert alert-dismissible alert-warning">
+            <h4>Geen tickets gevonden</h4>
+        </div>
+    }
+</div>

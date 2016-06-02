@@ -112,6 +112,8 @@
     <Content Include="Areas\Admin\Views\Film\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Film\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Order\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Order\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Error.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Admin\Views\Show\Add.cshtml" />
@@ -149,6 +151,7 @@
     <Compile Include="Areas\Admin\Controllers\CrewController.cs" />
     <Compile Include="Areas\Admin\Controllers\FilmController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\OrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShowController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
@@ -190,12 +193,12 @@
     <Folder Include="Areas" />
     <Folder Include="Areas\Admin" />
     <Folder Include="Areas\Admin\Controllers" />
-    <Folder Include="Areas\Admin\Film" />
     <Folder Include="Areas\Admin\Models" />
     <Folder Include="Areas\Admin\Views" />
     <Folder Include="Areas\Admin\Views\Crew" />
     <Folder Include="Areas\Admin\Views\Film" />
     <Folder Include="Areas\Admin\Views\Home" />
+    <Folder Include="Areas\Admin\Views\Order" />
     <Folder Include="Areas\Admin\Views\Shared" />
     <Folder Include="Areas\Admin\Views\Show" />
     <Folder Include="Areas\Admin\Views\User" />
