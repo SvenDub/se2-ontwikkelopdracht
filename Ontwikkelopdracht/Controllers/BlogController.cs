@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Inject;
 using Ontwikkelopdracht.Models;
 using Ontwikkelopdracht.Persistence;
+using Util;
 
 namespace Ontwikkelopdracht.Controllers
 {
@@ -17,8 +18,7 @@ namespace Ontwikkelopdracht.Controllers
         [Authentication(Admin = true)]
         public ActionResult Add()
         {
-            ViewBag.Author = new SelectList(_userRepository.FindAllWhere(user => user.Admin), "Id", "Name");
-            return View();
+            return View(new Blog());
         }
 
         [HttpPost]
@@ -26,7 +26,10 @@ namespace Ontwikkelopdracht.Controllers
         public ActionResult Save(Blog blog)
         {
             blog.Date = DateTime.Now;
-            blog.Author = _userRepository.FindOne(blog.Author.Id);
+            blog.Author = (User) Session[SessionVars.User];
+            Log.D("BLOG", blog.ToString());
+            Log.D("BLOG", blog.Author.ToString());
+            Log.D("BLOG", blog.Author.Name);
             Blog saved = Repository.Save(blog);
 
             return RedirectToAction("Details", new {id = saved.Id});

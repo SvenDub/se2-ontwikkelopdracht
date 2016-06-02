@@ -9,7 +9,7 @@ namespace Ontwikkelopdracht.Controllers
     {
         public ActionResult Index(string returnUrl, bool failed = false)
         {
-            if (Session["userId"] == null)
+            if (Session[SessionVars.User] == null)
             {
                 ViewBag.RedirectUrl = returnUrl;
                 ViewBag.Failed = failed;
@@ -28,7 +28,7 @@ namespace Ontwikkelopdracht.Controllers
         [HttpPost]
         public ActionResult Index(User model, string returnUrl)
         {
-            if (Session["userId"] == null)
+            if (Session[SessionVars.User] == null)
             {
                 List<User> users =
                     Repository.FindAllWhere(user => user.Email == model.Email && user.Password == model.Password);
@@ -36,7 +36,7 @@ namespace Ontwikkelopdracht.Controllers
                 {
                     User loggedIn = users.First();
 
-                    Session["user"] = loggedIn;
+                    Session[SessionVars.User] = loggedIn;
 
                     if (string.IsNullOrEmpty(returnUrl))
                     {
@@ -57,7 +57,7 @@ namespace Ontwikkelopdracht.Controllers
 
         public ActionResult Logout()
         {
-            Session.Remove("user");
+            Session.Remove(SessionVars.User);
 
             return RedirectToAction("Index");
         }

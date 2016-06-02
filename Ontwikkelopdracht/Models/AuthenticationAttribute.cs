@@ -11,18 +11,18 @@ namespace Ontwikkelopdracht.Models
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (filterContext.HttpContext.Session?["user"] == null)
+            if (filterContext.HttpContext.Session?[SessionVars.User] == null)
             {
                 RedirectToLogin(filterContext);
             }
             else
             {
-                User user = filterContext.HttpContext.Session["user"] as User;
+                User user = filterContext.HttpContext.Session[SessionVars.User] as User;
                 if (user != null)
                 {
                     // Get latest user info from db
                     User dbUser = _userRepository.FindOne(user.Id);
-                    filterContext.HttpContext.Session["user"] = dbUser;
+                    filterContext.HttpContext.Session[SessionVars.User] = dbUser;
 
                     if (Admin && !dbUser.Admin)
                     {
@@ -31,7 +31,7 @@ namespace Ontwikkelopdracht.Models
                 }
                 else
                 {
-                    filterContext.HttpContext.Session.Remove("user");
+                    filterContext.HttpContext.Session.Remove(SessionVars.User);
                 }
             }
         }

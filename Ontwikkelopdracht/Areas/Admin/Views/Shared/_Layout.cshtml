@@ -55,7 +55,7 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                @if (HttpContext.Current.Session["user"] == null)
+                @if (HttpContext.Current.Session[SessionVars.User] == null)
                 {
                     <li>
                         @Html.ActionLink("Login", "Index", "Login")
@@ -67,7 +67,7 @@
                 else
                 {
                     {
-                        User user = (User) HttpContext.Current.Session["user"];
+                        User user = (User) HttpContext.Current.Session[SessionVars.User];
                         <li class="dropdown">
                             <a data-target="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img class="login-avatar" src="@Gravatar.GetUrl(user.Email, "404")" onerror="this.remove()" alt="person">
