@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ontwikkelopdracht.Persistence
+﻿namespace Ontwikkelopdracht.Persistence.Exception
 {
     public class EntityNotFoundException : EntityException
     {
@@ -12,7 +10,7 @@ namespace Ontwikkelopdracht.Persistence
         {
         }
 
-        public EntityNotFoundException(string message, Exception innerException) : base(message, innerException)
+        public EntityNotFoundException(string message, System.Exception innerException) : base(message, innerException)
         {
         }
     }

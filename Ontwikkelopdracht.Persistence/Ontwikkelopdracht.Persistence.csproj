@@ -41,11 +41,15 @@
     <Compile Include="DataMemberAttribute.cs" />
     <Compile Include="DataType.cs" />
     <Compile Include="EntityAttribute.cs" />
-    <Compile Include="EntityException.cs" />
-    <Compile Include="EntityNotFoundException.cs" />
+    <Compile Include="Exception\ConnectException.cs" />
+    <Compile Include="Exception\EntityException.cs" />
+    <Compile Include="Exception\EntityNotFoundException.cs" />
     <Compile Include="IdentityAttribute.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Exception" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

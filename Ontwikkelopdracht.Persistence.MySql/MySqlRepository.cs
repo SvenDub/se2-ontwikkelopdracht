@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Reflection;
 using Inject;
 using MySql.Data.MySqlClient;
+using Ontwikkelopdracht.Persistence.Exception;
 using Util;
 
 namespace Ontwikkelopdracht.Persistence.MySql
@@ -23,7 +25,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
 
             if (!info.GetCustomAttributes(true).Any(attr => attr is EntityAttribute))
             {
-                throw new EntityException("The given type is not attributed with Entity");
+                throw new EntityException($"Type {typeof(T)} is not attributed with Entity");
             }
 
             _entityAttribute = info.GetCustomAttributes(true)
@@ -34,7 +36,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
 
             if (!properties.Any(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute))))
             {
-                throw new EntityException("The given type has no property attributed with Identity");
+                throw new EntityException($"Type {typeof(T)} has no property attributed with Identity");
             }
 
             _identityProperty = properties
@@ -230,9 +232,17 @@ namespace Ontwikkelopdracht.Persistence.MySql
                 Database = MySqlConnectionParams.Database
             };
 
-            MySqlConnection mySqlConnection = new MySqlConnection(mySqlConnectionStringBuilder.GetConnectionString(true));
-            mySqlConnection.Open();
-            return mySqlConnection;
+            try
+            {
+                MySqlConnection mySqlConnection =
+                    new MySqlConnection(mySqlConnectionStringBuilder.GetConnectionString(true));
+                mySqlConnection.Open();
+                return mySqlConnection;
+            }
+            catch (System.Exception e)
+            {
+                throw new ConnectException(e);
+            }
         }
 
         private Dictionary<PropertyInfo, string> DataMembers => typeof(T)
