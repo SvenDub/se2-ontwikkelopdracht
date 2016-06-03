@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
 using System.Reflection;
 using Inject;
 using MySql.Data.MySqlClient;
@@ -62,7 +61,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
                     }
                 }
             }
-            catch (System.Exception e)
+            catch (MySqlException e)
             {
                 throw new DataSourceException(e);
             }
@@ -82,7 +81,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
                     }
                 }
             }
-            catch (System.Exception e)
+            catch (MySqlException e)
             {
                 throw new DataSourceException(e);
             }
@@ -99,7 +98,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
             {
                 Delete((int) _identityProperty.GetGetMethod().Invoke(entity, new object[] {}));
             }
-            catch (System.Exception e)
+            catch (MySqlException e)
             {
                 throw new DataSourceException(e);
             }
@@ -118,7 +117,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
                     }
                 }
             }
-            catch (System.Exception e)
+            catch (MySqlException e)
             {
                 throw new DataSourceException(e);
             }
@@ -139,7 +138,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
                     }
                 }
             }
-            catch (System.Exception e)
+            catch (MySqlException e)
             {
                 throw new DataSourceException(e);
             }
@@ -160,7 +159,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
                     }
                 }
             }
-            catch (System.Exception e)
+            catch (MySqlException e)
             {
                 throw new DataSourceException(e);
             }
@@ -198,7 +197,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
                     }
                 }
             }
-            catch (System.Exception e)
+            catch (MySqlException e)
             {
                 throw new DataSourceException(e);
             }
@@ -266,7 +265,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
                     }
                 }
             }
-            catch (System.Exception e)
+            catch (MySqlException e)
             {
                 throw new DataSourceException(e);
             }

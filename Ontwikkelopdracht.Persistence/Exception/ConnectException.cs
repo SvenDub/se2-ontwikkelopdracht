@@ -1,5 +1,8 @@
 ﻿namespace Ontwikkelopdracht.Persistence.Exception
 {
+    /// <summary>
+    ///     Thrown when the connection to the data source failed.
+    /// </summary>
     public class ConnectException : DataSourceException
     {
         private const string DefaultMessage = "Could not connect to data source";

@@ -1,5 +1,8 @@
 ﻿namespace Ontwikkelopdracht.Persistence.Exception
 {
+    /// <summary>
+    ///     Thrown when an query returns no results.
+    /// </summary>
     public class EntityNotFoundException : EntityException
     {
         public EntityNotFoundException() : base("No entity found matching search criteria")

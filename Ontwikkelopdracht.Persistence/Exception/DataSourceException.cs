@@ -1,5 +1,8 @@
 ﻿namespace Ontwikkelopdracht.Persistence.Exception
 {
+    /// <summary>
+    ///     Thrown when an error occured while querying or reading from the data source.
+    /// </summary>
     public class DataSourceException : System.Exception
     {
         private const string DefaultMessage = "Could not read from data source";
