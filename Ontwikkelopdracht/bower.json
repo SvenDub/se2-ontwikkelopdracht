@@ -1,5 +1,5 @@
-﻿{
-  "name": "Ontwikkelopdracht",
+{
+  "name": "ontwikkelopdracht",
   "homepage": "https://github.com/SvenDub/se2-ontwikkelopdracht",
   "authors": [
     "Sven Dubbeld <s.dubbeld@student.fontys.nl>"
@@ -14,5 +14,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "bootstrap-material-design": "^0.5.9"
+  }
 }

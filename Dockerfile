@@ -5,12 +5,21 @@ RUN echo "deb http://download.mono-project.com/repo/debian wheezy-apache24-compa
 	&& apt-get -y install mono-xsp4 \
 		nuget \
 		libapache2-mod-mono \
-		apache2
+		apache2 \
+		git \
+	&& curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.1/install.sh | bash \
+	&& . ~/.bashrc \
+	&& nvm install 5.5 \
+	&& nvm use 5.5 \
+	&& npm install -g bower
 ADD . /app/
 RUN cd app/ \
 	&& nuget restore \
 	&& xbuild /t:clean \
 	&& xbuild \
+	&& cd Ontwikkelopdracht \
+	&& /bin/bash -c '. ~/.bashrc && bower --allow-root install' \
+	&& cd .. \
 	&& mv 100-mono.conf /etc/apache2/sites-available/ \
 	&& a2ensite 100-mono \
 	&& a2dissite 000-default \
