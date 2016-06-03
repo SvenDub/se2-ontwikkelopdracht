@@ -50,27 +50,41 @@ namespace Ontwikkelopdracht.Persistence.MySql
 
         public long Count()
         {
-            using (MySqlConnection connection = CreateConnection())
+            try
             {
-                using (MySqlCommand cmd = connection.CreateCommand())
+                using (MySqlConnection connection = CreateConnection())
                 {
-                    cmd.CommandText = $"SELECT COUNT(*) FROM {_entityAttribute.Table}";
-                    object result = cmd.ExecuteScalar();
-                    return Convert.ToInt64(result);
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = $"SELECT COUNT(*) FROM {_entityAttribute.Table}";
+                        object result = cmd.ExecuteScalar();
+                        return Convert.ToInt64(result);
+                    }
                 }
+            }
+            catch (System.Exception e)
+            {
+                throw new DataSourceException(e);
             }
         }
 
         public void Delete(int id)
         {
-            using (MySqlConnection connection = CreateConnection())
+            try
             {
-                using (MySqlCommand cmd = connection.CreateCommand())
+                using (MySqlConnection connection = CreateConnection())
                 {
-                    cmd.CommandText = $"DELETE FROM {_entityAttribute.Table} WHERE {_identityAttribute.Column}=@Id";
-                    cmd.Parameters.AddWithValue("Id", id);
-                    cmd.ExecuteNonQuery();
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = $"DELETE FROM {_entityAttribute.Table} WHERE {_identityAttribute.Column}=@Id";
+                        cmd.Parameters.AddWithValue("Id", id);
+                        cmd.ExecuteNonQuery();
+                    }
                 }
+            }
+            catch (System.Exception e)
+            {
+                throw new DataSourceException(e);
             }
         }
 
@@ -81,46 +95,74 @@ namespace Ontwikkelopdracht.Persistence.MySql
 
         public void Delete(T entity)
         {
-            Delete((int) _identityProperty.GetGetMethod().Invoke(entity, new object[] {}));
+            try
+            {
+                Delete((int) _identityProperty.GetGetMethod().Invoke(entity, new object[] {}));
+            }
+            catch (System.Exception e)
+            {
+                throw new DataSourceException(e);
+            }
         }
 
         public void DeleteAll()
         {
-            using (MySqlConnection connection = CreateConnection())
+            try
             {
-                using (MySqlCommand cmd = connection.CreateCommand())
+                using (MySqlConnection connection = CreateConnection())
                 {
-                    cmd.CommandText = $"DELETE FROM {_entityAttribute.Table}";
-                    cmd.ExecuteNonQuery();
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = $"DELETE FROM {_entityAttribute.Table}";
+                        cmd.ExecuteNonQuery();
+                    }
                 }
+            }
+            catch (System.Exception e)
+            {
+                throw new DataSourceException(e);
             }
         }
 
         public bool Exists(int id)
         {
-            using (MySqlConnection connection = CreateConnection())
+            try
             {
-                using (MySqlCommand cmd = connection.CreateCommand())
+                using (MySqlConnection connection = CreateConnection())
                 {
-                    cmd.CommandText =
-                        $"SELECT COUNT(*) FROM {_entityAttribute.Table} WHERE {_identityAttribute.Column}=@Id";
-                    cmd.Parameters.AddWithValue("Id", id);
-                    return Convert.ToInt64(cmd.ExecuteScalar()) > 0;
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText =
+                            $"SELECT COUNT(*) FROM {_entityAttribute.Table} WHERE {_identityAttribute.Column}=@Id";
+                        cmd.Parameters.AddWithValue("Id", id);
+                        return Convert.ToInt64(cmd.ExecuteScalar()) > 0;
+                    }
                 }
+            }
+            catch (System.Exception e)
+            {
+                throw new DataSourceException(e);
             }
         }
 
         public List<T> FindAll()
         {
-            using (MySqlConnection connection = CreateConnection())
+            try
             {
-                using (MySqlCommand cmd = connection.CreateCommand())
+                using (MySqlConnection connection = CreateConnection())
                 {
-                    cmd.CommandText = $"SELECT `{string.Join("`, `", DataMembers.Values)}` " +
-                                      $"FROM {_entityAttribute.Table}";
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = $"SELECT `{string.Join("`, `", DataMembers.Values)}` " +
+                                          $"FROM {_entityAttribute.Table}";
 
-                    return CreateListFromReader(cmd.ExecuteReader()).ToList();
+                        return CreateListFromReader(cmd.ExecuteReader()).ToList();
+                    }
                 }
+            }
+            catch (System.Exception e)
+            {
+                throw new DataSourceException(e);
             }
         }
 
@@ -141,78 +183,92 @@ namespace Ontwikkelopdracht.Persistence.MySql
 
         public T FindOne(int id)
         {
-            using (MySqlConnection connection = CreateConnection())
+            try
             {
-                using (MySqlCommand cmd = connection.CreateCommand())
+                using (MySqlConnection connection = CreateConnection())
                 {
-                    cmd.CommandText = $"SELECT `{string.Join("`, `", DataMembers.Values)}` " +
-                                      $"FROM {_entityAttribute.Table} " +
-                                      $"WHERE {_identityAttribute.Column}=@Id";
-                    cmd.Parameters.AddWithValue("Id", id);
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = $"SELECT `{string.Join("`, `", DataMembers.Values)}` " +
+                                          $"FROM {_entityAttribute.Table} " +
+                                          $"WHERE {_identityAttribute.Column}=@Id";
+                        cmd.Parameters.AddWithValue("Id", id);
 
-                    return CreateFromReader(cmd.ExecuteReader());
+                        return CreateFromReader(cmd.ExecuteReader());
+                    }
                 }
+            }
+            catch (System.Exception e)
+            {
+                throw new DataSourceException(e);
             }
         }
 
         public T Save(T entity)
         {
             int id = (int) _identityProperty.GetValue(entity);
-            if (Exists(id))
+            try
             {
-                // Update
-                using (MySqlConnection connection = CreateConnection())
+                if (Exists(id))
                 {
-                    using (MySqlCommand cmd = connection.CreateCommand())
+                    // Update
+                    using (MySqlConnection connection = CreateConnection())
                     {
-                        string[] parameters = new string[DataMembersWithoutIdentity.Count];
-                        int i = -1;
-                        foreach (var keyValuePair in DataMembersWithoutIdentity)
+                        using (MySqlCommand cmd = connection.CreateCommand())
                         {
-                            i++;
-                            parameters[i] = $"`{keyValuePair.Value}`=@{keyValuePair.Value}";
+                            string[] parameters = new string[DataMembersWithoutIdentity.Count];
+                            int i = -1;
+                            foreach (var keyValuePair in DataMembersWithoutIdentity)
+                            {
+                                i++;
+                                parameters[i] = $"`{keyValuePair.Value}`=@{keyValuePair.Value}";
+                            }
+
+                            cmd.CommandText =
+                                $"UPDATE {_entityAttribute.Table} " +
+                                $"SET {string.Join(", ", parameters)} " +
+                                $"WHERE `{_identityAttribute.Column}`=@Id";
+
+                            cmd.Parameters.AddWithValue("Id", id);
+
+                            AddUpdateParametersForEntity(cmd, entity);
+
+
+                            cmd.ExecuteNonQuery();
+                            return FindOne(id);
                         }
+                    }
+                }
+                else
+                {
+                    // Insert
+                    using (MySqlConnection connection = CreateConnection())
+                    {
+                        using (MySqlCommand cmd = connection.CreateCommand())
+                        {
+                            string[] parameters = new string[DataMembersWithoutIdentity.Count];
+                            int i = -1;
+                            foreach (var keyValuePair in DataMembersWithoutIdentity)
+                            {
+                                i++;
+                                parameters[i] = $"@{keyValuePair.Value}";
+                            }
 
-                        cmd.CommandText =
-                            $"UPDATE {_entityAttribute.Table} " +
-                            $"SET {string.Join(", ", parameters)} " +
-                            $"WHERE `{_identityAttribute.Column}`=@Id";
+                            cmd.CommandText =
+                                $"INSERT INTO {_entityAttribute.Table} (`{string.Join("`, `", DataMembersWithoutIdentity.Values)}`) " +
+                                $"VALUES ({string.Join(", ", parameters)})";
 
-                        cmd.Parameters.AddWithValue("Id", id);
+                            AddInsertParametersForEntity(cmd, entity);
 
-                        AddUpdateParametersForEntity(cmd, entity);
-
-
-                        cmd.ExecuteNonQuery();
-                        return FindOne(id);
+                            cmd.ExecuteNonQuery();
+                            return FindOne((int) cmd.LastInsertedId);
+                        }
                     }
                 }
             }
-            else
+            catch (System.Exception e)
             {
-                // Insert
-                using (MySqlConnection connection = CreateConnection())
-                {
-                    using (MySqlCommand cmd = connection.CreateCommand())
-                    {
-                        string[] parameters = new string[DataMembersWithoutIdentity.Count];
-                        int i = -1;
-                        foreach (var keyValuePair in DataMembersWithoutIdentity)
-                        {
-                            i++;
-                            parameters[i] = $"@{keyValuePair.Value}";
-                        }
-
-                        cmd.CommandText =
-                            $"INSERT INTO {_entityAttribute.Table} (`{string.Join("`, `", DataMembersWithoutIdentity.Values)}`) " +
-                            $"VALUES ({string.Join(", ", parameters)})";
-
-                        AddInsertParametersForEntity(cmd, entity);
-
-                        cmd.ExecuteNonQuery();
-                        return FindOne((int) cmd.LastInsertedId);
-                    }
-                }
+                throw new DataSourceException(e);
             }
         }
 

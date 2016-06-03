@@ -1,6 +1,6 @@
 ﻿namespace Ontwikkelopdracht.Persistence.Exception
 {
-    public class ConnectException : System.Exception
+    public class ConnectException : DataSourceException
     {
         private const string DefaultMessage = "Could not connect to data source";
 
@@ -14,7 +14,6 @@
 
         public ConnectException(System.Exception innerException) : this(DefaultMessage, innerException)
         {
-
         }
 
         public ConnectException(string message, System.Exception innerException) : base(message, innerException)

@@ -42,6 +42,7 @@
     <Compile Include="DataType.cs" />
     <Compile Include="EntityAttribute.cs" />
     <Compile Include="Exception\ConnectException.cs" />
+    <Compile Include="Exception\DataSourceException.cs" />
     <Compile Include="Exception\EntityException.cs" />
     <Compile Include="Exception\EntityNotFoundException.cs" />
     <Compile Include="IdentityAttribute.cs" />
