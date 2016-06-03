@@ -348,90 +348,60 @@ namespace Ontwikkelopdracht.Persistence.MySql
         /// </summary>
         private T CreateFromRow(MySqlDataReader reader)
         {
-            T entity = new T();
-            foreach (var keyValuePair in DataMembers)
+            try
             {
-                if (reader.IsDBNull(reader.GetOrdinal(keyValuePair.Value))) continue;
-
-                if (keyValuePair.Key.IsDefined(typeof(IdentityAttribute)))
+                T entity = new T();
+                foreach (var keyValuePair in DataMembers)
                 {
-                    keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
-                }
-                else if (keyValuePair.Key.IsDefined(typeof(DataMemberAttribute)))
-                {
-                    DataMemberAttribute attribute = keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
+                    if (reader.IsDBNull(reader.GetOrdinal(keyValuePair.Value))) continue;
 
-                    switch (attribute.Type)
+                    if (keyValuePair.Key.IsDefined(typeof(IdentityAttribute)))
                     {
-                        case DataType.Value:
-                            if (keyValuePair.Key.PropertyType == typeof(bool))
-                            {
-                                keyValuePair.Key.SetValue(entity, Convert.ToBoolean(reader[keyValuePair.Value]));
-                            }
-                            else
-                            {
-                                keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
-                            }
-                            break;
-                        case DataType.Entity:
-                            object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
-                                .MakeGenericMethod(keyValuePair.Key.PropertyType)
-                                .Invoke(this, new object[] {});
-                            object value = repo.GetType().GetMethod("FindOne")
-                                .Invoke(repo, new object[] {reader[keyValuePair.Value]});
-                            keyValuePair.Key.SetValue(entity, value);
-                            break;
+                        keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
+                    }
+                    else if (keyValuePair.Key.IsDefined(typeof(DataMemberAttribute)))
+                    {
+                        DataMemberAttribute attribute = keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
+
+                        switch (attribute.Type)
+                        {
+                            case DataType.Value:
+                                if (keyValuePair.Key.PropertyType == typeof(bool))
+                                {
+                                    keyValuePair.Key.SetValue(entity, Convert.ToBoolean(reader[keyValuePair.Value]));
+                                }
+                                else
+                                {
+                                    keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
+                                }
+                                break;
+                            case DataType.Entity:
+                                object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
+                                    .MakeGenericMethod(keyValuePair.Key.PropertyType)
+                                    .Invoke(this, new object[] {});
+                                object value = repo.GetType().GetMethod("FindOne")
+                                    .Invoke(repo, new object[] {reader[keyValuePair.Value]});
+                                keyValuePair.Key.SetValue(entity, value);
+                                break;
+                        }
                     }
                 }
+                return entity;
             }
-            return entity;
+            catch (ArgumentException e)
+            {
+                throw new EntityException(
+                    "The data type does not match and conversion is not yet implemented for this type.", e);
+            }
         }
 
         private void AddInsertParametersForEntity<TEntity>(MySqlCommand cmd, TEntity entity) where TEntity : T
         {
-            foreach (var keyValuePair in DataMembersWithoutIdentity)
+            try
             {
-                DataMemberAttribute attribute = keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
-
-                switch (attribute.Type)
+                foreach (var keyValuePair in DataMembersWithoutIdentity)
                 {
-                    case DataType.Value:
-                        cmd.Parameters.AddWithValue(attribute.Column, keyValuePair.Key.GetValue(entity));
-                        break;
-                    case DataType.Entity:
-                        object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
-                            .MakeGenericMethod(keyValuePair.Key.PropertyType)
-                            .Invoke(this, new object[] {});
-
-                        object nestedEntity = repo.GetType()
-                            .GetMethod("Save", new Type[] {keyValuePair.Key.PropertyType})
-                            .Invoke(repo, new object[] {keyValuePair.Key.GetValue(entity)});
-
-                        object nestedId = nestedEntity.GetType()
-                            .GetProperties()
-                            .First(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute)))
-                            .GetValue(nestedEntity);
-                        cmd.Parameters.AddWithValue(attribute.Column, nestedId);
-                        break;
-                }
-            }
-        }
-
-        private void AddUpdateParametersForEntity<TEntity>(MySqlCommand cmd, TEntity entity)
-        {
-            foreach (var keyValuePair in DataMembers)
-            {
-                if (keyValuePair.Key.IsDefined(typeof(IdentityAttribute)))
-                {
-                    IdentityAttribute attribute =
-                        keyValuePair.Key.GetCustomAttribute<IdentityAttribute>();
-
-                    cmd.Parameters.AddWithValue(attribute.Column, keyValuePair.Key.GetValue(entity));
-                }
-                else if (keyValuePair.Key.IsDefined(typeof(DataMemberAttribute)))
-                {
-                    DataMemberAttribute attribute =
-                        keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
+                    DataMemberAttribute attribute = keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
 
                     switch (attribute.Type)
                     {
@@ -442,9 +412,11 @@ namespace Ontwikkelopdracht.Persistence.MySql
                             object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
                                 .MakeGenericMethod(keyValuePair.Key.PropertyType)
                                 .Invoke(this, new object[] {});
+
                             object nestedEntity = repo.GetType()
                                 .GetMethod("Save", new Type[] {keyValuePair.Key.PropertyType})
                                 .Invoke(repo, new object[] {keyValuePair.Key.GetValue(entity)});
+
                             object nestedId = nestedEntity.GetType()
                                 .GetProperties()
                                 .First(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute)))
@@ -453,6 +425,58 @@ namespace Ontwikkelopdracht.Persistence.MySql
                             break;
                     }
                 }
+            }
+            catch (ArgumentException e)
+            {
+                throw new EntityException(
+                    "The data type does not match and conversion is not yet implemented for this type.", e);
+            }
+        }
+
+        private void AddUpdateParametersForEntity<TEntity>(MySqlCommand cmd, TEntity entity)
+        {
+            try
+            {
+                foreach (var keyValuePair in DataMembers)
+                {
+                    if (keyValuePair.Key.IsDefined(typeof(IdentityAttribute)))
+                    {
+                        IdentityAttribute attribute =
+                            keyValuePair.Key.GetCustomAttribute<IdentityAttribute>();
+
+                        cmd.Parameters.AddWithValue(attribute.Column, keyValuePair.Key.GetValue(entity));
+                    }
+                    else if (keyValuePair.Key.IsDefined(typeof(DataMemberAttribute)))
+                    {
+                        DataMemberAttribute attribute =
+                            keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
+
+                        switch (attribute.Type)
+                        {
+                            case DataType.Value:
+                                cmd.Parameters.AddWithValue(attribute.Column, keyValuePair.Key.GetValue(entity));
+                                break;
+                            case DataType.Entity:
+                                object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
+                                    .MakeGenericMethod(keyValuePair.Key.PropertyType)
+                                    .Invoke(this, new object[] {});
+                                object nestedEntity = repo.GetType()
+                                    .GetMethod("Save", new Type[] {keyValuePair.Key.PropertyType})
+                                    .Invoke(repo, new object[] {keyValuePair.Key.GetValue(entity)});
+                                object nestedId = nestedEntity.GetType()
+                                    .GetProperties()
+                                    .First(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute)))
+                                    .GetValue(nestedEntity);
+                                cmd.Parameters.AddWithValue(attribute.Column, nestedId);
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (ArgumentException e)
+            {
+                throw new EntityException(
+                    "The data type does not match and conversion is not yet implemented for this type.", e);
             }
         }
 
