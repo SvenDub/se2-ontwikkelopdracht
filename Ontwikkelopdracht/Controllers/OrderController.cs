@@ -11,6 +11,7 @@ namespace Ontwikkelopdracht.Controllers
     public class OrderController : EntityController<Order>
     {
         private readonly IRepository<Show> _showRepository = Injector.Resolve<IRepository<Show>>();
+        private readonly IRepository<Ticket> _ticketRepository = Injector.Resolve<IRepository<Ticket>>();
 
         public ActionResult Index(int show)
         {
@@ -27,6 +28,12 @@ namespace Ontwikkelopdracht.Controllers
             Order order = GetOrder();
 
             ticket.Show = _showRepository.FindOne(ticket.Show.Id);
+            ticket.Seat = _ticketRepository
+                              .FindAllWhere(t => t.Show.Id == ticket.Show.Id)
+                              .Concat(order.Tickets.Where(t => t.Show.Id == ticket.Show.Id))
+                              .Select(t => t.Seat)
+                              .DefaultIfEmpty(0)
+                              .Max() + 1;
             order.Tickets.Add(ticket);
 
             return View(ticket);
