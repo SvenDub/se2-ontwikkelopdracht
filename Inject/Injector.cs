@@ -72,7 +72,7 @@ namespace Inject
         /// <returns>The implementation of the given type.</returns>
         public static T Resolve<T>()
         {
-            return (T) Resolve(typeof (T));
+                return (T) Resolve(typeof(T));
         }
 
         /// <summary>
@@ -87,28 +87,36 @@ namespace Inject
                 return Instances[contract];
             }
 
-            // Resolve the type
-            Type implementation = Types[contract];
-
-            // Get constructor for type
-            ConstructorInfo constructor = implementation.GetConstructors()[0];
-            ParameterInfo[] constructorParameters = constructor.GetParameters();
-
-            // Use default constructor if available
-            if (constructorParameters.Length == 1)
+            try
             {
-                object instance = Activator.CreateInstance(implementation);
-                Instances[contract] = instance;
-                return instance;
+                // Resolve the type
+                Type implementation = Types[contract];
+
+
+                // Get constructor for type
+                ConstructorInfo constructor = implementation.GetConstructors()[0];
+                ParameterInfo[] constructorParameters = constructor.GetParameters();
+
+                // Use default constructor if available
+                if (constructorParameters.Length == 1)
+                {
+                    object instance = Activator.CreateInstance(implementation);
+                    Instances[contract] = instance;
+                    return instance;
+                }
+
+                // Create using available constructor that takes parameters that are registered and therefore can also be inject
+                List<object> parameters = new List<object>(constructorParameters.Length);
+                parameters.AddRange(constructorParameters.Select(parameterInfo => Resolve(parameterInfo.ParameterType)));
+
+                object resolve = constructor.Invoke(parameters.ToArray());
+                Instances[contract] = resolve;
+                return resolve;
             }
-
-            // Create using available constructor that takes parameters that are registered and therefore can also be inject
-            List<object> parameters = new List<object>(constructorParameters.Length);
-            parameters.AddRange(constructorParameters.Select(parameterInfo => Resolve(parameterInfo.ParameterType)));
-
-            object resolve = constructor.Invoke(parameters.ToArray());
-            Instances[contract] = resolve;
-            return resolve;
+            catch (KeyNotFoundException e)
+            {
+                throw new TypeNotResolvedException(contract, e);
+            }
         }
     }
 }
