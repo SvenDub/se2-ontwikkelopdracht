@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Inject;
 using Ontwikkelopdracht.Models;
@@ -42,7 +43,7 @@ namespace Ontwikkelopdracht.Controllers
             Order order = (Order) Session[SessionVars.Order];
             order.Date = DateTime.Now;
             order.Tickets.ForEach(ticket => ticket.Order = order.Id);
-            // TODO Calculate cost
+            order.Cost = order.Tickets.Select(GetTicketCost).Sum();
             Order saved = Repository.Save(order);
 
             return View(saved);
@@ -63,5 +64,7 @@ namespace Ontwikkelopdracht.Controllers
             }
             return (Order) Session[SessionVars.Order];
         }
+
+        private int GetTicketCost(Ticket ticket) => 1200;
     }
 }
