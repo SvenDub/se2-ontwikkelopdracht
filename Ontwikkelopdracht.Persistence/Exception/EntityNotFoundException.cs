@@ -1,7 +1,8 @@
-﻿using System;
-
-namespace Ontwikkelopdracht.Persistence
+﻿namespace Ontwikkelopdracht.Persistence.Exception
 {
+    /// <summary>
+    ///     Thrown when an query returns no results.
+    /// </summary>
     public class EntityNotFoundException : EntityException
     {
         public EntityNotFoundException() : base("No entity found matching search criteria")
@@ -12,7 +13,7 @@ namespace Ontwikkelopdracht.Persistence
         {
         }
 
-        public EntityNotFoundException(string message, Exception innerException) : base(message, innerException)
+        public EntityNotFoundException(string message, System.Exception innerException) : base(message, innerException)
         {
         }
     }

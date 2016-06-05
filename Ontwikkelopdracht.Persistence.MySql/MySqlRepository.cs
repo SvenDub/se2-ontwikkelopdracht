@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Inject;
 using MySql.Data.MySqlClient;
+using Ontwikkelopdracht.Persistence.Exception;
 using Util;
 
 namespace Ontwikkelopdracht.Persistence.MySql
@@ -23,7 +24,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
 
             if (!info.GetCustomAttributes(true).Any(attr => attr is EntityAttribute))
             {
-                throw new EntityException("The given type is not attributed with Entity");
+                throw new EntityException($"Type {typeof(T)} is not attributed with Entity");
             }
 
             _entityAttribute = info.GetCustomAttributes(true)
@@ -34,7 +35,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
 
             if (!properties.Any(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute))))
             {
-                throw new EntityException("The given type has no property attributed with Identity");
+                throw new EntityException($"Type {typeof(T)} has no property attributed with Identity");
             }
 
             _identityProperty = properties
@@ -48,27 +49,41 @@ namespace Ontwikkelopdracht.Persistence.MySql
 
         public long Count()
         {
-            using (MySqlConnection connection = CreateConnection())
+            try
             {
-                using (MySqlCommand cmd = connection.CreateCommand())
+                using (MySqlConnection connection = CreateConnection())
                 {
-                    cmd.CommandText = $"SELECT COUNT(*) FROM {_entityAttribute.Table}";
-                    object result = cmd.ExecuteScalar();
-                    return Convert.ToInt64(result);
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = $"SELECT COUNT(*) FROM {_entityAttribute.Table}";
+                        object result = cmd.ExecuteScalar();
+                        return Convert.ToInt64(result);
+                    }
                 }
+            }
+            catch (MySqlException e)
+            {
+                throw new DataSourceException(e);
             }
         }
 
         public void Delete(int id)
         {
-            using (MySqlConnection connection = CreateConnection())
+            try
             {
-                using (MySqlCommand cmd = connection.CreateCommand())
+                using (MySqlConnection connection = CreateConnection())
                 {
-                    cmd.CommandText = $"DELETE FROM {_entityAttribute.Table} WHERE {_identityAttribute.Column}=@Id";
-                    cmd.Parameters.AddWithValue("Id", id);
-                    cmd.ExecuteNonQuery();
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = $"DELETE FROM {_entityAttribute.Table} WHERE {_identityAttribute.Column}=@Id";
+                        cmd.Parameters.AddWithValue("Id", id);
+                        cmd.ExecuteNonQuery();
+                    }
                 }
+            }
+            catch (MySqlException e)
+            {
+                throw new DataSourceException(e);
             }
         }
 
@@ -79,46 +94,74 @@ namespace Ontwikkelopdracht.Persistence.MySql
 
         public void Delete(T entity)
         {
-            Delete((int) _identityProperty.GetGetMethod().Invoke(entity, new object[] {}));
+            try
+            {
+                Delete((int) _identityProperty.GetGetMethod().Invoke(entity, new object[] {}));
+            }
+            catch (MySqlException e)
+            {
+                throw new DataSourceException(e);
+            }
         }
 
         public void DeleteAll()
         {
-            using (MySqlConnection connection = CreateConnection())
+            try
             {
-                using (MySqlCommand cmd = connection.CreateCommand())
+                using (MySqlConnection connection = CreateConnection())
                 {
-                    cmd.CommandText = $"DELETE FROM {_entityAttribute.Table}";
-                    cmd.ExecuteNonQuery();
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = $"DELETE FROM {_entityAttribute.Table}";
+                        cmd.ExecuteNonQuery();
+                    }
                 }
+            }
+            catch (MySqlException e)
+            {
+                throw new DataSourceException(e);
             }
         }
 
         public bool Exists(int id)
         {
-            using (MySqlConnection connection = CreateConnection())
+            try
             {
-                using (MySqlCommand cmd = connection.CreateCommand())
+                using (MySqlConnection connection = CreateConnection())
                 {
-                    cmd.CommandText =
-                        $"SELECT COUNT(*) FROM {_entityAttribute.Table} WHERE {_identityAttribute.Column}=@Id";
-                    cmd.Parameters.AddWithValue("Id", id);
-                    return Convert.ToInt64(cmd.ExecuteScalar()) > 0;
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText =
+                            $"SELECT COUNT(*) FROM {_entityAttribute.Table} WHERE {_identityAttribute.Column}=@Id";
+                        cmd.Parameters.AddWithValue("Id", id);
+                        return Convert.ToInt64(cmd.ExecuteScalar()) > 0;
+                    }
                 }
+            }
+            catch (MySqlException e)
+            {
+                throw new DataSourceException(e);
             }
         }
 
         public List<T> FindAll()
         {
-            using (MySqlConnection connection = CreateConnection())
+            try
             {
-                using (MySqlCommand cmd = connection.CreateCommand())
+                using (MySqlConnection connection = CreateConnection())
                 {
-                    cmd.CommandText = $"SELECT `{string.Join("`, `", DataMembers.Values)}` " +
-                                      $"FROM {_entityAttribute.Table}";
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = $"SELECT `{string.Join("`, `", DataMembers.Values)}` " +
+                                          $"FROM {_entityAttribute.Table}";
 
-                    return CreateListFromReader(cmd.ExecuteReader()).ToList();
+                        return CreateListFromReader(cmd.ExecuteReader()).ToList();
+                    }
                 }
+            }
+            catch (MySqlException e)
+            {
+                throw new DataSourceException(e);
             }
         }
 
@@ -139,78 +182,92 @@ namespace Ontwikkelopdracht.Persistence.MySql
 
         public T FindOne(int id)
         {
-            using (MySqlConnection connection = CreateConnection())
+            try
             {
-                using (MySqlCommand cmd = connection.CreateCommand())
+                using (MySqlConnection connection = CreateConnection())
                 {
-                    cmd.CommandText = $"SELECT `{string.Join("`, `", DataMembers.Values)}` " +
-                                      $"FROM {_entityAttribute.Table} " +
-                                      $"WHERE {_identityAttribute.Column}=@Id";
-                    cmd.Parameters.AddWithValue("Id", id);
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = $"SELECT `{string.Join("`, `", DataMembers.Values)}` " +
+                                          $"FROM {_entityAttribute.Table} " +
+                                          $"WHERE {_identityAttribute.Column}=@Id";
+                        cmd.Parameters.AddWithValue("Id", id);
 
-                    return CreateFromReader(cmd.ExecuteReader());
+                        return CreateFromReader(cmd.ExecuteReader());
+                    }
                 }
+            }
+            catch (MySqlException e)
+            {
+                throw new DataSourceException(e);
             }
         }
 
         public T Save(T entity)
         {
             int id = (int) _identityProperty.GetValue(entity);
-            if (Exists(id))
+            try
             {
-                // Update
-                using (MySqlConnection connection = CreateConnection())
+                if (Exists(id))
                 {
-                    using (MySqlCommand cmd = connection.CreateCommand())
+                    // Update
+                    using (MySqlConnection connection = CreateConnection())
                     {
-                        string[] parameters = new string[DataMembersWithoutIdentity.Count];
-                        int i = -1;
-                        foreach (var keyValuePair in DataMembersWithoutIdentity)
+                        using (MySqlCommand cmd = connection.CreateCommand())
                         {
-                            i++;
-                            parameters[i] = $"`{keyValuePair.Value}`=@{keyValuePair.Value}";
+                            string[] parameters = new string[DataMembersWithoutIdentity.Count];
+                            int i = -1;
+                            foreach (var keyValuePair in DataMembersWithoutIdentity)
+                            {
+                                i++;
+                                parameters[i] = $"`{keyValuePair.Value}`=@{keyValuePair.Value}";
+                            }
+
+                            cmd.CommandText =
+                                $"UPDATE {_entityAttribute.Table} " +
+                                $"SET {string.Join(", ", parameters)} " +
+                                $"WHERE `{_identityAttribute.Column}`=@Id";
+
+                            cmd.Parameters.AddWithValue("Id", id);
+
+                            AddUpdateParametersForEntity(cmd, entity);
+
+
+                            cmd.ExecuteNonQuery();
+                            return FindOne(id);
                         }
+                    }
+                }
+                else
+                {
+                    // Insert
+                    using (MySqlConnection connection = CreateConnection())
+                    {
+                        using (MySqlCommand cmd = connection.CreateCommand())
+                        {
+                            string[] parameters = new string[DataMembersWithoutIdentity.Count];
+                            int i = -1;
+                            foreach (var keyValuePair in DataMembersWithoutIdentity)
+                            {
+                                i++;
+                                parameters[i] = $"@{keyValuePair.Value}";
+                            }
 
-                        cmd.CommandText =
-                            $"UPDATE {_entityAttribute.Table} " +
-                            $"SET {string.Join(", ", parameters)} " +
-                            $"WHERE `{_identityAttribute.Column}`=@Id";
+                            cmd.CommandText =
+                                $"INSERT INTO {_entityAttribute.Table} (`{string.Join("`, `", DataMembersWithoutIdentity.Values)}`) " +
+                                $"VALUES ({string.Join(", ", parameters)})";
 
-                        cmd.Parameters.AddWithValue("Id", id);
+                            AddInsertParametersForEntity(cmd, entity);
 
-                        AddUpdateParametersForEntity(cmd, entity);
-
-
-                        cmd.ExecuteNonQuery();
-                        return FindOne(id);
+                            cmd.ExecuteNonQuery();
+                            return FindOne((int) cmd.LastInsertedId);
+                        }
                     }
                 }
             }
-            else
+            catch (MySqlException e)
             {
-                // Insert
-                using (MySqlConnection connection = CreateConnection())
-                {
-                    using (MySqlCommand cmd = connection.CreateCommand())
-                    {
-                        string[] parameters = new string[DataMembersWithoutIdentity.Count];
-                        int i = -1;
-                        foreach (var keyValuePair in DataMembersWithoutIdentity)
-                        {
-                            i++;
-                            parameters[i] = $"@{keyValuePair.Value}";
-                        }
-
-                        cmd.CommandText =
-                            $"INSERT INTO {_entityAttribute.Table} (`{string.Join("`, `", DataMembersWithoutIdentity.Values)}`) " +
-                            $"VALUES ({string.Join(", ", parameters)})";
-
-                        AddInsertParametersForEntity(cmd, entity);
-
-                        cmd.ExecuteNonQuery();
-                        return FindOne((int) cmd.LastInsertedId);
-                    }
-                }
+                throw new DataSourceException(e);
             }
         }
 
@@ -230,9 +287,17 @@ namespace Ontwikkelopdracht.Persistence.MySql
                 Database = MySqlConnectionParams.Database
             };
 
-            MySqlConnection mySqlConnection = new MySqlConnection(mySqlConnectionStringBuilder.GetConnectionString(true));
-            mySqlConnection.Open();
-            return mySqlConnection;
+            try
+            {
+                MySqlConnection mySqlConnection =
+                    new MySqlConnection(mySqlConnectionStringBuilder.GetConnectionString(true));
+                mySqlConnection.Open();
+                return mySqlConnection;
+            }
+            catch (System.Exception e)
+            {
+                throw new ConnectException(e);
+            }
         }
 
         private Dictionary<PropertyInfo, string> DataMembers => typeof(T)
@@ -283,90 +348,60 @@ namespace Ontwikkelopdracht.Persistence.MySql
         /// </summary>
         private T CreateFromRow(MySqlDataReader reader)
         {
-            T entity = new T();
-            foreach (var keyValuePair in DataMembers)
+            try
             {
-                if (reader.IsDBNull(reader.GetOrdinal(keyValuePair.Value))) continue;
-
-                if (keyValuePair.Key.IsDefined(typeof(IdentityAttribute)))
+                T entity = new T();
+                foreach (var keyValuePair in DataMembers)
                 {
-                    keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
-                }
-                else if (keyValuePair.Key.IsDefined(typeof(DataMemberAttribute)))
-                {
-                    DataMemberAttribute attribute = keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
+                    if (reader.IsDBNull(reader.GetOrdinal(keyValuePair.Value))) continue;
 
-                    switch (attribute.Type)
+                    if (keyValuePair.Key.IsDefined(typeof(IdentityAttribute)))
                     {
-                        case DataType.Value:
-                            if (keyValuePair.Key.PropertyType == typeof(bool))
-                            {
-                                keyValuePair.Key.SetValue(entity, Convert.ToBoolean(reader[keyValuePair.Value]));
-                            }
-                            else
-                            {
-                                keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
-                            }
-                            break;
-                        case DataType.Entity:
-                            object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
-                                .MakeGenericMethod(keyValuePair.Key.PropertyType)
-                                .Invoke(this, new object[] {});
-                            object value = repo.GetType().GetMethod("FindOne")
-                                .Invoke(repo, new object[] {reader[keyValuePair.Value]});
-                            keyValuePair.Key.SetValue(entity, value);
-                            break;
+                        keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
+                    }
+                    else if (keyValuePair.Key.IsDefined(typeof(DataMemberAttribute)))
+                    {
+                        DataMemberAttribute attribute = keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
+
+                        switch (attribute.Type)
+                        {
+                            case DataType.Value:
+                                if (keyValuePair.Key.PropertyType == typeof(bool))
+                                {
+                                    keyValuePair.Key.SetValue(entity, Convert.ToBoolean(reader[keyValuePair.Value]));
+                                }
+                                else
+                                {
+                                    keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
+                                }
+                                break;
+                            case DataType.Entity:
+                                object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
+                                    .MakeGenericMethod(keyValuePair.Key.PropertyType)
+                                    .Invoke(this, new object[] {});
+                                object value = repo.GetType().GetMethod("FindOne")
+                                    .Invoke(repo, new object[] {reader[keyValuePair.Value]});
+                                keyValuePair.Key.SetValue(entity, value);
+                                break;
+                        }
                     }
                 }
+                return entity;
             }
-            return entity;
+            catch (ArgumentException e)
+            {
+                throw new EntityException(
+                    "The data type does not match and conversion is not yet implemented for this type.", e);
+            }
         }
 
         private void AddInsertParametersForEntity<TEntity>(MySqlCommand cmd, TEntity entity) where TEntity : T
         {
-            foreach (var keyValuePair in DataMembersWithoutIdentity)
+            try
             {
-                DataMemberAttribute attribute = keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
-
-                switch (attribute.Type)
+                foreach (var keyValuePair in DataMembersWithoutIdentity)
                 {
-                    case DataType.Value:
-                        cmd.Parameters.AddWithValue(attribute.Column, keyValuePair.Key.GetValue(entity));
-                        break;
-                    case DataType.Entity:
-                        object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
-                            .MakeGenericMethod(keyValuePair.Key.PropertyType)
-                            .Invoke(this, new object[] {});
-
-                        object nestedEntity = repo.GetType()
-                            .GetMethod("Save", new Type[] {keyValuePair.Key.PropertyType})
-                            .Invoke(repo, new object[] {keyValuePair.Key.GetValue(entity)});
-
-                        object nestedId = nestedEntity.GetType()
-                            .GetProperties()
-                            .First(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute)))
-                            .GetValue(nestedEntity);
-                        cmd.Parameters.AddWithValue(attribute.Column, nestedId);
-                        break;
-                }
-            }
-        }
-
-        private void AddUpdateParametersForEntity<TEntity>(MySqlCommand cmd, TEntity entity)
-        {
-            foreach (var keyValuePair in DataMembers)
-            {
-                if (keyValuePair.Key.IsDefined(typeof(IdentityAttribute)))
-                {
-                    IdentityAttribute attribute =
-                        keyValuePair.Key.GetCustomAttribute<IdentityAttribute>();
-
-                    cmd.Parameters.AddWithValue(attribute.Column, keyValuePair.Key.GetValue(entity));
-                }
-                else if (keyValuePair.Key.IsDefined(typeof(DataMemberAttribute)))
-                {
-                    DataMemberAttribute attribute =
-                        keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
+                    DataMemberAttribute attribute = keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
 
                     switch (attribute.Type)
                     {
@@ -377,9 +412,11 @@ namespace Ontwikkelopdracht.Persistence.MySql
                             object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
                                 .MakeGenericMethod(keyValuePair.Key.PropertyType)
                                 .Invoke(this, new object[] {});
+
                             object nestedEntity = repo.GetType()
                                 .GetMethod("Save", new Type[] {keyValuePair.Key.PropertyType})
                                 .Invoke(repo, new object[] {keyValuePair.Key.GetValue(entity)});
+
                             object nestedId = nestedEntity.GetType()
                                 .GetProperties()
                                 .First(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute)))
@@ -388,6 +425,58 @@ namespace Ontwikkelopdracht.Persistence.MySql
                             break;
                     }
                 }
+            }
+            catch (ArgumentException e)
+            {
+                throw new EntityException(
+                    "The data type does not match and conversion is not yet implemented for this type.", e);
+            }
+        }
+
+        private void AddUpdateParametersForEntity<TEntity>(MySqlCommand cmd, TEntity entity)
+        {
+            try
+            {
+                foreach (var keyValuePair in DataMembers)
+                {
+                    if (keyValuePair.Key.IsDefined(typeof(IdentityAttribute)))
+                    {
+                        IdentityAttribute attribute =
+                            keyValuePair.Key.GetCustomAttribute<IdentityAttribute>();
+
+                        cmd.Parameters.AddWithValue(attribute.Column, keyValuePair.Key.GetValue(entity));
+                    }
+                    else if (keyValuePair.Key.IsDefined(typeof(DataMemberAttribute)))
+                    {
+                        DataMemberAttribute attribute =
+                            keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
+
+                        switch (attribute.Type)
+                        {
+                            case DataType.Value:
+                                cmd.Parameters.AddWithValue(attribute.Column, keyValuePair.Key.GetValue(entity));
+                                break;
+                            case DataType.Entity:
+                                object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
+                                    .MakeGenericMethod(keyValuePair.Key.PropertyType)
+                                    .Invoke(this, new object[] {});
+                                object nestedEntity = repo.GetType()
+                                    .GetMethod("Save", new Type[] {keyValuePair.Key.PropertyType})
+                                    .Invoke(repo, new object[] {keyValuePair.Key.GetValue(entity)});
+                                object nestedId = nestedEntity.GetType()
+                                    .GetProperties()
+                                    .First(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute)))
+                                    .GetValue(nestedEntity);
+                                cmd.Parameters.AddWithValue(attribute.Column, nestedId);
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (ArgumentException e)
+            {
+                throw new EntityException(
+                    "The data type does not match and conversion is not yet implemented for this type.", e);
             }
         }
 
