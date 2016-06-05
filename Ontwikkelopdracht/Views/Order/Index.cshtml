@@ -1,1 +1,27 @@
-﻿<h1>New Order</h1>
+﻿@model Ontwikkelopdracht.Models.Ticket
+
+@{
+    ViewBag.Title = "Bestellen";
+}
+
+<h1>@ViewBag.Title</h1>
+@using (Html.BeginForm("Add", "Order", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    @Html.HiddenFor(ticket => ticket.Id)
+    @Html.HiddenFor(ticket => ticket.Order)
+    @Html.HiddenFor(ticket => ticket.Show.Id)
+
+    <div class="form-group label-floating">
+        @Html.LabelFor(ticket => ticket.Show.Film.Title, new {@class = "control-label"})
+        @Html.EditorFor(ticket => ticket.Show.Film.Title, new {htmlAttributes = new {@class = "form-control", disabled = "disabled"}})
+    </div>
+
+    <div class="form-group label-floating">
+        @Html.LabelFor(ticket => ticket.Show.Date, new {@class = "control-label"})
+        <input class="form-control" type="datetime-local" disabled="disabled" value="@Model.Show.Date.ToString("O")">
+    </div>
+
+    <input class="btn btn-raised btn-primary" type="submit"/>
+}

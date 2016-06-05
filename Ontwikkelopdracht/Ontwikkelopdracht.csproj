@@ -135,10 +135,11 @@
     <Content Include="Views\Blog\Index.cshtml" />
     <Content Include="Views\Film\Details.cshtml" />
     <Content Include="Views\Film\Index.cshtml" />
-    <Content Include="Views\Film\Save.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Login\Unauthorized.cshtml" />
+    <Content Include="Views\Order\Add.cshtml" />
+    <Content Include="Views\Order\Cart.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Order\Save.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Enum.cshtml" />

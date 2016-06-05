@@ -1,19 +1,11 @@
 ﻿@using Ontwikkelopdracht.Models
-@using Util
 @model Order
 
 @{
-    ViewBag.Title = "Bestelling toegevoegd";
+    ViewBag.Title = "Bestelling";
 }
 
-<div class="alert alert-dismissible alert-success">
-    <button type="button" class="close" data-dismiss="alert">×</button>
-    <h4>@ViewBag.Title</h4>
-
-    <p>
-        Uw bestelling met bestelnr <strong>#@Model.Id</strong> is succesvol toegevoegd!
-    </p>
-</div>
+<h1>@ViewBag.Title</h1>
 @Html.DisplayNameFor(order => order.Cost): @Html.FormatValue(Model.Cost / 100f, "{0:C}")<br>
 
 <h2>Voorstellingen</h2>
@@ -45,4 +37,8 @@
         </div>
     }
 </div>
-<img src="@QR.GenerateBase64(Url.Action("Details", "Order", new {area = "Admin", id = Model.Id}, HttpContext.Current.Request.Url.Scheme))" width="150" height="150">
+@if (Model.Tickets.Count > 0)
+{
+    @Html.ActionLink("Bevestigen", "Save", "Order", new {}, new {@class = "btn btn-raised btn-primary"})
+    @Html.ActionLink("Annuleren", "Clear", "Order", new {}, new {@class = "btn btn-raised"})
+}

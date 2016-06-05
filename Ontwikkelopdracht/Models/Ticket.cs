@@ -16,7 +16,7 @@ namespace Ontwikkelopdracht.Models
         [DisplayName("Stoel")]
         public int Seat { get; set; }
 
-        [DataMember(Column = "BESTELLING_ID")]
+        [DataMember(Column = "BESTELLING_ID", RawType = typeof(Order))]
         public int Order { get; set; }
     }
 }

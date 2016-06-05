@@ -45,6 +45,7 @@
     <Compile Include="Exception\DataSourceException.cs" />
     <Compile Include="Exception\EntityException.cs" />
     <Compile Include="Exception\EntityNotFoundException.cs" />
+    <Compile Include="Exception\EntityWithoutIdentityException.cs" />
     <Compile Include="IdentityAttribute.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
