@@ -1,4 +1,5 @@
 ﻿@using Ontwikkelopdracht.Models
+@using Util
 @model Order
 
 @{
@@ -37,3 +38,4 @@
         </div>
     }
 </div>
+<img src="@QR.GenerateBase64(Url.Action("Details", "Order", new {area = "Admin", id = Model.Id}, HttpContext.Current.Request.Url.Scheme))" width="150" height="150">
