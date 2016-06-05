@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Ontwikkelopdracht.Persistence;
 using DataType = Ontwikkelopdracht.Persistence.DataType;
@@ -15,6 +16,7 @@ namespace Ontwikkelopdracht.Models
         public Film Film { get; set; }
 
         [DataMember(Column = "DATUM")]
+        [DisplayName("Datum")]
         [DisplayFormat(DataFormatString = "{0:D}")]
         [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         public DateTime Date { get; set; }

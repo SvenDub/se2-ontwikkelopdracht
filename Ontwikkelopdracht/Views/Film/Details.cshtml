@@ -33,6 +33,10 @@
                 <h4 class="list-group-item-heading">
                     @Html.DisplayFor(film => show.Date)
                 </h4>
+
+                <p class="list-group-item-text">
+                    @Html.ActionLink("Bestellen", "Index", "Order", new {show = show.Id}, new {})
+                </p>
             </div>
         </div>
         <div class="list-group-separator"></div>

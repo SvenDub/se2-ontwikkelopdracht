@@ -1,0 +1,29 @@
+﻿@model Ontwikkelopdracht.Models.Ticket
+
+@{
+    ViewBag.Title = "Kaartje toegevoegd";
+}
+
+<div class="alert alert-dismissible alert-success">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <h4>@ViewBag.Title</h4>
+
+    <p>
+        @Html.ActionLink("Klik hier", "Index", "Order", new {show = @Model.Show.Id}, new {@class = "alert-link"}) om er nog een te bestellen.
+    </p>
+</div>
+
+<div class="form-group label-floating">
+    @Html.LabelFor(ticket => ticket.Show.Film.Title, new {@class = "control-label"})
+    @Html.EditorFor(ticket => ticket.Show.Film.Title, new {htmlAttributes = new {@class = "form-control", disabled = "disabled"}})
+</div>
+
+<div class="form-group label-floating">
+    @Html.LabelFor(ticket => ticket.Show.Date, new {@class = "control-label"})
+    <input class="form-control" type="datetime-local" disabled="disabled" value="@Model.Show.Date.ToString("O")">
+</div>
+
+<div class="form-group label-floating">
+    @Html.LabelFor(ticket => ticket.Seat, new {@class = "control-label"})
+    @Html.EditorFor(ticket => ticket.Seat, new {htmlAttributes = new {@class = "form-control", disabled = "disabled"}})
+</div>

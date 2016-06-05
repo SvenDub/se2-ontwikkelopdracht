@@ -30,6 +30,6 @@ namespace Ontwikkelopdracht.Models
         public int Cost { get; set; }
 
         [DisplayName("Tickets")]
-        public List<Ticket> Tickets { get; set; }
+        public List<Ticket> Tickets { get; set; } = new List<Ticket>();
     }
 }
