@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -208,67 +209,111 @@ namespace Ontwikkelopdracht.Persistence.MySql
             int id = (int) _identityProperty.GetValue(entity);
             try
             {
-                if (Exists(id))
-                {
-                    // Update
-                    using (MySqlConnection connection = CreateConnection())
-                    {
-                        using (MySqlCommand cmd = connection.CreateCommand())
-                        {
-                            string[] parameters = new string[DataMembersWithoutIdentity.Count];
-                            int i = -1;
-                            foreach (var keyValuePair in DataMembersWithoutIdentity)
-                            {
-                                i++;
-                                parameters[i] = $"`{keyValuePair.Value}`=@{keyValuePair.Value}";
-                            }
-
-                            cmd.CommandText =
-                                $"UPDATE {_entityAttribute.Table} " +
-                                $"SET {string.Join(", ", parameters)} " +
-                                $"WHERE `{_identityAttribute.Column}`=@Id";
-
-                            cmd.Parameters.AddWithValue("Id", id);
-
-                            AddUpdateParametersForEntity(cmd, entity);
-
-
-                            cmd.ExecuteNonQuery();
-                            return FindOne(id);
-                        }
-                    }
-                }
-                else
-                {
-                    // Insert
-                    using (MySqlConnection connection = CreateConnection())
-                    {
-                        using (MySqlCommand cmd = connection.CreateCommand())
-                        {
-                            string[] parameters = new string[DataMembersWithoutIdentity.Count];
-                            int i = -1;
-                            foreach (var keyValuePair in DataMembersWithoutIdentity)
-                            {
-                                i++;
-                                parameters[i] = $"@{keyValuePair.Value}";
-                            }
-
-                            cmd.CommandText =
-                                $"INSERT INTO {_entityAttribute.Table} (`{string.Join("`, `", DataMembersWithoutIdentity.Values)}`) " +
-                                $"VALUES ({string.Join(", ", parameters)})";
-
-                            AddInsertParametersForEntity(cmd, entity);
-
-                            cmd.ExecuteNonQuery();
-                            return FindOne((int) cmd.LastInsertedId);
-                        }
-                    }
-                }
+                return Exists(id) ? Update(entity, id) : Insert(entity);
             }
             catch (MySqlException e)
             {
                 throw new DataSourceException(e);
             }
+        }
+
+        private T Update(T entity, int id)
+        {
+            using (MySqlConnection connection = CreateConnection())
+            {
+                using (MySqlCommand cmd = connection.CreateCommand())
+                {
+                    string[] parameters = new string[DataMembersWithoutIdentity.Count];
+                    int i = -1;
+                    foreach (var keyValuePair in DataMembersWithoutIdentity)
+                    {
+                        i++;
+                        parameters[i] = $"`{keyValuePair.Value}`=@{keyValuePair.Value}";
+                    }
+
+                    cmd.CommandText =
+                        $"UPDATE {_entityAttribute.Table} " +
+                        $"SET {string.Join(", ", parameters)} " +
+                        $"WHERE `{_identityAttribute.Column}`=@Id";
+
+                    cmd.Parameters.AddWithValue("Id", id);
+
+                    AddUpdateParametersForEntity(cmd, entity);
+
+                    cmd.ExecuteNonQuery();
+
+                    T saved = FindOne(id);
+                    SaveOneToMany(entity, saved, id);
+                    return saved;
+                }
+            }
+        }
+
+        private T Insert(T entity)
+        {
+            using (MySqlConnection connection = CreateConnection())
+            {
+                using (MySqlCommand cmd = connection.CreateCommand())
+                {
+                    string[] parameters = new string[DataMembersWithoutIdentity.Count];
+                    int i = -1;
+                    foreach (var keyValuePair in DataMembersWithoutIdentity)
+                    {
+                        i++;
+                        parameters[i] = $"@{keyValuePair.Value}";
+                    }
+
+                    cmd.CommandText =
+                        $"INSERT INTO {_entityAttribute.Table} (`{string.Join("`, `", DataMembersWithoutIdentity.Values)}`) " +
+                        $"VALUES ({string.Join(", ", parameters)})";
+
+                    AddInsertParametersForEntity(cmd, entity);
+
+                    cmd.ExecuteNonQuery();
+
+                    T saved = FindOne((int) cmd.LastInsertedId);
+                    SaveOneToMany(entity, saved, (int) cmd.LastInsertedId);
+                    return saved;
+                }
+            }
+        }
+
+        private void SaveOneToMany(T entity, T saved, int id)
+        {
+            DataMembersOneToMany.ForEach(key =>
+            {
+                if (key.PropertyType.IsGenericType && key.PropertyType.GetGenericTypeDefinition()
+                    == typeof(List<>))
+                {
+                    Type itemType = key.PropertyType.GetGenericArguments()[0];
+                    // Save one to many entities to their repo
+                    object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
+                        .MakeGenericMethod(itemType)
+                        .Invoke(this, new object[] {});
+                    IList entities = (IList) key.GetValue(entity);
+                    entities.Cast<object>().ToList().ForEach(e =>
+                    {
+                        e.GetType()
+                            .GetProperties()
+                            .Where(
+                                info =>
+                                    info.IsDefined(typeof(DataMemberAttribute)) &&
+                                    info.GetCustomAttribute<DataMemberAttribute>().RawType == typeof(T))
+                            .ToList()
+                            .ForEach(info => info.SetValue(e, id));
+                    });
+
+                    object savedValues = repo.GetType().GetMethod("Save", new[] {key.PropertyType})
+                        .Invoke(repo, new object[] {entities});
+
+                    // Set entities to new object
+                    key.SetValue(saved, savedValues);
+                }
+                else
+                {
+                    throw new EntityException("DataType.OneToMany can only be defined on a List<>.");
+                }
+            });
         }
 
         public List<T> Save(List<T> entities)
@@ -312,12 +357,23 @@ namespace Ontwikkelopdracht.Persistence.MySql
 
         private Dictionary<PropertyInfo, string> DataMembersWithoutIdentity => typeof(T)
             .GetProperties()
-            .Where(propertyInfo => propertyInfo.IsDefined(typeof(DataMemberAttribute), true))
+            .Where(
+                propertyInfo =>
+                    propertyInfo.IsDefined(typeof(DataMemberAttribute), true) &&
+                    propertyInfo.GetCustomAttribute<DataMemberAttribute>().Type != DataType.OneToManyEntity)
             .Select(
                 propertyInfo =>
                     new KeyValuePair<PropertyInfo, string>(propertyInfo,
                         propertyInfo.GetCustomAttribute<DataMemberAttribute>(true).Column))
             .ToDictionary(pair => pair.Key, pair => pair.Value);
+
+        private List<PropertyInfo> DataMembersOneToMany => typeof(T)
+            .GetProperties()
+            .Where(
+                propertyInfo =>
+                    propertyInfo.IsDefined(typeof(DataMemberAttribute), true) &&
+                    propertyInfo.GetCustomAttribute<DataMemberAttribute>().Type == DataType.OneToManyEntity)
+            .ToList();
 
         private T CreateFromReader(MySqlDataReader reader)
         {
@@ -423,6 +479,8 @@ namespace Ontwikkelopdracht.Persistence.MySql
                                 .GetValue(nestedEntity);
                             cmd.Parameters.AddWithValue(attribute.Column, nestedId);
                             break;
+                        case DataType.OneToManyEntity:
+                            break;
                     }
                 }
             }
@@ -468,6 +526,8 @@ namespace Ontwikkelopdracht.Persistence.MySql
                                     .First(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute)))
                                     .GetValue(nestedEntity);
                                 cmd.Parameters.AddWithValue(attribute.Column, nestedId);
+                                break;
+                            case DataType.OneToManyEntity:
                                 break;
                         }
                     }

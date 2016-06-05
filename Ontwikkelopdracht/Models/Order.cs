@@ -30,6 +30,7 @@ namespace Ontwikkelopdracht.Models
         public int Cost { get; set; }
 
         [DisplayName("Tickets")]
+        [DataMember(Type = DataType.OneToManyEntity)]
         public List<Ticket> Tickets { get; set; } = new List<Ticket>();
     }
 }

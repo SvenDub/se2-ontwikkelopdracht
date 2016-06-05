@@ -49,7 +49,6 @@ namespace Ontwikkelopdracht.Controllers
 
             Order order = (Order) Session[SessionVars.Order];
             order.Date = DateTime.Now;
-            order.Tickets.ForEach(ticket => ticket.Order = order.Id);
             order.Cost = order.Tickets.Select(GetTicketCost).Sum();
             Order saved = Repository.Save(order);
 
