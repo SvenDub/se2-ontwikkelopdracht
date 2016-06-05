@@ -68,8 +68,15 @@
                                     <li>
                                         @Html.ActionLink("Admin panel", "Index", "Home", new {Area = "Admin"}, new {})
                                     </li>
-                                    <li class="divider"></li>
                                 }
+                                <li>
+                                    <a href="@Url.Action("Cart", "Order")">
+                                        Bestelling
+                                        <span class="badge">
+                                        @Html.Raw(HttpContext.Current.Session[SessionVars.Order] == null ? 0 : ((Order) HttpContext.Current.Session[SessionVars.Order]).Tickets.Count)
+                                    </span></a>
+                                </li>
+                                <li class="divider"></li>
                                 <li>
                                     @Html.ActionLink("Logout", "Logout", "Login")
                                 </li>

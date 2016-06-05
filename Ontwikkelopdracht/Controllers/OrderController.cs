@@ -35,9 +35,12 @@ namespace Ontwikkelopdracht.Controllers
                               .DefaultIfEmpty(0)
                               .Max() + 1;
             order.Tickets.Add(ticket);
+            order.Cost = order.Tickets.Select(GetTicketCost).Sum();
 
             return View(ticket);
         }
+
+        public ActionResult Cart() => View(GetOrder());
 
         public ActionResult Save()
         {
@@ -52,7 +55,16 @@ namespace Ontwikkelopdracht.Controllers
             order.Cost = order.Tickets.Select(GetTicketCost).Sum();
             Order saved = Repository.Save(order);
 
+            Clear();
+
             return View(saved);
+        }
+
+        public ActionResult Clear()
+        {
+            Session[SessionVars.Order] = null;
+
+            return RedirectToAction("Cart");
         }
 
         private Order GetOrder()
