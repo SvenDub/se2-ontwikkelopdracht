@@ -47,10 +47,16 @@ namespace Ontwikkelopdracht.Controllers
             // Do not save order if not yet created
             if (Session[SessionVars.Order] == null)
             {
-                return View();
+                return RedirectToAction("Cart");
             }
 
             Order order = (Order) Session[SessionVars.Order];
+
+            if (order.Tickets.Count == 0)
+            {
+                return RedirectToAction("Cart");
+            }
+
             order.Date = DateTime.Now;
             order.Cost = order.Tickets.Select(GetTicketCost).Sum();
             Order saved = Repository.Save(order);
