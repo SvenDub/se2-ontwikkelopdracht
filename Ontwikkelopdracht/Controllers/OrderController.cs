@@ -25,7 +25,6 @@ namespace Ontwikkelopdracht.Controllers
         {
             Order order = GetOrder();
 
-            ticket.Order = order.Id;
             ticket.Show = _showRepository.FindOne(ticket.Show.Id);
             order.Tickets.Add(ticket);
 
@@ -42,6 +41,7 @@ namespace Ontwikkelopdracht.Controllers
 
             Order order = (Order) Session[SessionVars.Order];
             order.Date = DateTime.Now;
+            order.Tickets.ForEach(ticket => ticket.Order = order.Id);
             // TODO Calculate cost
             Order saved = Repository.Save(order);
 
@@ -53,10 +53,10 @@ namespace Ontwikkelopdracht.Controllers
             // Start a new order if no order exists yet
             if (Session[SessionVars.Order] == null)
             {
-                Order order = Repository.Save(new Order
+                Order order = new Order
                 {
                     User = (User) Session[SessionVars.User]
-                });
+                };
 
                 Session[SessionVars.Order] = order;
                 return order;
