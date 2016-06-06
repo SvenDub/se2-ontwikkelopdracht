@@ -10,7 +10,7 @@ using Util;
 
 namespace Ontwikkelopdracht.Persistence.MySql
 {
-    public class MySqlRepository<T> : IRepository<T> where T : new()
+    public class MySqlRepository<T> : IStrictRepository<T> where T : new()
     {
         public IMySqlConnectionParams MySqlConnectionParams { set; protected get; } =
             Injector.Resolve<IMySqlConnectionParams>();
@@ -422,6 +422,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
                         switch (attribute.Type)
                         {
                             case DataType.Value:
+                                // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                                 if (keyValuePair.Key.PropertyType == typeof(bool))
                                 {
                                     keyValuePair.Key.SetValue(entity, Convert.ToBoolean(reader[keyValuePair.Value]));
@@ -439,6 +440,10 @@ namespace Ontwikkelopdracht.Persistence.MySql
                                     .Invoke(repo, new object[] {reader[keyValuePair.Value]});
                                 keyValuePair.Key.SetValue(entity, value);
                                 break;
+                            case DataType.OneToManyEntity:
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
                     }
                 }
@@ -481,6 +486,8 @@ namespace Ontwikkelopdracht.Persistence.MySql
                             break;
                         case DataType.OneToManyEntity:
                             break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                 }
             }
@@ -529,6 +536,8 @@ namespace Ontwikkelopdracht.Persistence.MySql
                                 break;
                             case DataType.OneToManyEntity:
                                 break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
                     }
                 }
