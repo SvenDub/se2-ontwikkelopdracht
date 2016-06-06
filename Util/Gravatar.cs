@@ -7,7 +7,7 @@
         public static string GetUrl(string email, string defaultValue = null)
         {
             string url = $"https://www.gravatar.com/avatar/{GetHash(email)}";
-            if (defaultValue != null)
+            if (!string.IsNullOrEmpty(defaultValue))
             {
                 url += $"?d={defaultValue}";
             }
