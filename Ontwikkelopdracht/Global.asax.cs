@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Inject;
+using Ontwikkelopdracht.Models;
 using Ontwikkelopdracht.Persistence;
 using Ontwikkelopdracht.Persistence.MySql;
 using Util;
@@ -43,7 +44,11 @@ namespace Ontwikkelopdracht
 
         public void RegisterRepository<T>() where T : new()
         {
-            Injector.Register<IRepository<T>, MySqlRepository<T>>();
+            // Global persistence layer
+            Injector.Register<IRepository<T>, RepositoryArmour<T>>();
+
+            // Database specific
+            Injector.Register<IStrictRepository<T>, MySqlRepository<T>>();
         }
     }
 }

@@ -48,10 +48,18 @@
     <Compile Include="Exception\EntityWithoutIdentityException.cs" />
     <Compile Include="IdentityAttribute.cs" />
     <Compile Include="IRepository.cs" />
+    <Compile Include="IStrictRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryArmour.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Exception" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Inject\Inject.csproj">
+      <Project>{33C556CA-FAA6-46A9-B812-6F29F80491A9}</Project>
+      <Name>Inject</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
