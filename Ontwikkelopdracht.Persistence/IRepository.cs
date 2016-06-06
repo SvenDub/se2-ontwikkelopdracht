@@ -18,7 +18,7 @@ namespace Ontwikkelopdracht.Persistence
         /// <exception cref="ConnectException">When the connection to the data source failed.</exception>
         /// <exception cref="DataSourceException">When an error occured while querying or reading from the data source.</exception>
         /// <exception cref="EntityException">When an entity does not match its data representation.</exception>
-        /// <exception cref="EntityNotFoundException">When an query returns no results.</exception>
+        /// <exception cref="EntityNotFoundException">When a query returns no results.</exception>
         long Count();
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Ontwikkelopdracht.Persistence
         /// <exception cref="ConnectException">When the connection to the data source failed.</exception>
         /// <exception cref="DataSourceException">When an error occured while querying or reading from the data source.</exception>
         /// <exception cref="EntityException">When an entity does not match its data representation.</exception>
-        /// <exception cref="EntityNotFoundException">When an query returns no results.</exception>
+        /// <exception cref="EntityNotFoundException">When a query returns no results.</exception>
         void Delete(int id);
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Ontwikkelopdracht.Persistence
         /// <exception cref="ConnectException">When the connection to the data source failed.</exception>
         /// <exception cref="DataSourceException">When an error occured while querying or reading from the data source.</exception>
         /// <exception cref="EntityException">When an entity does not match its data representation.</exception>
-        /// <exception cref="EntityNotFoundException">When an query returns no results.</exception>
+        /// <exception cref="EntityNotFoundException">When a query returns no results.</exception>
         void Delete(List<T> entities);
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Ontwikkelopdracht.Persistence
         /// <exception cref="ConnectException">When the connection to the data source failed.</exception>
         /// <exception cref="DataSourceException">When an error occured while querying or reading from the data source.</exception>
         /// <exception cref="EntityException">When an entity does not match its data representation.</exception>
-        /// <exception cref="EntityNotFoundException">When an query returns no results.</exception>
+        /// <exception cref="EntityNotFoundException">When a query returns no results.</exception>
         void Delete(T entity);
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Ontwikkelopdracht.Persistence
         /// <exception cref="ConnectException">When the connection to the data source failed.</exception>
         /// <exception cref="DataSourceException">When an error occured while querying or reading from the data source.</exception>
         /// <exception cref="EntityException">When an entity does not match its data representation.</exception>
-        /// <exception cref="EntityNotFoundException">When an query returns no results.</exception>
+        /// <exception cref="EntityNotFoundException">When a query returns no results.</exception>
         void DeleteAll();
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Ontwikkelopdracht.Persistence
         /// <exception cref="ConnectException">When the connection to the data source failed.</exception>
         /// <exception cref="DataSourceException">When an error occured while querying or reading from the data source.</exception>
         /// <exception cref="EntityException">When an entity does not match its data representation.</exception>
-        /// <exception cref="EntityNotFoundException">When an query returns no results.</exception>
+        /// <exception cref="EntityNotFoundException">When a query returns no results.</exception>
         bool Exists(int id);
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Ontwikkelopdracht.Persistence
         /// <exception cref="ConnectException">When the connection to the data source failed.</exception>
         /// <exception cref="DataSourceException">When an error occured while querying or reading from the data source.</exception>
         /// <exception cref="EntityException">When an entity does not match its data representation.</exception>
-        /// <exception cref="EntityNotFoundException">When an query returns no results.</exception>
+        /// <exception cref="EntityNotFoundException">When a query returns no results.</exception>
         List<T> FindAll();
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Ontwikkelopdracht.Persistence
         /// <exception cref="ConnectException">When the connection to the data source failed.</exception>
         /// <exception cref="DataSourceException">When an error occured while querying or reading from the data source.</exception>
         /// <exception cref="EntityException">When an entity does not match its data representation.</exception>
-        /// <exception cref="EntityNotFoundException">When an query returns no results.</exception>
+        /// <exception cref="EntityNotFoundException">When a query returns no results.</exception>
         List<T> FindAll(List<int> ids);
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Ontwikkelopdracht.Persistence
         /// <exception cref="ConnectException">When the connection to the data source failed.</exception>
         /// <exception cref="DataSourceException">When an error occured while querying or reading from the data source.</exception>
         /// <exception cref="EntityException">When an entity does not match its data representation.</exception>
-        /// <exception cref="EntityNotFoundException">When an query returns no results.</exception>
+        /// <exception cref="EntityNotFoundException">When a query returns no results.</exception>
         List<T> FindAllWhere(Func<T, bool> predicate);
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace Ontwikkelopdracht.Persistence
         /// <exception cref="ConnectException">When the connection to the data source failed.</exception>
         /// <exception cref="DataSourceException">When an error occured while querying or reading from the data source.</exception>
         /// <exception cref="EntityException">When an entity does not match its data representation.</exception>
-        /// <exception cref="EntityNotFoundException">When an query returns no results.</exception>
+        /// <exception cref="EntityNotFoundException">When a query returns no results.</exception>
         List<T> FindAllWhere(Func<T, int, bool> predicate);
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Ontwikkelopdracht.Persistence
         /// <exception cref="ConnectException">When the connection to the data source failed.</exception>
         /// <exception cref="DataSourceException">When an error occured while querying or reading from the data source.</exception>
         /// <exception cref="EntityException">When an entity does not match its data representation.</exception>
-        /// <exception cref="EntityNotFoundException">When an query returns no results.</exception>
+        /// <exception cref="EntityNotFoundException">When a query returns no results.</exception>
         T FindOne(int id);
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace Ontwikkelopdracht.Persistence
         /// <exception cref="ConnectException">When the connection to the data source failed.</exception>
         /// <exception cref="DataSourceException">When an error occured while querying or reading from the data source.</exception>
         /// <exception cref="EntityException">When an entity does not match its data representation.</exception>
-        /// <exception cref="EntityNotFoundException">When an query returns no results.</exception>
+        /// <exception cref="EntityNotFoundException">When a query returns no results.</exception>
         T Save(T entity);
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Ontwikkelopdracht.Persistence
         /// <exception cref="ConnectException">When the connection to the data source failed.</exception>
         /// <exception cref="DataSourceException">When an error occured while querying or reading from the data source.</exception>
         /// <exception cref="EntityException">When an entity does not match its data representation.</exception>
-        /// <exception cref="EntityNotFoundException">When an query returns no results.</exception>
+        /// <exception cref="EntityNotFoundException">When a query returns no results.</exception>
         List<T> Save(List<T> entities);
     }
 }
