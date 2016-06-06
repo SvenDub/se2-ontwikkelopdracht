@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="IMySqlConnectionParams.cs" />
     <Compile Include="MySqlRepository.cs" />
+    <Compile Include="MySqlRepositoryProvider.cs" />
     <Compile Include="ProductionMySqlConnectionParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
