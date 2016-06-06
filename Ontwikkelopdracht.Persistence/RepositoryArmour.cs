@@ -14,6 +14,8 @@ namespace Ontwikkelopdracht.Persistence
 
         protected IStrictRepository<T> Repository = Injector.Resolve<IStrictRepository<T>>();
 
+        private readonly PropertyInfo _identityProperty;
+
         public RepositoryArmour()
         {
             MemberInfo info = typeof(T);
@@ -32,6 +34,9 @@ namespace Ontwikkelopdracht.Persistence
                     new EntityException($"Type {typeof(T)} has no property attributed with Identity");
                 ThrowInvalidCreate(exception);
             }
+
+            _identityProperty = properties
+                .First(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute)));
         }
 
         public long Count()
@@ -43,7 +48,8 @@ namespace Ontwikkelopdracht.Persistence
         {
             if (id < 0)
             {
-                ArgumentOutOfRangeException exception = new ArgumentOutOfRangeException(nameof(id), id, "Valid values are >= 0.");
+                ArgumentOutOfRangeException exception = new ArgumentOutOfRangeException(nameof(id), id,
+                    "Valid values are >= 0.");
                 ThrowInvalidMethodCall(exception);
             }
 
@@ -59,9 +65,21 @@ namespace Ontwikkelopdracht.Persistence
             }
             if (entities.Any(entity => entity == null))
             {
-                ArgumentNullException exception = new ArgumentNullException(nameof(entities), "The list contains a null reference.");
+                ArgumentNullException exception = new ArgumentNullException(nameof(entities),
+                    "The list contains a null reference.");
                 ThrowInvalidMethodCall(exception);
             }
+            entities.ForEach(entity =>
+            {
+                int id = (int) _identityProperty.GetValue(entity);
+                if (id < 0)
+                {
+                    ArgumentOutOfRangeException exception =
+                        new ArgumentOutOfRangeException(typeof(T).Name + "." + _identityProperty.Name, id,
+                            "Valid values are >= 0.");
+                    ThrowInvalidMethodCall(exception);
+                }
+            });
 
             Repository.Delete(entities);
         }
@@ -71,6 +89,14 @@ namespace Ontwikkelopdracht.Persistence
             if (entity == null)
             {
                 ArgumentNullException exception = new ArgumentNullException(nameof(entity));
+                ThrowInvalidMethodCall(exception);
+            }
+            int id = (int) _identityProperty.GetValue(entity);
+            if (id < 0)
+            {
+                ArgumentOutOfRangeException exception =
+                    new ArgumentOutOfRangeException(typeof(T).Name + "." + _identityProperty.Name, id,
+                        "Valid values are >= 0.");
                 ThrowInvalidMethodCall(exception);
             }
 
@@ -86,7 +112,8 @@ namespace Ontwikkelopdracht.Persistence
         {
             if (id < 0)
             {
-                ArgumentOutOfRangeException exception = new ArgumentOutOfRangeException(nameof(id), id, "Valid values are x >= 0.");
+                ArgumentOutOfRangeException exception = new ArgumentOutOfRangeException(nameof(id), id,
+                    "Valid values are x >= 0.");
                 ThrowInvalidMethodCall(exception);
             }
 
@@ -135,7 +162,8 @@ namespace Ontwikkelopdracht.Persistence
         {
             if (id < 0)
             {
-                ArgumentOutOfRangeException exception = new ArgumentOutOfRangeException(nameof(id), id, "Valid values are x >= 0.");
+                ArgumentOutOfRangeException exception = new ArgumentOutOfRangeException(nameof(id), id,
+                    "Valid values are x >= 0.");
                 ThrowInvalidMethodCall(exception);
             }
 
@@ -147,6 +175,14 @@ namespace Ontwikkelopdracht.Persistence
             if (entity == null)
             {
                 ArgumentNullException exception = new ArgumentNullException(nameof(entity));
+                ThrowInvalidMethodCall(exception);
+            }
+            int id = (int) _identityProperty.GetValue(entity);
+            if (id < 0)
+            {
+                ArgumentOutOfRangeException exception =
+                    new ArgumentOutOfRangeException(typeof(T).Name + "." + _identityProperty.Name, id,
+                        "Valid values are >= 0.");
                 ThrowInvalidMethodCall(exception);
             }
 
@@ -162,9 +198,21 @@ namespace Ontwikkelopdracht.Persistence
             }
             if (entities.Any(entity => entity == null))
             {
-                ArgumentNullException exception = new ArgumentNullException(nameof(entities), "The list contains a null reference.");
+                ArgumentNullException exception = new ArgumentNullException(nameof(entities),
+                    "The list contains a null reference.");
                 ThrowInvalidMethodCall(exception);
             }
+            entities.ForEach(entity =>
+            {
+                int id = (int) _identityProperty.GetValue(entity);
+                if (id < 0)
+                {
+                    ArgumentOutOfRangeException exception =
+                        new ArgumentOutOfRangeException(typeof(T).Name + "." + _identityProperty.Name, id,
+                            "Valid values are >= 0.");
+                    ThrowInvalidMethodCall(exception);
+                }
+            });
 
             return Repository.Save(entities);
         }
