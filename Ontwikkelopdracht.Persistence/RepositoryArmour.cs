@@ -4,11 +4,14 @@ using System.Linq;
 using System.Reflection;
 using Inject;
 using Ontwikkelopdracht.Persistence.Exception;
+using Util;
 
 namespace Ontwikkelopdracht.Persistence
 {
     public class RepositoryArmour<T> : IRepository<T> where T : new()
     {
+        private const string Tag = "REPOARMOUR";
+
         protected IStrictRepository<T> Repository = Injector.Resolve<IStrictRepository<T>>();
 
         public RepositoryArmour()
@@ -17,14 +20,17 @@ namespace Ontwikkelopdracht.Persistence
 
             if (!info.GetCustomAttributes(true).Any(attr => attr is EntityAttribute))
             {
-                throw new EntityException($"Type {typeof(T)} is not attributed with Entity");
+                EntityException exception = new EntityException($"Type {typeof(T)} is not attributed with Entity");
+                ThrowInvalidCreate(exception);
             }
 
             PropertyInfo[] properties = typeof(T).GetProperties();
 
             if (!properties.Any(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute))))
             {
-                throw new EntityException($"Type {typeof(T)} has no property attributed with Identity");
+                EntityException exception =
+                    new EntityException($"Type {typeof(T)} has no property attributed with Identity");
+                ThrowInvalidCreate(exception);
             }
         }
 
@@ -37,7 +43,8 @@ namespace Ontwikkelopdracht.Persistence
         {
             if (id < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(id), id, "Valid values are x >= 0.");
+                ArgumentOutOfRangeException exception = new ArgumentOutOfRangeException(nameof(id), id, "Valid values are >= 0.");
+                ThrowInvalidMethodCall(exception);
             }
 
             Repository.Delete(id);
@@ -47,11 +54,13 @@ namespace Ontwikkelopdracht.Persistence
         {
             if (entities == null)
             {
-                throw new ArgumentNullException(nameof(entities));
+                ArgumentNullException exception = new ArgumentNullException(nameof(entities));
+                ThrowInvalidMethodCall(exception);
             }
             if (entities.Any(entity => entity == null))
             {
-                throw new ArgumentNullException(nameof(entities), "The list contains a null reference.");
+                ArgumentNullException exception = new ArgumentNullException(nameof(entities), "The list contains a null reference.");
+                ThrowInvalidMethodCall(exception);
             }
 
             Repository.Delete(entities);
@@ -61,7 +70,8 @@ namespace Ontwikkelopdracht.Persistence
         {
             if (entity == null)
             {
-                throw new ArgumentNullException(nameof(entity));
+                ArgumentNullException exception = new ArgumentNullException(nameof(entity));
+                ThrowInvalidMethodCall(exception);
             }
 
             Repository.Delete(entity);
@@ -76,7 +86,8 @@ namespace Ontwikkelopdracht.Persistence
         {
             if (id < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(id), id, "Valid values are x >= 0.");
+                ArgumentOutOfRangeException exception = new ArgumentOutOfRangeException(nameof(id), id, "Valid values are x >= 0.");
+                ThrowInvalidMethodCall(exception);
             }
 
             return Repository.Exists(id);
@@ -91,7 +102,8 @@ namespace Ontwikkelopdracht.Persistence
         {
             if (ids == null)
             {
-                throw new ArgumentNullException(nameof(ids));
+                ArgumentNullException exception = new ArgumentNullException(nameof(ids));
+                ThrowInvalidMethodCall(exception);
             }
 
             return Repository.FindAll(ids);
@@ -101,7 +113,8 @@ namespace Ontwikkelopdracht.Persistence
         {
             if (predicate == null)
             {
-                throw new ArgumentNullException(nameof(predicate));
+                ArgumentNullException exception = new ArgumentNullException(nameof(predicate));
+                ThrowInvalidMethodCall(exception);
             }
 
             return Repository.FindAllWhere(predicate);
@@ -111,7 +124,8 @@ namespace Ontwikkelopdracht.Persistence
         {
             if (predicate == null)
             {
-                throw new ArgumentNullException(nameof(predicate));
+                ArgumentNullException exception = new ArgumentNullException(nameof(predicate));
+                ThrowInvalidMethodCall(exception);
             }
 
             return Repository.FindAllWhere(predicate);
@@ -121,7 +135,8 @@ namespace Ontwikkelopdracht.Persistence
         {
             if (id < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(id), id, "Valid values are x >= 0.");
+                ArgumentOutOfRangeException exception = new ArgumentOutOfRangeException(nameof(id), id, "Valid values are x >= 0.");
+                ThrowInvalidMethodCall(exception);
             }
 
             return Repository.FindOne(id);
@@ -131,7 +146,8 @@ namespace Ontwikkelopdracht.Persistence
         {
             if (entity == null)
             {
-                throw new ArgumentNullException(nameof(entity));
+                ArgumentNullException exception = new ArgumentNullException(nameof(entity));
+                ThrowInvalidMethodCall(exception);
             }
 
             return Repository.Save(entity);
@@ -141,14 +157,32 @@ namespace Ontwikkelopdracht.Persistence
         {
             if (entities == null)
             {
-                throw new ArgumentNullException(nameof(entities));
+                ArgumentNullException exception = new ArgumentNullException(nameof(entities));
+                ThrowInvalidMethodCall(exception);
             }
             if (entities.Any(entity => entity == null))
             {
-                throw new ArgumentNullException(nameof(entities), "The list contains a null reference.");
+                ArgumentNullException exception = new ArgumentNullException(nameof(entities), "The list contains a null reference.");
+                ThrowInvalidMethodCall(exception);
             }
 
             return Repository.Save(entities);
+        }
+
+        private static void ThrowInvalidMethodCall(System.Exception exception)
+        {
+            Throw(exception, "Invalid method call.");
+        }
+
+        private static void ThrowInvalidCreate(System.Exception exception)
+        {
+            Throw(exception, "Invalid repository created.");
+        }
+
+        private static void Throw(System.Exception exception, string message)
+        {
+            Log.E(Tag, $"{message} {exception.Message}");
+            throw exception;
         }
     }
 }
