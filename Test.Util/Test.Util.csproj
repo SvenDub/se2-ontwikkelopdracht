@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="GravatarTest.cs" />
     <Compile Include="PluralFormatProviderTest.cs" />
+    <Compile Include="QRTest.cs" />
     <Compile Include="StringExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
