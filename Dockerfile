@@ -24,7 +24,7 @@ RUN 	nuget restore \
 	&& /bin/bash -c '. ~/.bashrc && bower --allow-root install' \
 	&& cd ..
 
-RUN	mono packages/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe Test.Util/Test.Util.csproj
+RUN	mono packages/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe Test.Util/Test.Util.csproj Test.Ontwikkelopdracht.Persistence/Test.Ontwikkelopdracht.Persistence.csproj
 
 RUN	mv 100-mono.conf /etc/apache2/sites-available/ \
 	&& a2ensite 100-mono \
