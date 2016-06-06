@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util", "Util\Util.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Util", "Test.Util\Test.Util.csproj", "{946333D5-99A3-4AC7-ABAA-9E5C401F3CAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Ontwikkelopdracht.Persistence", "Test.Ontwikkelopdracht.Persistence\Test.Ontwikkelopdracht.Persistence.csproj", "{D432AD5D-FD3F-49E5-91F2-7B14A5CE5871}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ontwikkelopdracht.Persistence.Memory", "Ontwikkelopdracht.Persistence.Memory\Ontwikkelopdracht.Persistence.Memory.csproj", "{51631066-5AC0-40EC-9E92-E6ADC2FD7D16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{946333D5-99A3-4AC7-ABAA-9E5C401F3CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{946333D5-99A3-4AC7-ABAA-9E5C401F3CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{946333D5-99A3-4AC7-ABAA-9E5C401F3CAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D432AD5D-FD3F-49E5-91F2-7B14A5CE5871}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D432AD5D-FD3F-49E5-91F2-7B14A5CE5871}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D432AD5D-FD3F-49E5-91F2-7B14A5CE5871}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D432AD5D-FD3F-49E5-91F2-7B14A5CE5871}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51631066-5AC0-40EC-9E92-E6ADC2FD7D16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51631066-5AC0-40EC-9E92-E6ADC2FD7D16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51631066-5AC0-40EC-9E92-E6ADC2FD7D16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51631066-5AC0-40EC-9E92-E6ADC2FD7D16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

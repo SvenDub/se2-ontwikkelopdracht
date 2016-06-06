@@ -118,5 +118,14 @@ namespace Inject
                 throw new TypeNotResolvedException(contract, e);
             }
         }
+
+        /// <summary>
+        ///     Remove all data from the Injector.
+        /// </summary>
+        public static void Reset()
+        {
+            Types.Clear();
+            Instances.Clear();
+        }
     }
 }

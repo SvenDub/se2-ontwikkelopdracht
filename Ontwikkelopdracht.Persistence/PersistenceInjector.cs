@@ -15,7 +15,10 @@ namespace Ontwikkelopdracht.Persistence
         public static void Inject(IRepositoryProvider provider)
         {
             // Connection params
-            Injector.Register(provider.ConnectionParamsContract, provider.ConnectionParamsImpl);
+            if (provider.ConnectionParamsContract != null && provider.ConnectionParamsImpl != null)
+            {
+                Injector.Register(provider.ConnectionParamsContract, provider.ConnectionParamsImpl);
+            }
 
             AppDomain.CurrentDomain.GetAssemblies()
                 // Get all entities with Entity and Identity attribute
