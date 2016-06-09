@@ -10,6 +10,9 @@
 @Html.DisplayNameFor(crew => crew.Gender): @Html.DisplayFor(crew => crew.Gender)<br>
 @Html.DisplayNameFor(crew => crew.Birth): @Html.DisplayFor(crew => crew.Birth)<br>
 
+<h2>Admin</h2>
+@Html.ActionLink("Delete", "Delete", "Crew", new { id = Model.Id}, new {@class="btn btn-raised btn-danger"})
+
 <p>
     @Html.DisplayFor(crew => crew.Bio)
 </p>
