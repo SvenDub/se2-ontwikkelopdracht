@@ -11,6 +11,7 @@ namespace Ontwikkelopdracht.Controllers
     {
         private readonly IRepository<Show> _showRepository = Injector.Resolve<IRepository<Show>>();
         private readonly IRepository<Genre> _genreRepository = Injector.Resolve<IRepository<Genre>>();
+        private readonly IRepository<CrewMapping> _crewMappingRepository = Injector.Resolve<IRepository<CrewMapping>>();
 
         public ActionResult Index()
         {
@@ -35,6 +36,7 @@ namespace Ontwikkelopdracht.Controllers
         public ActionResult Details(int id)
         {
             ViewBag.Shows = _showRepository.FindAllWhere(show => show.Film.Id == id);
+            ViewBag.Crew = _crewMappingRepository.FindAllWhere(mapping => mapping.Film.Id == id);
 
             return View(Repository.FindOne(id));
         }
