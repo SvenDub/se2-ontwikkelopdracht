@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Inject;
 using Ontwikkelopdracht.Models;
 using Ontwikkelopdracht.Persistence;
+using Ontwikkelopdracht.Persistence.Exception;
 using Util;
 
 namespace Ontwikkelopdracht.Controllers
@@ -35,11 +36,18 @@ namespace Ontwikkelopdracht.Controllers
             return RedirectToAction("Details", new {id = saved.Id});
         }
 
-        [HttpDelete]
         [Authentication(Admin = true)]
         public ActionResult Delete(int id)
         {
-            Repository.Delete(id);
+            try
+            {
+                Repository.Delete(id);
+            }
+            catch (DataSourceException ex)
+            {
+                Log.E("BLOG", $"Delete failed. {ex}");
+                throw;
+            }
 
             return RedirectToAction("Index");
         }
