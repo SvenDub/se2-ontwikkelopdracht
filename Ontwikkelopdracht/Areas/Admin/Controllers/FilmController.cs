@@ -2,6 +2,8 @@
 using Inject;
 using Ontwikkelopdracht.Models;
 using Ontwikkelopdracht.Persistence;
+using Ontwikkelopdracht.Persistence.Exception;
+using Util;
 
 namespace Ontwikkelopdracht.Areas.Admin.Controllers
 {
@@ -24,6 +26,21 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
             Film saved = Repository.Save(film);
 
             return RedirectToAction("Details", new {id = saved.Id});
+        }
+
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                Repository.Delete(id);
+            }
+            catch (DataSourceException ex)
+            {
+                Log.E("FILM", $"Delete failed. {ex}");
+                throw;
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -20,6 +20,9 @@
 @Html.DisplayNameFor(film => film.Genre): @Html.DisplayFor(film => film.Genre.Name)<br>
 @Html.DisplayNameFor(film => film.Length): @string.Format(new PluralFormatProvider(), "{0:minuut;minuten}", Model.Length)<br>
 
+<h2>Admin</h2>
+@Html.ActionLink("Delete", "Delete", "Film", new { id = Model.Id}, new {@class="btn btn-raised btn-danger"})
+
 <h2>Voorstellingen</h2>
 <div class="list-group">
     @foreach (Show show in ((List<Show>) ViewBag.Shows).OrderBy(show => show.Date))
