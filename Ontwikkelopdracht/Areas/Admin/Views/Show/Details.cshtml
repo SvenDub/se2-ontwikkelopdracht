@@ -6,3 +6,6 @@
 
 <h1>@ViewBag.Title</h1>
 @Model.Date.ToShortTimeString()
+
+<h2>Admin</h2>
+@Html.ActionLink("Delete", "Delete", "Show", new { id = Model.Id}, new {@class="btn btn-raised btn-danger"})

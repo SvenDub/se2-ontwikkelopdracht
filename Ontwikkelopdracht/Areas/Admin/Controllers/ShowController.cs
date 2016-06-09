@@ -2,6 +2,7 @@
 using Inject;
 using Ontwikkelopdracht.Models;
 using Ontwikkelopdracht.Persistence;
+using Ontwikkelopdracht.Persistence.Exception;
 using Util;
 
 namespace Ontwikkelopdracht.Areas.Admin.Controllers
@@ -33,10 +34,17 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
             return RedirectToAction("Details", new {id = saved.Id});
         }
 
-        [HttpDelete]
         public ActionResult Delete(int id)
         {
-            Repository.Delete(id);
+            try
+            {
+                Repository.Delete(id);
+            }
+            catch (DataSourceException ex)
+            {
+                Log.E("SHOW", $"Delete failed. {ex}");
+                throw;
+            }
 
             return RedirectToAction("Index");
         }
