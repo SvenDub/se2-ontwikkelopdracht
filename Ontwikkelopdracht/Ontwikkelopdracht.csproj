@@ -137,6 +137,7 @@
     <Content Include="Views\Film\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Login\Signup.cshtml" />
     <Content Include="Views\Login\Unauthorized.cshtml" />
     <Content Include="Views\Order\Add.cshtml" />
     <Content Include="Views\Order\Cart.cshtml" />
@@ -170,7 +171,9 @@
     </Compile>
     <Compile Include="Models\AuthenticationAttribute.cs" />
     <Compile Include="Models\Blog.cs" />
+    <Compile Include="Models\CrewMapping.cs" />
     <Compile Include="Models\Crewmember.cs" />
+    <Compile Include="Models\CrewType.cs" />
     <Compile Include="Models\EntityController.cs" />
     <Compile Include="Models\Film.cs" />
     <Compile Include="Models\Gender.cs" />
