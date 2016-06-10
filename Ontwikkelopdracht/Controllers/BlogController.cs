@@ -22,15 +22,15 @@ namespace Ontwikkelopdracht.Controllers
             return View(new Blog());
         }
 
+        [Authentication(Admin = true)]
+        public ActionResult Edit(int id) => View(Repository.FindOne(id));
+
         [HttpPost]
         [Authentication(Admin = true)]
         public ActionResult Save(Blog blog)
         {
             blog.Date = DateTime.Now;
             blog.Author = (User) Session[SessionVars.User];
-            Log.D("BLOG", blog.ToString());
-            Log.D("BLOG", blog.Author.ToString());
-            Log.D("BLOG", blog.Author.Name);
             Blog saved = Repository.Save(blog);
 
             return RedirectToAction("Details", new {id = saved.Id});

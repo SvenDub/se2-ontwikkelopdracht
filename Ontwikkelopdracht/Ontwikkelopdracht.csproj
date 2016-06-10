@@ -132,6 +132,7 @@
     <Content Include="packages.config" />
     <Content Include="Views\Blog\Add.cshtml" />
     <Content Include="Views\Blog\Details.cshtml" />
+    <Content Include="Views\Blog\Edit.cshtml" />
     <Content Include="Views\Blog\Index.cshtml" />
     <Content Include="Views\Film\Details.cshtml" />
     <Content Include="Views\Film\Index.cshtml" />
