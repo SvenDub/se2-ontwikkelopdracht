@@ -17,6 +17,8 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
 
         public ActionResult Add() => View();
 
+        public ActionResult Edit(int id) => View(Repository.FindOne(id));
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Save(Crewmember crew)

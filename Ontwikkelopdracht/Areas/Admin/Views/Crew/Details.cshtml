@@ -1,5 +1,4 @@
 ﻿@using Ontwikkelopdracht.Models
-@using Util
 @model Crewmember
 
 @{
@@ -12,6 +11,7 @@
 
 <h2>Admin</h2>
 @Html.ActionLink("Delete", "Delete", "Crew", new { id = Model.Id}, new {@class="btn btn-raised btn-danger"})
+@Html.ActionLink("Edit", "Edit", "Crew", new { id = Model.Id}, new {@class="btn btn-raised"})
 
 <p>
     @Html.DisplayFor(crew => crew.Bio)

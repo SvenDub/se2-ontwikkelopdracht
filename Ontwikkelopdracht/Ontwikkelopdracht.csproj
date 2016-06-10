@@ -107,6 +107,7 @@
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Crew\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Crew\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Crew\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Crew\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Film\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Film\Details.cshtml" />
