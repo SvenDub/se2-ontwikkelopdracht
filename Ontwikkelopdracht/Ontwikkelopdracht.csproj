@@ -110,6 +110,7 @@
     <Content Include="Areas\Admin\Views\Crew\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Film\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Film\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Film\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Film\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Login\Index.cshtml" />
