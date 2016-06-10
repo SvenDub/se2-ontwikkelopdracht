@@ -25,6 +25,13 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
             return View();
         }
 
+        public ActionResult Edit(int id)
+        {
+            Show show = Repository.FindOne(id);
+            ViewBag.Film = new SelectList(_filmRepository.FindAll(), "Id", "Title", show.Film.Id);
+            return View(show);
+        }
+
         [HttpPost]
         public ActionResult Save(Show show)
         {
