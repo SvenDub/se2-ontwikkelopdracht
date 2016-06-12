@@ -1,5 +1,6 @@
 ﻿namespace Ontwikkelopdracht.Persistence.Memory
 {
+    /// <see cref="MemoryRepository{T}"/>
     public class MemorySetup : IRepositorySetup
     {
         /// <summary>

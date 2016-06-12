@@ -7,6 +7,9 @@ using Util;
 
 namespace Ontwikkelopdracht.Persistence.Memory
 {
+    /// <summary>
+    ///     In-memory database that loses its data as soon as the application exits.
+    /// </summary>
     public class MemoryRepository<T> : IStrictRepository<T> where T : new()
     {
         protected List<T> Entities = new List<T>();
