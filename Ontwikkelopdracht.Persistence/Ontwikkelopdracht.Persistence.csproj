@@ -49,6 +49,7 @@
     <Compile Include="IdentityAttribute.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IRepositoryProvider.cs" />
+    <Compile Include="IRepositorySetup.cs" />
     <Compile Include="IStrictRepository.cs" />
     <Compile Include="PersistenceInjector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

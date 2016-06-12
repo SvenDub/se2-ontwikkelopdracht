@@ -7,5 +7,6 @@ namespace Ontwikkelopdracht.Persistence.MySql
         public Type GetDatabaseType<T>() where T : new() => typeof(MySqlRepository<T>);
         public Type ConnectionParamsContract => typeof(IMySqlConnectionParams);
         public Type ConnectionParamsImpl => typeof(ProductionMySqlConnectionParams);
+        public Type Setup => typeof(MySqlSetup);
     }
 }

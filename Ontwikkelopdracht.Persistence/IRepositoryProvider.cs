@@ -21,5 +21,10 @@ namespace Ontwikkelopdracht.Persistence
         ///     The type that implements the connection parameters.
         /// </summary>
         Type ConnectionParamsImpl { get; }
+
+        /// <summary>
+        ///     The type that sets up the database.
+        /// </summary>
+        Type Setup { get; }
     }
 }
