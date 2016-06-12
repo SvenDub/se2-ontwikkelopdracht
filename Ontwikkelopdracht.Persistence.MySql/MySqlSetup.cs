@@ -21,10 +21,36 @@ namespace Ontwikkelopdracht.Persistence.MySql
             {
                 using (MySqlConnection connection = CreateConnection())
                 {
+                    MySqlTransaction transaction = connection.BeginTransaction();
                     using (MySqlCommand cmd = connection.CreateCommand())
                     {
-                        cmd.CommandText = GetResourceFileContentAsString("CREATE.sql");
-                        cmd.ExecuteNonQuery();
+                        try
+                        {
+                            cmd.Transaction = transaction;
+                            cmd.CommandText = GetResourceFileContentAsString("CREATE.sql");
+                            cmd.ExecuteNonQuery();
+
+                            transaction.Commit();
+                        }
+                        catch (System.Exception e)
+                        {
+                            Log.E("DB", "Could not initialize database.");
+                            Log.E("DB", e.ToString());
+                            Log.I("DB", "Rolling back.");
+
+                            try
+                            {
+                                transaction?.Rollback();
+                                Log.I("DB", "Rollback success.");
+                            }
+                            catch (System.Exception e1)
+                            {
+                                Log.E("DB", "Could not roll back.");
+                                Log.E("DB", e1.ToString());
+                            }
+
+                            return false;
+                        }
                     }
                 }
             }
@@ -32,6 +58,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
             {
                 Log.E("DB", "Could not initialize database.");
                 Log.E("DB", e.ToString());
+
                 return false;
             }
 
@@ -64,19 +91,19 @@ namespace Ontwikkelopdracht.Persistence.MySql
         }
 
         public static string GetResourceFileContentAsString(string fileName)
-            {
-                var assembly = Assembly.GetExecutingAssembly();
-                var resourceName = "Ontwikkelopdracht.Persistence.MySql." + fileName;
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "Ontwikkelopdracht.Persistence.MySql." + fileName;
 
-                string resource = null;
-                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            string resource = null;
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                using (StreamReader reader = new StreamReader(stream))
                 {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        resource = reader.ReadToEnd();
-                    }
+                    resource = reader.ReadToEnd();
                 }
-                return resource;
             }
+            return resource;
+        }
     }
 }
