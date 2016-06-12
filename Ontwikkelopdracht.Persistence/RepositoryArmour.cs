@@ -8,14 +8,24 @@ using Util;
 
 namespace Ontwikkelopdracht.Persistence
 {
+    /// <summary>
+    ///     The layer between the application and the actual repositories. Prevents invalid calls.
+    /// </summary>
+    /// <typeparam name="T">The entity type the repository manages.</typeparam>
     public class RepositoryArmour<T> : IRepository<T> where T : new()
     {
         private const string Tag = "REPOARMOUR";
 
+        /// <summary>
+        ///     Actual repository.
+        /// </summary>
         protected IStrictRepository<T> Repository = Injector.Resolve<IStrictRepository<T>>();
 
         private readonly PropertyInfo _identityProperty;
 
+        /// <summary>
+        ///     Checks if the given property is valid.
+        /// </summary>
         public RepositoryArmour()
         {
             MemberInfo info = typeof(T);
@@ -217,16 +227,32 @@ namespace Ontwikkelopdracht.Persistence
             return Repository.Save(entities);
         }
 
+        /// <summary>
+        ///     Throw an exception and log a message that the method call is invalid.
+        /// </summary>
+        /// <param name="exception">The exception to throw.</param>
+        /// <exception cref="Exception">The given exception.</exception>
         private static void ThrowInvalidMethodCall(System.Exception exception)
         {
             Throw(exception, "Invalid method call.");
         }
 
+        /// <summary>
+        ///     Throw an exception and log a message that the repository is invalid.
+        /// </summary>
+        /// <param name="exception">The exception to throw.</param>
+        /// <exception cref="Exception">The given exception.</exception>
         private static void ThrowInvalidCreate(System.Exception exception)
         {
             Throw(exception, "Invalid repository created.");
         }
 
+        /// <summary>
+        ///     Throw an exception and log a message.
+        /// </summary>
+        /// <param name="exception">The exception to throw.</param>
+        /// <param name="message">The message to log.</param>
+        /// <exception cref="Exception">The given exception.</exception>
         private static void Throw(System.Exception exception, string message)
         {
             Log.E(Tag, $"{message} {exception.Message}");

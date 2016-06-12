@@ -2,6 +2,9 @@
 
 namespace Ontwikkelopdracht.Persistence
 {
+    /// <summary>
+    ///     Get this class from the database.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class EntityAttribute : Attribute
     {

@@ -12,12 +12,19 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
     {
         private readonly IRepository<Genre> _genreRepository = Injector.Resolve<IRepository<Genre>>();
 
+        /// <summary>
+        ///     Show form for creating new film.
+        /// </summary>
         public ActionResult Add()
         {
             ViewBag.Genre = new SelectList(_genreRepository.FindAll(), "Id", "Name");
             return View();
         }
 
+        /// <summary>
+        ///     Edit a film.
+        /// </summary>
+        /// <param name="id">Id of the film.</param>
         public ActionResult Edit(int id)
         {
             Film model = Repository.FindOne(id);
@@ -25,6 +32,10 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
             return View(model);
         }
 
+        /// <summary>
+        ///     Create or update a film.
+        /// </summary>
+        /// <param name="film">The film to save.</param>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Save(Film film)
@@ -35,6 +46,10 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
             return RedirectToAction("Details", new {id = saved.Id});
         }
 
+        /// <summary>
+        ///     Delete a film.
+        /// </summary>
+        /// <param name="id">Id of the film.</param>
         public ActionResult Delete(int id)
         {
             try

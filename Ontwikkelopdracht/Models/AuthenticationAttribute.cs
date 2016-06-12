@@ -5,10 +5,17 @@ using Ontwikkelopdracht.Persistence;
 
 namespace Ontwikkelopdracht.Models
 {
+    /// <summary>
+    ///     Require authorization on the attributed method or controller.
+    /// </summary>
     public class AuthenticationAttribute : ActionFilterAttribute
     {
         private readonly IRepository<User> _userRepository = Injector.Resolve<IRepository<User>>();
 
+        /// <summary>
+        ///     Check if the user is logged in and redirect to the appropriate page.
+        /// </summary>
+        /// <param name="filterContext">The filter context.</param>
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (filterContext.HttpContext.Session?[SessionVars.User] == null)
@@ -36,6 +43,10 @@ namespace Ontwikkelopdracht.Models
             }
         }
 
+        /// <summary>
+        ///     Redirect to the login page.
+        /// </summary>
+        /// <param name="filterContext">The filter context.</param>
         private static void RedirectToLogin(ActionExecutingContext filterContext)
         {
             filterContext.Result =
@@ -49,6 +60,10 @@ namespace Ontwikkelopdracht.Models
                         }));
         }
 
+        /// <summary>
+        ///     Redirect to the unauthorized page.
+        /// </summary>
+        /// <param name="filterContext">The filter context.</param>
         private static void RedirectToUnauthorized(ActionExecutingContext filterContext)
         {
             filterContext.Result =
@@ -62,6 +77,9 @@ namespace Ontwikkelopdracht.Models
                         }));
         }
 
+        /// <summary>
+        ///     Whether to require admin credentials.
+        /// </summary>
         public bool Admin { get; set; } = false;
     }
 }

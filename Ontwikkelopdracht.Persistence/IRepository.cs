@@ -8,7 +8,6 @@ namespace Ontwikkelopdracht.Persistence
     ///     Interface for generic CRUD operations on a repository for a specified type.
     /// </summary>
     /// <typeparam name="T">The entity type the repository manages.</typeparam>
-    /// <typeparam name="ID">The type of the id of the entity the repository manages.</typeparam>
     public interface IRepository<T> where T : new()
     {
         /// <summary>

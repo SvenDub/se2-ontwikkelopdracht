@@ -1,5 +1,8 @@
 ﻿namespace Ontwikkelopdracht.Persistence.MySql
 {
+    /// <summary>
+    ///     Connection parameters for the production environment.
+    /// </summary>
     public class ProductionMySqlConnectionParams : IMySqlConnectionParams
     {
         public string Host { get; set; } = "db";

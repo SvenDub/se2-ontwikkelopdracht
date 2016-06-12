@@ -4,6 +4,9 @@ using System.Web.Mvc;
 
 namespace Ontwikkelopdracht.Models
 {
+    /// <summary>
+    ///     Set the correct language for the user.
+    /// </summary>
     public class InternationalizationAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)

@@ -7,6 +7,11 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
 {
     public class LoginController : EntityController<User>
     {
+        /// <summary>
+        ///     Show login form.
+        /// </summary>
+        /// <param name="returnUrl">The url to direct to after logging in.</param>
+        /// <param name="failed">Whether the last attempt failed.</param>
         public ActionResult Index(string returnUrl, bool failed = false)
         {
             if (Session[SessionVars.User] == null)
@@ -25,6 +30,11 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
             }
         }
 
+        /// <summary>
+        ///     Try to login. Redirect to login form if failed.
+        /// </summary>
+        /// <param name="model">The entered credentials.</param>
+        /// <param name="returnUrl">The url to direct to after logging in.</param>
         [HttpPost]
         public ActionResult Index(User model, string returnUrl)
         {
@@ -55,6 +65,9 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
             }
         }
 
+        /// <summary>
+        ///     Log out.
+        /// </summary>
         public ActionResult Logout()
         {
             Session.Remove(SessionVars.User);
@@ -62,6 +75,10 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        ///     Show a message that the user is unauthorized.
+        /// </summary>
+        /// <param name="returnUrl">The url that was not allowed.</param>
         public ActionResult Unauthorized(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
