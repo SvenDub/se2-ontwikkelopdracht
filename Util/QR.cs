@@ -6,8 +6,16 @@ using QRCoder;
 
 namespace Util
 {
+    /// <summary>
+    ///     Utility class for generating QR codes.
+    /// </summary>
     public static class QR
     {
+        /// <summary>
+        ///     Generates a QR code for an url.
+        /// </summary>
+        /// <param name="url">The url to encode.</param>
+        /// <returns>A base64 encoded PNG.</returns>
         public static string GenerateBase64(string url)
         {
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
