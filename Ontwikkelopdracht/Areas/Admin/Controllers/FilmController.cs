@@ -2,6 +2,8 @@
 using Inject;
 using Ontwikkelopdracht.Models;
 using Ontwikkelopdracht.Persistence;
+using Ontwikkelopdracht.Persistence.Exception;
+using Util;
 
 namespace Ontwikkelopdracht.Areas.Admin.Controllers
 {
@@ -16,6 +18,13 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
             return View();
         }
 
+        public ActionResult Edit(int id)
+        {
+            Film model = Repository.FindOne(id);
+            ViewBag.Genre = new SelectList(_genreRepository.FindAll(), "Id", "Name", model.Genre.Id);
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Save(Film film)
@@ -24,6 +33,21 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
             Film saved = Repository.Save(film);
 
             return RedirectToAction("Details", new {id = saved.Id});
+        }
+
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                Repository.Delete(id);
+            }
+            catch (DataSourceException ex)
+            {
+                Log.E("FILM", $"Delete failed. {ex}");
+                throw;
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

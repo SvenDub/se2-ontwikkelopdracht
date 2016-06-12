@@ -1,5 +1,4 @@
 ﻿@using Ontwikkelopdracht.Models
-@using Util
 @model Crewmember
 
 @{
@@ -9,6 +8,10 @@
 <h1>@ViewBag.Title</h1>
 @Html.DisplayNameFor(crew => crew.Gender): @Html.DisplayFor(crew => crew.Gender)<br>
 @Html.DisplayNameFor(crew => crew.Birth): @Html.DisplayFor(crew => crew.Birth)<br>
+
+<h2>Admin</h2>
+@Html.ActionLink("Delete", "Delete", "Crew", new { id = Model.Id}, new {@class="btn btn-raised btn-danger"})
+@Html.ActionLink("Edit", "Edit", "Crew", new { id = Model.Id}, new {@class="btn btn-raised"})
 
 <p>
     @Html.DisplayFor(crew => crew.Bio)

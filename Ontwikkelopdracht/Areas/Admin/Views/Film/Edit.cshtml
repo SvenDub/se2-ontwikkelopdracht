@@ -1,0 +1,47 @@
+﻿@using Ontwikkelopdracht.Models
+@model Film
+
+@{
+    ViewBag.Title = "Film Aanpassen";
+}
+
+<h1>@ViewBag.Title</h1>
+@using (Html.BeginForm("Save", "Film"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    @Html.HiddenFor(film => film.Id)
+
+    <div class="form-group label-floating">
+        @Html.LabelFor(film => film.Title, new {@class = "control-label"})
+        @Html.EditorFor(film => film.Title, new {htmlAttributes = new {@class = "form-control"}})
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(film => film.Release, new {@class = "control-label"})
+        <input class="form-control" type="date" name="Release" id="Release" value="@Model.Release.ToString("yyyy-M-d")">
+    </div>
+
+    <div class="form-group label-floating">
+        @Html.LabelFor(film => film.Length, new {@class = "control-label"})
+        @Html.EditorFor(film => film.Length, new {htmlAttributes = new {@class = "form-control"}})
+    </div>
+
+    <div class="form-group label-floating">
+        @Html.LabelFor(film => film.Language, new {@class = "control-label"})
+        @Html.EditorFor(film => film.Language, new {htmlAttributes = new {@class = "form-control"}})
+    </div>
+
+    <div class="form-group label-floating">
+        @Html.LabelFor(film => film.Subtitles, new {@class = "control-label"})
+        @Html.EditorFor(film => film.Subtitles, new {htmlAttributes = new {@class = "form-control"}})
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(film => film.Genre, new {@class = "control-label"})
+        @Html.DropDownListFor(film => film.Genre.Id, (IEnumerable<SelectListItem>) ViewBag.Genre, new {@class = "form-control"})
+    </div>
+
+    <input class="btn btn-primary btn-raised" type="submit" value="Opslaan"/>
+    <input class="btn btn-raised" type="button" onclick="location.href = '@Url.Action("Index", "Film")'" value="Annuleren"/>
+}

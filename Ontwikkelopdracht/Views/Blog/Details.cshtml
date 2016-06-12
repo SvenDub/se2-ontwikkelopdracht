@@ -1,4 +1,5 @@
-﻿@model Ontwikkelopdracht.Models.Blog
+﻿@using Ontwikkelopdracht.Models
+@model Blog
 
 @{
     ViewBag.Title = Model.Title;
@@ -9,4 +10,12 @@
     @Html.DisplayNameFor(blog => blog.Author): @Html.DisplayFor(blog => blog.Author.Name)<br>
     @Html.DisplayNameFor(blog => blog.Date): @Html.DisplayFor(blog => blog.Date)
 </p>
+
+@if (HttpContext.Current.Session[SessionVars.User] != null && ((User) HttpContext.Current.Session[SessionVars.User]).Admin)
+{
+    <h2>Admin</h2>
+    @Html.ActionLink("Delete", "Delete", "Blog", new {id = Model.Id}, new {@class = "btn btn-raised btn-danger"})
+    @Html.ActionLink("Edit", "Edit", "Blog", new {id = Model.Id}, new {@class = "btn btn-raised"})
+}
+
 @Model.Body

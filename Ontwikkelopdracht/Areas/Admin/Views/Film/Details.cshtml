@@ -20,6 +20,40 @@
 @Html.DisplayNameFor(film => film.Genre): @Html.DisplayFor(film => film.Genre.Name)<br>
 @Html.DisplayNameFor(film => film.Length): @string.Format(new PluralFormatProvider(), "{0:minuut;minuten}", Model.Length)<br>
 
+<h2>Admin</h2>
+@Html.ActionLink("Delete", "Delete", "Film", new { id = Model.Id}, new {@class="btn btn-raised btn-danger"})
+@Html.ActionLink("Aanpassen", "Edit", "Film", new { id = Model.Id}, new {@class="btn btn-raised"})
+
+<h2>Crew</h2>
+<div class="list-group">
+    @foreach (CrewMapping mapping in ViewBag.Crew)
+    {
+        <div class="list-group-item">
+            <div class="row-action-primary">
+                <i class="material-icons">person</i>
+            </div>
+            <div class="row-content">
+                <h4 class="list-group-item-heading">
+                    @Html.DisplayFor(film => mapping.Crewmember.Name)
+                </h4>
+
+                <p class="list-group-item-text">
+                    @Html.DisplayFor(film => mapping.CrewType.Name)
+                </p>
+            </div>
+        </div>
+        <div class="list-group-separator"></div>
+    }
+    @if (ViewBag.Crew.Count == 0)
+    {
+        <div class="alert alert-dismissible alert-warning">
+            <h4>Geen crew beschikbaar</h4>
+
+            <p>Probeer het later nog eens.</p>
+        </div>
+    }
+</div>
+
 <h2>Voorstellingen</h2>
 <div class="list-group">
     @foreach (Show show in ((List<Show>) ViewBag.Shows).OrderBy(show => show.Date))

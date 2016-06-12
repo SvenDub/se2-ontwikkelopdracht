@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Ontwikkelopdracht.Models;
+using Ontwikkelopdracht.Persistence.Exception;
 using Util;
 
 namespace Ontwikkelopdracht.Areas.Admin.Controllers
@@ -16,6 +17,8 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
 
         public ActionResult Add() => View();
 
+        public ActionResult Edit(int id) => View(Repository.FindOne(id));
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Save(User user)
@@ -23,6 +26,21 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
             User saved = Repository.Save(user);
 
             return RedirectToAction("Details", new {id = saved.Id});
+        }
+
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                Repository.Delete(id);
+            }
+            catch (DataSourceException ex)
+            {
+                Log.E("USER", $"Delete failed. {ex}");
+                throw;
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }
