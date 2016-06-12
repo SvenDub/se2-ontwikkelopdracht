@@ -12,19 +12,37 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
     {
         private readonly IRepository<Film> _filmRepository = Injector.Resolve<IRepository<Film>>();
 
+        /// <summary>
+        ///     Show list of all shows.
+        /// </summary>
         public ActionResult Index() => View(Repository.FindAll());
 
+        /// <summary>
+        ///     Show list of shows.
+        /// </summary>
+        /// <param name="query">Query string to search for.</param>
         public ActionResult Search(string query)
             => View("Index", Repository.FindAllWhere(show => show.Film.Title.ContainsIgnoreCase(query)));
 
+        /// <summary>
+        ///     Show individual show.
+        /// </summary>
+        /// <param name="id">Id of the show.</param>
         public ActionResult Details(int id) => View(Repository.FindOne(id));
 
+        /// <summary>
+        ///     Show form for creating new show.
+        /// </summary>
         public ActionResult Add()
         {
             ViewBag.Film = new SelectList(_filmRepository.FindAll(), "Id", "Title");
             return View();
         }
 
+        /// <summary>
+        ///     Edit a show.
+        /// </summary>
+        /// <param name="id">Id of the show.</param>
         public ActionResult Edit(int id)
         {
             Show show = Repository.FindOne(id);
@@ -32,6 +50,10 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
             return View(show);
         }
 
+        /// <summary>
+        ///     Create or update a show.
+        /// </summary>
+        /// <param name="show">The show to save.</param>
         [HttpPost]
         public ActionResult Save(Show show)
         {
@@ -41,6 +63,10 @@ namespace Ontwikkelopdracht.Areas.Admin.Controllers
             return RedirectToAction("Details", new {id = saved.Id});
         }
 
+        /// <summary>
+        ///     Delete a show.
+        /// </summary>
+        /// <param name="id">Id of the show.</param>
         public ActionResult Delete(int id)
         {
             try

@@ -13,6 +13,10 @@ namespace Ontwikkelopdracht.Controllers
         private readonly IRepository<Show> _showRepository = Injector.Resolve<IRepository<Show>>();
         private readonly IRepository<Ticket> _ticketRepository = Injector.Resolve<IRepository<Ticket>>();
 
+        /// <summary>
+        ///     Create a new order.
+        /// </summary>
+        /// <param name="show">The show for which to create the order.</param>
         public ActionResult Index(int show)
         {
             Show dbShow = _showRepository.FindOne(show);
@@ -22,6 +26,10 @@ namespace Ontwikkelopdracht.Controllers
             });
         }
 
+        /// <summary>
+        ///     Add a new ticket.
+        /// </summary>
+        /// <param name="ticket">The ticket to add.</param>
         [HttpPost]
         public ActionResult Add(Ticket ticket)
         {
@@ -40,8 +48,14 @@ namespace Ontwikkelopdracht.Controllers
             return View(ticket);
         }
 
+        /// <summary>
+        ///     Show overview of pending order.
+        /// </summary>
         public ActionResult Cart() => View(GetOrder());
 
+        /// <summary>
+        ///     Confirm order.
+        /// </summary>
         public ActionResult Save()
         {
             // Do not save order if not yet created
@@ -66,6 +80,9 @@ namespace Ontwikkelopdracht.Controllers
             return View(saved);
         }
 
+        /// <summary>
+        ///     Clear pending order.
+        /// </summary>
         public ActionResult Clear()
         {
             Session[SessionVars.Order] = null;
@@ -73,6 +90,10 @@ namespace Ontwikkelopdracht.Controllers
             return RedirectToAction("Cart");
         }
 
+        /// <summary>
+        ///     Get the pending order or create a new one if none exist.
+        /// </summary>
+        /// <returns>The pending order.</returns>
         private Order GetOrder()
         {
             // Start a new order if no order exists yet
@@ -89,6 +110,9 @@ namespace Ontwikkelopdracht.Controllers
             return (Order) Session[SessionVars.Order];
         }
 
+        /// <summary>
+        ///     Get the cost for a ticket.
+        /// </summary>
         private int GetTicketCost(Ticket ticket) => 1200;
     }
 }

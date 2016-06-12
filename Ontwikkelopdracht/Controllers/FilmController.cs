@@ -13,6 +13,9 @@ namespace Ontwikkelopdracht.Controllers
         private readonly IRepository<Genre> _genreRepository = Injector.Resolve<IRepository<Genre>>();
         private readonly IRepository<CrewMapping> _crewMappingRepository = Injector.Resolve<IRepository<CrewMapping>>();
 
+        /// <summary>
+        ///     Show list of all films.
+        /// </summary>
         public ActionResult Index()
         {
             ViewBag.Genres = _genreRepository.FindAll();
@@ -20,6 +23,11 @@ namespace Ontwikkelopdracht.Controllers
             return View(Repository.FindAll());
         }
 
+        /// <summary>
+        ///     Show list of films.
+        /// </summary>
+        /// <param name="query">Query string to search for.</param>
+        /// <param name="genre">The <see cref="Genre"/> to filter on. -1 sets no filter.</param>
         public ActionResult Search(string query, int genre = -1)
         {
             ViewBag.Genres = _genreRepository.FindAll();
@@ -33,6 +41,10 @@ namespace Ontwikkelopdracht.Controllers
             return View("Index", films);
         }
 
+        /// <summary>
+        ///     Show individual film.
+        /// </summary>
+        /// <param name="id">Id of the film.</param>
         public ActionResult Details(int id)
         {
             ViewBag.Shows = _showRepository.FindAllWhere(show => show.Film.Id == id);
