@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="MemoryRepository.cs" />
     <Compile Include="MemoryRepositoryProvider.cs" />
+    <Compile Include="MemorySetup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

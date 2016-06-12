@@ -20,6 +20,12 @@ namespace Ontwikkelopdracht.Persistence
                 Injector.Register(provider.ConnectionParamsContract, provider.ConnectionParamsImpl);
             }
 
+            // Setup
+            if (provider.Setup != null)
+            {
+                Injector.Register(typeof(IRepositorySetup), provider.Setup);
+            }
+
             AppDomain.CurrentDomain.GetAssemblies()
                 // Get all entities with Entity and Identity attribute
                 .SelectMany(x => x.GetTypes()

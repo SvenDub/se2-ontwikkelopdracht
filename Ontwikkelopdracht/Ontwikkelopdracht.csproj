@@ -184,6 +184,7 @@
     <Compile Include="Models\Gender.cs" />
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\InternationalizationAttribute.cs" />
+    <Compile Include="Models\MetaKeyValuePair.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\SessionVars.cs" />
     <Compile Include="Models\Show.cs" />

@@ -8,5 +8,6 @@ namespace Ontwikkelopdracht.Persistence.Memory
 
         public Type ConnectionParamsContract => null;
         public Type ConnectionParamsImpl => null;
+        public Type Setup => typeof(MemorySetup);
     }
 }

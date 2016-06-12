@@ -44,8 +44,10 @@
     <Compile Include="IMySqlConnectionParams.cs" />
     <Compile Include="MySqlRepository.cs" />
     <Compile Include="MySqlRepositoryProvider.cs" />
+    <Compile Include="MySqlSetup.cs" />
     <Compile Include="ProductionMySqlConnectionParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CREATE.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Inject\Inject.csproj">
@@ -63,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.config" />
-    <Content Include="CREATE.sql" />
     <Content Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
