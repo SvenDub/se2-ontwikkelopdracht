@@ -10,8 +10,14 @@ using Util;
 
 namespace Ontwikkelopdracht.Persistence.MySql
 {
+    /// <summary>
+    ///     Repository that connects to a MySQL backend.
+    /// </summary>
     public class MySqlRepository<T> : IStrictRepository<T> where T : new()
     {
+        /// <summary>
+        ///     Connection parameters to use.
+        /// </summary>
         public IMySqlConnectionParams MySqlConnectionParams { set; protected get; } =
             Injector.Resolve<IMySqlConnectionParams>();
 
@@ -19,6 +25,9 @@ namespace Ontwikkelopdracht.Persistence.MySql
         private readonly IdentityAttribute _identityAttribute;
         private readonly PropertyInfo _identityProperty;
 
+        /// <summary>
+        ///     Checks if the entity is valid.
+        /// </summary>
         public MySqlRepository()
         {
             MemberInfo info = typeof(T);
@@ -217,6 +226,12 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
+        /// <summary>
+        ///     Update an entity with the given id.
+        /// </summary>
+        /// <param name="entity">The new entity values.</param>
+        /// <param name="id">The id of the entity.</param>
+        /// <returns>The saved entity.</returns>
         private T Update(T entity, int id)
         {
             using (MySqlConnection connection = CreateConnection())
@@ -225,7 +240,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
                 {
                     string[] parameters = new string[DataMembersWithoutIdentity.Count];
                     int i = -1;
-                    foreach (var keyValuePair in DataMembersWithoutIdentity)
+                    foreach (KeyValuePair<PropertyInfo, string> keyValuePair in DataMembersWithoutIdentity)
                     {
                         i++;
                         parameters[i] = $"`{keyValuePair.Value}`=@{keyValuePair.Value}";
@@ -249,6 +264,11 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
+        /// <summary>
+        ///     Insert a new entity.
+        /// </summary>
+        /// <param name="entity">The entity to insert.</param>
+        /// <returns>The saved entity.</returns>
         private T Insert(T entity)
         {
             using (MySqlConnection connection = CreateConnection())
@@ -278,6 +298,14 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
+        /// <summary>
+        ///     Save all <see cref="DataType.OneToManyEntity"/> properties after the entity itself has been saved.
+        ///     The new id has to be known at this point.
+        /// </summary>
+        /// <param name="entity">The old entity.</param>
+        /// <param name="saved">The saved entity.</param>
+        /// <param name="id">The id of the saved entity.</param>
+        /// <exception cref="EntityException">If <see cref="DataType.OneToManyEntity"/> was incorrectly defined.</exception>
         private void SaveOneToMany(T entity, T saved, int id)
         {
             DataMembersOneToMany.ForEach(key =>
@@ -286,10 +314,12 @@ namespace Ontwikkelopdracht.Persistence.MySql
                     == typeof(List<>))
                 {
                     Type itemType = key.PropertyType.GetGenericArguments()[0];
+
                     // Save one to many entities to their repo
                     object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
                         .MakeGenericMethod(itemType)
                         .Invoke(this, new object[] {});
+
                     IList entities = (IList) key.GetValue(entity);
                     entities.Cast<object>().ToList().ForEach(e =>
                     {
@@ -321,6 +351,11 @@ namespace Ontwikkelopdracht.Persistence.MySql
             return entities.Select(Save).ToList();
         }
 
+        /// <summary>
+        ///     Open a new connection to the database.
+        /// </summary>
+        /// <returns>The open connection.</returns>
+        /// <exception cref="ConnectException">When the connection could not be established.</exception>
         private MySqlConnection CreateConnection()
         {
             MySqlConnectionStringBuilder mySqlConnectionStringBuilder = new MySqlConnectionStringBuilder
@@ -345,6 +380,9 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
+        /// <summary>
+        ///     All properties attributed with <see cref="DataMemberAttribute"/> and their Column name.
+        /// </summary>
         private Dictionary<PropertyInfo, string> DataMembers => typeof(T)
             .GetProperties()
             .Where(propertyInfo => propertyInfo.IsDefined(typeof(IdentityAttribute), true))
@@ -355,6 +393,9 @@ namespace Ontwikkelopdracht.Persistence.MySql
             .Concat(DataMembersWithoutIdentity)
             .ToDictionary(pair => pair.Key, pair => pair.Value);
 
+        /// <summary>
+        ///     All properties attributed with <see cref="DataMemberAttribute"/> except <see cref="IdentityAttribute"/> and their Column name.
+        /// </summary>
         private Dictionary<PropertyInfo, string> DataMembersWithoutIdentity => typeof(T)
             .GetProperties()
             .Where(
@@ -367,6 +408,9 @@ namespace Ontwikkelopdracht.Persistence.MySql
                         propertyInfo.GetCustomAttribute<DataMemberAttribute>(true).Column))
             .ToDictionary(pair => pair.Key, pair => pair.Value);
 
+        /// <summary>
+        ///     All properties attributed with <see cref="DataType.OneToManyEntity"/>.
+        /// </summary>
         private List<PropertyInfo> DataMembersOneToMany => typeof(T)
             .GetProperties()
             .Where(
@@ -375,6 +419,11 @@ namespace Ontwikkelopdracht.Persistence.MySql
                     propertyInfo.GetCustomAttribute<DataMemberAttribute>().Type == DataType.OneToManyEntity)
             .ToList();
 
+        /// <summary>
+        ///     Create a new entity from the given reader.
+        /// </summary>
+        /// <param name="reader">The reader that contains the data.</param>
+        /// <returns>A new entity.</returns>
         private T CreateFromReader(MySqlDataReader reader)
         {
             using (reader)
@@ -388,6 +437,11 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
+        /// <summary>
+        ///     Create a new list of entities from the given reader.
+        /// </summary>
+        /// <param name="reader">The reader that contains the data.</param>
+        /// <returns>A new list of entities.</returns>
         private IEnumerable<T> CreateListFromReader(MySqlDataReader reader)
         {
             using (reader)
@@ -400,8 +454,12 @@ namespace Ontwikkelopdracht.Persistence.MySql
         }
 
         /// <summary>
+        ///     Create a new entity from the given reader.
         ///     Expects reader to contain data at current row. Does not clean up reader.
         /// </summary>
+        /// <param name="reader">The reader that contains the data.</param>
+        /// <returns>A new entity.</returns>
+        /// <exception cref="EntityException">When a property can not be populated.</exception>
         private T CreateFromRow(MySqlDataReader reader)
         {
             try
@@ -409,29 +467,36 @@ namespace Ontwikkelopdracht.Persistence.MySql
                 T entity = new T();
                 foreach (var keyValuePair in DataMembers)
                 {
+                    // Do not set null values
                     if (reader.IsDBNull(reader.GetOrdinal(keyValuePair.Value))) continue;
 
+                    // Set the Identity
                     if (keyValuePair.Key.IsDefined(typeof(IdentityAttribute)))
                     {
                         keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
                     }
+                    // Set DataMember
                     else if (keyValuePair.Key.IsDefined(typeof(DataMemberAttribute)))
                     {
                         DataMemberAttribute attribute = keyValuePair.Key.GetCustomAttribute<DataMemberAttribute>();
 
                         switch (attribute.Type)
                         {
+                            // Set raw value. Perform conversion if necessary and supported.
                             case DataType.Value:
+                                // Boolean
                                 // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                                 if (keyValuePair.Key.PropertyType == typeof(bool))
                                 {
                                     keyValuePair.Key.SetValue(entity, Convert.ToBoolean(reader[keyValuePair.Value]));
                                 }
+                                // Generic
                                 else
                                 {
                                     keyValuePair.Key.SetValue(entity, reader[keyValuePair.Value]);
                                 }
                                 break;
+                            // Resolve entity from other IRepository
                             case DataType.Entity:
                                 object repo = typeof(MySqlRepository<T>).GetMethod("ResolveRepository")
                                     .MakeGenericMethod(keyValuePair.Key.PropertyType)
@@ -440,6 +505,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
                                     .Invoke(repo, new object[] {reader[keyValuePair.Value]});
                                 keyValuePair.Key.SetValue(entity, value);
                                 break;
+                            // Resolve one to many entities
                             case DataType.OneToManyEntity:
                                 break;
                             default:
@@ -456,7 +522,13 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
-        private void AddInsertParametersForEntity<TEntity>(MySqlCommand cmd, TEntity entity) where TEntity : T
+        /// <summary>
+        ///     Add parameters to insert statement.
+        /// </summary>
+        /// <param name="cmd">The statement to which the parameters should be added.</param>
+        /// <param name="entity">The entity to insert.</param>
+        /// <exception cref="EntityException">When a property can not be populated.</exception>
+        private void AddInsertParametersForEntity(MySqlCommand cmd, T entity)
         {
             try
             {
@@ -498,7 +570,13 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
-        private void AddUpdateParametersForEntity<TEntity>(MySqlCommand cmd, TEntity entity)
+        /// <summary>
+        ///     Add parameters to update statement.
+        /// </summary>
+        /// <param name="cmd">The statement to which the parameters should be added.</param>
+        /// <param name="entity">The entity to insert.</param>
+        /// <exception cref="EntityException">When a property can not be populated.</exception>
+        private void AddUpdateParametersForEntity(MySqlCommand cmd, T entity)
         {
             try
             {
@@ -549,6 +627,11 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
+        /// <summary>
+        ///     Resolve the repository for the given entity.
+        /// </summary>
+        /// <typeparam name="TEntity">The entity to resolve.</typeparam>
+        /// <returns>The repository for the given entity.</returns>
         public IRepository<TEntity> ResolveRepository<TEntity>() where TEntity : new()
         {
             return Injector.Resolve<IRepository<TEntity>>();

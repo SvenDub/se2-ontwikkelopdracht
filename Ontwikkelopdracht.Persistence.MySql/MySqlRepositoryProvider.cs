@@ -2,6 +2,7 @@
 
 namespace Ontwikkelopdracht.Persistence.MySql
 {
+    /// <see cref="MySqlRepository{T}"/>
     public class MySqlRepositoryProvider : IRepositoryProvider
     {
         public Type GetDatabaseType<T>() where T : new() => typeof(MySqlRepository<T>);

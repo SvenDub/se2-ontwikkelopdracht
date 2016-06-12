@@ -7,11 +7,20 @@ using Util;
 
 namespace Ontwikkelopdracht.Persistence.MySql
 {
+    /// <summary>
+    ///     Provides intilalization of the database by creating the tables and inserting initial data.
+    /// </summary>
     public class MySqlSetup : IRepositorySetup
     {
+        /// <summary>
+        ///     Connection parameters to use.
+        /// </summary>
         public IMySqlConnectionParams MySqlConnectionParams { set; protected get; } =
             Injector.Resolve<IMySqlConnectionParams>();
 
+        /// <summary>
+        ///     Execute the <c>CREATE.sql</c> script.
+        /// </summary>
         public bool Setup()
         {
             Log.I("DB", "Initializing database.");
@@ -20,6 +29,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
             {
                 using (MySqlConnection connection = CreateConnection())
                 {
+                    // Wrap in transaction. DDL auto commits, but rolls back inserts
                     MySqlTransaction transaction = connection.BeginTransaction();
                     using (MySqlCommand cmd = connection.CreateCommand())
                     {
@@ -33,6 +43,7 @@ namespace Ontwikkelopdracht.Persistence.MySql
                         }
                         catch (System.Exception e)
                         {
+                            // Roll back when the script fails
                             Log.E("DB", "Could not initialize database.");
                             Log.E("DB", e.ToString());
                             Log.I("DB", "Rolling back.");
@@ -65,6 +76,11 @@ namespace Ontwikkelopdracht.Persistence.MySql
             return true;
         }
 
+        /// <summary>
+        ///     Open a new connection to the database.
+        /// </summary>
+        /// <returns>The open connection.</returns>
+        /// <exception cref="ConnectException">When the connection could not be established.</exception>
         private MySqlConnection CreateConnection()
         {
             MySqlConnectionStringBuilder mySqlConnectionStringBuilder = new MySqlConnectionStringBuilder
@@ -89,6 +105,11 @@ namespace Ontwikkelopdracht.Persistence.MySql
             }
         }
 
+        /// <summary>
+        ///     Get the contents of an <c>Embedded Resource</c>.
+        /// </summary>
+        /// <param name="fileName">The name of the file.</param>
+        /// <returns>The contents of the file.</returns>
         public static string GetResourceFileContentAsString(string fileName)
         {
             var assembly = Assembly.GetExecutingAssembly();
